@@ -1,0 +1,150 @@
+<%- include('layouts/header', { title: 'Quản lý Tài Khoản - Admin' }) %>
+
+<main class="container py-5 my-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 mb-4">
+            <%- include('partials/sidebar') %>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold text-primary mb-0"><i class="bi bi-person-badge me-2"></i>Quản lý Tài Khoản</h2>
+                        <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                            <i class="bi bi-person-plus-fill me-1"></i>Thêm Tài Khoản
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle border text-center">
+                            <thead class="table-light text-secondary">
+                                <tr>
+                                    <th style="width: 10%">ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Tên hiển thị</th>
+                                    <th>Quyền hạn</th>
+                                    <th style="width: 25%">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (users && users.length > 0) { %>
+                                    <% users.forEach(function(u) { %>
+                                        <tr>
+                                            <td class="fw-bold text-muted"><%= u.id %></td>
+                                            <td class="fw-bold text-dark fs-5"><%= u.username %></td>
+                                            <td><%= u.full_name %></td>
+                                            <td>
+                                                <% if (u.role === 'admin') { %>
+                                                    <span class="badge bg-danger rounded-pill px-3">Quản trị viên (Admin)</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-info text-dark rounded-pill px-3">Giáo viên</span>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#editUserModal<%= u.id %>">Sửa</button>
+                                                <% if (typeof user !== 'undefined' && user.id === u.id) { %>
+                                                    <button class="btn btn-sm btn-secondary rounded-pill px-3" disabled title="Không thể xóa tài khoản của chính mình">Xóa</button>
+                                                <% } else { %>
+                                                    <form action="/admin/users/delete/<%= u.id %>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tài khoản <%= u.username %> không?');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Xóa</button>
+                                                    </form>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Edit Modal -->
+                                        <div class="modal fade" id="editUserModal<%= u.id %>" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content rounded-4 border-0 shadow">
+                                                    <form action="/admin/users/edit/<%= u.id %>" method="POST">
+                                                        <div class="modal-header border-bottom-0 pb-0">
+                                                            <h5 class="modal-title fw-bold text-primary">Sửa Thông Tin Tài Khoản</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body p-4">
+                                                            <div class="mb-3 text-start">
+                                                                <label class="form-label fw-bold">Tên đăng nhập</label>
+                                                                <input type="text" name="username" class="form-control" value="<%= u.username %>" required>
+                                                            </div>
+                                                            <div class="mb-3 text-start">
+                                                                <label class="form-label fw-bold text-danger">Mật khẩu mới (Bỏ trống nếu không muốn đổi)</label>
+                                                                <input type="password" name="password" class="form-control" placeholder="••••••••">
+                                                            </div>
+                                                            <div class="mb-3 text-start">
+                                                                <label class="form-label fw-bold">Tên hiển thị</label>
+                                                                <input type="text" name="full_name" class="form-control" value="<%= u.full_name %>" required>
+                                                            </div>
+                                                            <div class="mb-3 text-start">
+                                                                <label class="form-label fw-bold">Phân quyền</label>
+                                                                <select name="role" class="form-select">
+                                                                    <option value="giaovien" <%= u.role === 'giaovien' ? 'selected' : '' %>>Giáo viên</option>
+                                                                    <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Quản trị viên (Admin)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer border-top-0 pt-0">
+                                                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu Thay Đổi</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5" class="py-4 text-muted fs-5">Chưa có dữ liệu</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="/admin/users/create" method="POST">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary">Thêm Tài Khoản Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold">Tên đăng nhập</label>
+                        <input type="text" name="username" class="form-control" required placeholder="Nhập tên đăng nhập viết liền (vd: cogiaonga)">
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold">Mật khẩu</label>
+                        <input type="password" name="password" class="form-control" required placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)">
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold">Tên hiển thị</label>
+                        <input type="text" name="full_name" class="form-control" required placeholder="Ví dụ: Cô Giáo Nga">
+                    </div>
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold">Phân quyền</label>
+                        <select name="role" class="form-select">
+                            <option value="giaovien">Giáo viên</option>
+                            <option value="admin">Quản trị viên (Admin)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Tạo Tài Khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('layouts/footer') %>

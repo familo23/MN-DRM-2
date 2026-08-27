@@ -1,44 +1,59 @@
 <%- include('layouts/header', { title: 'Trang Chủ - Mầm Non Đồ Rê Mí' }) %>
 
+<style>
+    .wave-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        z-index: 5;
+    }
+    .wave-bottom svg {
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 60px;
+    }
+    .wave-bottom .shape-fill {
+        fill: #ffffff;
+    }
+</style>
+
 <!-- HERO CAROUSEL -->
-<section id="home">
+<section id="home" class="position-relative bg-dark">
     <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-        <div class="carousel-indicators">
+        <div class="carousel-indicators z-3">
             <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
             <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
             <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
         </div>
         <div class="carousel-inner shadow-sm">
-            <div class="carousel-item active" data-bs-interval="3500">
-                <img src="/images/banner1.jpg" class="d-block w-100 object-fit-cover" alt="Lớp học" style="height: 65vh;">
-                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
-                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Môi Trường Vui Nhộn</h1>
-                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Nơi trẻ em thỏa sức sáng tạo và học hỏi</p>
-                </div>
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img src="/images/banner1.jpg" class="d-block w-100" alt="Lớp học">
             </div>
-            <div class="carousel-item" data-bs-interval="3500">
-                <img src="/images/banner2.jpg" class="d-block w-100 object-fit-cover" alt="Mỹ thuật" style="height: 65vh;">
-                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
-                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Ươm Mầm Tài Năng</h1>
-                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Phát triển toàn diện nghệ thuật & tư duy</p>
-                </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="/images/banner2.jpg" class="d-block w-100" alt="Mỹ thuật">
             </div>
-            <div class="carousel-item" data-bs-interval="3500">
-                <img src="/images/banner3.jpg" class="d-block w-100 object-fit-cover" alt="Vui chơi ngoài trời" style="height: 65vh;">
-                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
-                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Khỏe Mạnh Tự Tin</h1>
-                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Khu vui chơi ngoài trời an toàn, hiện đại</p>
-                </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="/images/banner3.jpg" class="d-block w-100" alt="Vui chơi ngoài trời">
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <button class="carousel-control-prev z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <button class="carousel-control-next z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
             <span class="visually-hidden">Next</span>
         </button>
+    </div>
+    
+    <!-- Wave Bottom Separator -->
+    <div class="wave-bottom">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C73.23,24.3,149.33,52.42,223.3,64.22c32.74,5.2,65.8,7.91,98.09,1.2Z" class="shape-fill"></path>
+        </svg>
     </div>
 </section>
 

@@ -196,4 +196,84 @@ router.post('/schedules/delete', async (req, res) => {
     }
 });
 
+// ==========================================
+// QUẢN LÝ TÀI KHOẢN (GIÁO VIÊN / ADMIN)
+// ==========================================
+
+const bcrypt = require('bcryptjs');
+
+// GET /admin/users
+router.get('/users', async (req, res) => {
+    try {
+        const db = await connectDB();
+        const users = await db.all('SELECT id, username, full_name, role FROM users ORDER BY id ASC');
+        res.render('admin_users', { currentRoute: '/admin/users', users });
+    } catch (e) {
+        console.error("Lỗi get users:", e);
+        res.status(500).send("Lỗi Server");
+    }
+});
+
+// POST /admin/users/create
+router.post('/users/create', async (req, res) => {
+    try {
+        const { username, password, full_name, role } = req.body;
+        const db = await connectDB();
+        const hash = await bcrypt.hash(password, 10);
+        await db.run(
+            'INSERT INTO users (username, password, full_name, role) VALUES (?, ?, ?, ?)',
+            [username, hash, full_name, role || 'admin']
+        );
+        res.redirect('/admin/users');
+    } catch (e) {
+        console.error("Lỗi create user:", e);
+        res.redirect('/admin/users');
+    }
+});
+
+// POST /admin/users/edit/:id
+router.post('/users/edit/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { username, password, full_name, role } = req.body;
+        const db = await connectDB();
+        
+        if (password && password.trim() !== '') {
+            // Cập nhật có mật khẩu mới
+            const hash = await bcrypt.hash(password, 10);
+            await db.run(
+                'UPDATE users SET username = ?, password = ?, full_name = ?, role = ? WHERE id = ?',
+                [username, hash, full_name, role, id]
+            );
+        } else {
+            // Giữ nguyên mật khẩu
+            await db.run(
+                'UPDATE users SET username = ?, full_name = ?, role = ? WHERE id = ?',
+                [username, full_name, role, id]
+            );
+        }
+        res.redirect('/admin/users');
+    } catch (e) {
+        console.error("Lỗi edit user:", e);
+        res.redirect('/admin/users');
+    }
+});
+
+// POST /admin/users/delete/:id
+router.post('/users/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (req.session.user && req.session.user.id == id) {
+            console.error("Không thể tự xóa tài khoản đang đăng nhập");
+            return res.redirect('/admin/users');
+        }
+        const db = await connectDB();
+        await db.run('DELETE FROM users WHERE id = ?', [id]);
+        res.redirect('/admin/users');
+    } catch (e) {
+        console.error("Lỗi delete user:", e);
+        res.redirect('/admin/users');
+    }
+});
+
 module.exports = router;
