@@ -1,0 +1,284 @@
+<%- include('layouts/header', { title: 'Quản lý Lịch Học - Admin' }) %>
+
+<style>
+    .interactive-cell {
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+        position: relative;
+    }
+    .interactive-cell:hover {
+        outline: 3px dashed var(--bs-primary);
+        outline-offset: -3px;
+        z-index: 10;
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .color-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .color-btn:hover {
+        transform: scale(1.1);
+    }
+    .color-btn.active {
+        border-color: #000;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+</style>
+
+<main class="container py-5 my-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 mb-4">
+            <%- include('partials/sidebar') %>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4 p-lg-5">
+                    <h2 class="fw-bold text-primary mb-4"><i class="bi bi-calendar-check me-2"></i>Quản lý Thời Khóa Biểu</h2>
+                    
+                    <!-- LỌC THEO LỚP HỌC -->
+                    <div class="bg-light rounded-4 p-4 mb-4">
+                        <form action="/admin/schedules" method="GET" class="row g-3 align-items-center">
+                            <div class="col-md-3">
+                                <label class="fw-bold text-muted mb-0">Chọn lớp học:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-select fw-bold border-primary" name="class_id" onchange="this.form.submit()">
+                                    <% if (classes && classes.length > 0) { %>
+                                        <% classes.forEach(function(cls) { %>
+                                            <option value="<%= cls.id %>" <%= selectedClassId === cls.id ? 'selected' : '' %>>
+                                                <%= cls.name %>
+                                            </option>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <option value="">Chưa có lớp học</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <% if (schedule) { %>
+                        <!-- FORM SỬA THÔNG TIN CHUNG -->
+                        <div class="card border border-primary-subtle rounded-4 mb-4">
+                            <div class="card-header bg-primary-subtle fw-bold text-primary py-3">
+                                <i class="bi bi-pencil-square me-2"></i>Cài đặt Tiêu đề
+                            </div>
+                            <div class="card-body">
+                                <form action="/admin/schedules/update-info" method="POST" class="row g-3">
+                                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                    
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Tháng</label>
+                                        <input type="text" name="month_title" class="form-control" value="<%= schedule.month_title %>" required>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label small fw-bold">Chủ đề</label>
+                                        <input type="text" name="theme_title" class="form-control" value="<%= schedule.theme_title %>">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label small fw-bold">Tuần</label>
+                                        <input type="text" name="week_label" class="form-control" value="<%= schedule.week_label %>">
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary w-100 fw-bold">Lưu Tiêu Đề</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label small fw-bold">Thời gian áp dụng</label>
+                                        <input type="text" name="date_range" class="form-control" value="<%= schedule.date_range %>">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info border-0 shadow-sm rounded-3 d-flex align-items-center">
+                            <i class="bi bi-info-circle-fill fs-4 text-info me-3"></i>
+                            <div>
+                                <strong>Mẹo:</strong> Hãy <b>CLICK trực tiếp</b> vào các ô Thời Khóa Biểu bên dưới để thay đổi Môn Học và Màu Sắc ngay lập tức!
+                            </div>
+                        </div>
+
+                        <!-- BẢNG TKB TƯƠNG TÁC -->
+                        <div class="table-responsive shadow-sm rounded-4 border border-secondary-subtle">
+                            <table class="table table-bordered text-center align-middle mb-0">
+                                <thead class="bg-secondary text-white">
+                                    <tr>
+                                        <th class="py-3" style="width: 15%">Thời gian</th>
+                                        <th class="py-3" style="width: 14%">Thứ 2</th>
+                                        <th class="py-3" style="width: 14%">Thứ 3</th>
+                                        <th class="py-3" style="width: 14%">Thứ 4</th>
+                                        <th class="py-3" style="width: 14%">Thứ 5</th>
+                                        <th class="py-3" style="width: 14%">Thứ 6</th>
+                                        <th class="py-3" style="width: 14%">Thứ 7</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let s=0; s < 7; s++) { %>
+                                        <tr>
+                                            <td class="text-primary fw-bold bg-light"><%= timeSlots[s] %></td>
+                                            <% for(let d=0; d < 6; d++) { %>
+                                                <% const cell = matrix[s][d]; %>
+                                                <% if (cell && cell.is_merged == 0) { %>
+                                                    <% const inlineStyle=`background-color: ${cell.bg_color}; color: ${cell.bg_color==='#ffffff' ? 'inherit' : '#000' }`; %>
+                                                    
+                                                    <td class="interactive-cell fw-semibold" 
+                                                        rowspan="<%= cell.row_span %>" 
+                                                        colspan="<%= cell.col_span %>"
+                                                        style="<%= inlineStyle %>"
+                                                        onclick="openCellModal(<%= cell.id %>, this.innerText, '<%= cell.bg_color %>')">
+                                                        <%= cell.content %>
+                                                    </td>
+
+                                                <% } else if (!cell) { %>
+                                                    <td class="bg-light text-muted small">Lỗi dữ liệu</td>
+                                                <% } %>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <form action="/admin/schedules/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn làm mới toàn bộ bảng TKB của lớp này không?');">
+                                <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                <button type="submit" class="btn btn-outline-danger fw-bold"><i class="bi bi-trash me-2"></i>Làm mới toàn bộ TKB (Xóa)</button>
+                            </form>
+                        </div>
+
+                    <% } else { %>
+                        <!-- CHƯA CÓ LỊCH -->
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar-x display-1 text-muted mb-4 d-block opacity-50"></i>
+                            <h3 class="fw-bold">Chưa có Thời Khóa Biểu</h3>
+                            <p class="text-muted mb-4">Lớp học này hiện tại chưa được khởi tạo thời khóa biểu. Nhấn nút bên dưới để tạo lưới lịch học mặc định.</p>
+                            
+                            <form action="/admin/schedules/init" method="POST">
+                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm px-5">
+                                    <i class="bi bi-magic me-2"></i>Tạo Lưới Thời Khóa Biểu
+                                </button>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL SỬA Ô TKB -->
+<div class="modal fade" id="cellModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header bg-light border-bottom-0">
+                <h5 class="modal-title fw-bold text-primary"><i class="bi bi-pencil-square me-2"></i>Sửa Nội Dung Ô</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="modalCellId">
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Nội dung (Môn học / Hoạt động)</label>
+                    <textarea class="form-control" id="modalCellContent" rows="3" placeholder="Nhập tên môn học..."></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Màu sắc nổi bật</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="button" class="color-btn" style="background-color: #ffffff" onclick="selectColor('#ffffff')" title="Trắng"></button>
+                        <button type="button" class="color-btn" style="background-color: #ffc000" onclick="selectColor('#ffc000')" title="Vàng"></button>
+                        <button type="button" class="color-btn" style="background-color: #92d050" onclick="selectColor('#92d050')" title="Xanh lá"></button>
+                        <button type="button" class="color-btn" style="background-color: #00b0f0" onclick="selectColor('#00b0f0')" title="Xanh dương"></button>
+                        <button type="button" class="color-btn" style="background-color: #ff99cc" onclick="selectColor('#ff99cc')" title="Hồng"></button>
+                        <button type="button" class="color-btn" style="background-color: #ff0000" onclick="selectColor('#ff0000')" title="Đỏ"></button>
+                    </div>
+                    <input type="hidden" id="modalCellColor" value="#ffffff">
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveCell" onclick="saveCellData()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cellModal;
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        cellModal = new bootstrap.Modal(document.getElementById('cellModal'));
+    });
+
+    function selectColor(colorHex) {
+        document.getElementById('modalCellColor').value = colorHex;
+        // Xóa class active của các nút màu khác
+        document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+        // Thêm class active cho nút vừa click
+        event.target.classList.add('active');
+    }
+
+    function openCellModal(id, content, color) {
+        document.getElementById('modalCellId').value = id;
+        document.getElementById('modalCellContent').value = content.trim();
+        document.getElementById('modalCellColor').value = color;
+        
+        // Highlight đúng nút màu
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.classList.remove('active');
+            // rgb to hex or standard matching isn't perfectly reliable with DOM colors sometimes, 
+            // but since we render it exactly as hex string in the inline style, it matches.
+            // A simple trick is checking if style.backgroundColor includes the hex or we can just compare hex.
+        });
+        const targetBtn = Array.from(document.querySelectorAll('.color-btn')).find(
+            b => b.getAttribute('onclick').includes(color)
+        );
+        if (targetBtn) targetBtn.classList.add('active');
+
+        cellModal.show();
+    }
+
+    async function saveCellData() {
+        const id = document.getElementById('modalCellId').value;
+        const content = document.getElementById('modalCellContent').value;
+        const color = document.getElementById('modalCellColor').value;
+        const btnSave = document.getElementById('btnSaveCell');
+
+        btnSave.disabled = true;
+        btnSave.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...';
+
+        try {
+            const res = await fetch('/admin/schedules/update-cell', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cell_id: id, content: content, bg_color: color })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                // Tải lại trang để thấy cập nhật ngay lập tức
+                window.location.reload();
+            } else {
+                alert("Lỗi khi lưu dữ liệu!");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Lỗi kết nối!");
+        } finally {
+            btnSave.disabled = false;
+            btnSave.innerHTML = 'Lưu thay đổi';
+        }
+    }
+</script>
+
+<%- include('layouts/footer') %>
