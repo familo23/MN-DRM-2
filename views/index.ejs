@@ -1,32 +1,142 @@
-<%- include('layouts/header', { title: 'Trang Chủ - Đồ RÊ MÍ 2' }) %>
+<%- include('layouts/header', { title: 'Trang Chủ - Mầm Non Đồ Rê Mí' }) %>
 
-<!-- BANNER -->
-<section id="home" class="banner">
-    <button class="arrow left" id="prevBtn">&lt;</button>
-    <div class="banner-content">
-        <h1 id="bannerTitle">Banner</h1>
-        <div class="dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+<!-- HERO CAROUSEL -->
+<section id="home">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
         </div>
+        <div class="carousel-inner shadow-sm">
+            <div class="carousel-item active" data-bs-interval="3500">
+                <img src="/images/banner1.jpg" class="d-block w-100 object-fit-cover" alt="Lớp học" style="height: 65vh;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
+                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Môi Trường Vui Nhộn</h1>
+                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Nơi trẻ em thỏa sức sáng tạo và học hỏi</p>
+                </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="3500">
+                <img src="/images/banner2.jpg" class="d-block w-100 object-fit-cover" alt="Mỹ thuật" style="height: 65vh;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
+                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Ươm Mầm Tài Năng</h1>
+                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Phát triển toàn diện nghệ thuật & tư duy</p>
+                </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="3500">
+                <img src="/images/banner3.jpg" class="d-block w-100 object-fit-cover" alt="Vui chơi ngoài trời" style="height: 65vh;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center h-100 pb-5">
+                    <h1 class="display-3 fw-black text-white text-shadow-lg mb-3">Khỏe Mạnh Tự Tin</h1>
+                    <p class="fs-4 text-white text-shadow-md bg-dark bg-opacity-25 px-4 py-2 rounded-pill">Khu vui chơi ngoài trời an toàn, hiện đại</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <button class="arrow right" id="nextBtn">&gt;</button>
 </section>
 
-<!-- NỘI DUNG -->
-<section id="lich" class="content-section">
-    <h2>Nội dung</h2>
-    <div class="content-box">
-        <div id="tkb" class="item">
-            <h3>Lịch học</h3>
-            <p>Thời khóa biểu</p>
+<!-- MAIN CONTENT -->
+<main class="container py-5 my-3">
+    
+    <!-- THỜI KHÓA BIỂU MOCKUP -->
+    <section id="lich" class="mb-5 pb-5">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fs-6">Kế hoạch mỗi ngày</span>
+            <h2 class="display-5 fw-bold text-primary mb-3">
+                <i class="bi bi-calendar-heart text-danger me-2"></i>Thời Khóa Biểu
+            </h2>
+            <p class="text-muted fs-5">Lịch hoạt động một ngày vui vẻ của các bé</p>
         </div>
-        <div id="sign" class="item">
-            <h3>Sign</h3>
-            <p>Thông tin đăng nhập / ký hiệu</p>
+
+        <div class="table-responsive shadow rounded-4 overflow-hidden border border-primary-subtle bg-white">
+            <table class="table table-bordered text-center align-middle mb-0 schedule-table">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th class="py-3" style="width: 15%">Thời gian</th>
+                        <th class="py-3" style="width: 17%">Thứ 2</th>
+                        <th class="py-3" style="width: 17%">Thứ 3</th>
+                        <th class="py-3" style="width: 17%">Thứ 4</th>
+                        <th class="py-3" style="width: 17%">Thứ 5</th>
+                        <th class="py-3" style="width: 17%">Thứ 6</th>
+                    </tr>
+                </thead>
+                <tbody class="fw-semibold text-secondary">
+                    <tr>
+                        <td class="text-primary fw-bold">08:20 - 08:45</td>
+                        <td colspan="5" class="bg-light text-dark">Đón trẻ, Tập thể dục buổi sáng, Ăn sáng</td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary fw-bold">08:50 - 09:00</td>
+                        <td colspan="5" class="bg-light text-dark">Uống sữa Vinamilk</td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary fw-bold">09:00 - 09:50</td>
+                        <td class="bg-success-subtle text-success-emphasis">STEAM: Trống cơm</td>
+                        <td class="bg-warning-subtle text-warning-emphasis">Toán: Hình tròn, Vuông</td>
+                        <td class="bg-info-subtle text-info-emphasis">Âm nhạc: Yêu Hà Nội</td>
+                        <td class="bg-danger-subtle text-danger-emphasis">Tạo hình: Đất nặn</td>
+                        <td class="bg-primary-subtle text-primary-emphasis">Kỹ năng sống</td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary fw-bold">09:50 - 10:25</td>
+                        <td class="bg-success-subtle text-success-emphasis">Tạo hình: Tô màu</td>
+                        <td class="bg-warning-subtle text-warning-emphasis">LQ Toán: To - Nhỏ</td>
+                        <td class="bg-info-subtle text-info-emphasis">HĐ Nhận biết Thủ Đô</td>
+                        <td class="bg-danger-subtle text-danger-emphasis">Truyện: Kiến con</td>
+                        <td class="bg-primary-subtle text-primary-emphasis">Giao lưu tập thể</td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary fw-bold">15:15 - 15:45</td>
+                        <td colspan="5" class="bg-light text-dark">Hoạt động chiều & Ăn nhẹ</td>
+                    </tr>
+                    <tr>
+                        <td class="text-primary fw-bold">16:00 - 18:00</td>
+                        <td colspan="5" class="text-muted fst-italic">Phụ huynh đón trẻ ra về</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!-- TIỆN ÍCH -->
+    <section id="sign" class="pt-3">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary mb-3">Tiện Ích Khác</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-5">
+                <div class="card h-100 border-0 shadow-sm feature-card rounded-4">
+                    <div class="card-body text-center p-5">
+                        <div class="icon-circle bg-primary-subtle text-primary mb-4 mx-auto">
+                            <i class="bi bi-person-badge fs-1"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Thông Tin Của Bé</h4>
+                        <p class="text-muted mb-4">Đăng nhập để xem ký hiệu, tình trạng sức khỏe và nhận xét hàng ngày của giáo viên về bé.</p>
+                        <a href="#" class="btn btn-primary rounded-pill px-5 py-2">Đăng Nhập</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card h-100 border-0 shadow-sm feature-card rounded-4">
+                    <div class="card-body text-center p-5">
+                        <div class="icon-circle bg-success-subtle text-success mb-4 mx-auto">
+                            <i class="bi bi-journal-text fs-1"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Tin Tức Mới</h4>
+                        <p class="text-muted mb-4">Cập nhật thực đơn dinh dưỡng, thông báo từ nhà trường và các sự kiện ngoại khóa sắp tới.</p>
+                        <a href="#" class="btn btn-outline-success rounded-pill px-5 py-2">Xem Ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
 <%- include('layouts/footer') %>
