@@ -1,0 +1,17 @@
+<div class="list-group rounded-4 shadow-sm border-0">
+    <a href="/admin" class="list-group-item list-group-item-action <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin' ? 'active fw-bold' : '' %> py-3">
+        <i class="bi bi-speedometer2 me-2"></i>Tổng quan
+    </a>
+    <a href="/admin/classes" class="list-group-item list-group-item-action <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin/classes' ? 'active fw-bold' : '' %> py-3">
+        <i class="bi bi-people me-2"></i>Quản lý Lớp Học
+    </a>
+    <a href="/admin/schedules" class="list-group-item list-group-item-action <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin/schedules' ? 'active fw-bold' : '' %> py-3">
+        <i class="bi bi-calendar-check me-2"></i>Quản lý Lịch Học
+    </a>
+    <a href="#" class="list-group-item list-group-item-action py-3">
+        <i class="bi bi-newspaper me-2"></i>Đăng Tin Tức
+    </a>
+    <a href="/logout" class="list-group-item list-group-item-action text-danger fw-bold py-3 bg-danger-subtle">
+        <i class="bi bi-box-arrow-right me-2"></i>Đăng Xuất
+    </a>
+</div>

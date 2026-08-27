@@ -69,9 +69,54 @@ router.get('/tkb', async (req, res) => {
     }
 });
 
+const bcrypt = require('bcryptjs');
+const { requireLogin } = require('../middlewares/authMiddleware');
+
 // Route hiển thị trang Đăng nhập
 router.get('/login', (req, res) => {
-    res.render('login', { currentRoute: '/login' });
+    if (req.session && req.session.user) {
+        return res.redirect('/admin');
+    }
+    const error = req.query.error;
+    res.render('login', { currentRoute: '/login', error });
+});
+
+// Xử lý logic Đăng nhập
+router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const db = await connectDB();
+        
+        // Tìm user
+        const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+        
+        if (user) {
+            // So khớp password
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (isMatch) {
+                // Đăng nhập thành công, lưu session
+                req.session.user = {
+                    id: user.id,
+                    username: user.username,
+                    full_name: user.full_name,
+                    role: user.role
+                };
+                return res.redirect('/admin');
+            }
+        }
+        
+        // Sai thông tin
+        res.redirect('/login?error=1');
+    } catch (error) {
+        console.error("Lỗi đăng nhập:", error);
+        res.status(500).send("Đã xảy ra lỗi trên server");
+    }
+});
+
+// Đăng xuất
+router.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
 });
 
 module.exports = router;

@@ -1,0 +1,48 @@
+<%- include('layouts/header', { title: 'Trang Quản Trị - Mầm Non Đồ Rê Mí' }) %>
+
+<main class="container py-5 my-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 mb-4">
+            <%- include('partials/sidebar') %>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-5">
+                    <h2 class="fw-bold text-primary mb-4">Xin chào, <%= typeof user !== 'undefined' && user ? user.full_name : 'Quản trị viên' %>! 👋</h2>
+                    <p class="fs-5 text-muted">Chào mừng bạn đến với hệ thống quản trị của Trường Mầm Non Đồ Rê Mí.</p>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="row g-4 mt-2">
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="p-4 bg-primary-subtle text-primary rounded-4 text-center h-100">
+                                <i class="bi bi-calendar3 display-4 mb-3 d-block"></i>
+                                <h5 class="fw-bold">Chỉnh sửa TKB</h5>
+                                <p class="small mb-0">Cập nhật lịch học cho các lớp (Sẽ phát triển ở bước sau)</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="p-4 bg-success-subtle text-success rounded-4 text-center h-100">
+                                <i class="bi bi-person-badge display-4 mb-3 d-block"></i>
+                                <h5 class="fw-bold">Học sinh</h5>
+                                <p class="small mb-0">Quản lý danh sách trẻ em đang theo học</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="p-4 bg-warning-subtle text-warning rounded-4 text-center h-100">
+                                <i class="bi bi-bell display-4 mb-3 d-block"></i>
+                                <h5 class="fw-bold">Thông báo</h5>
+                                <p class="small mb-0">Gửi thông báo và tin tức tới phụ huynh</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('layouts/footer') %>

@@ -57,6 +57,10 @@ CREATE TABLE IF NOT EXISTS schedule_cells (
 INSERT OR IGNORE INTO users (id, username, password, full_name, role) VALUES
 (1, 'giaovien', '$2a$10$7RkbQ0n0z91bYJb4f5Y4jOB6N01v8mDk.2XWbY13e8oQY9U15wXea', 'Cô Giáo Đồ Rê Mí', 'admin');
 
+-- Tài khoản Admin (Mật khẩu: admin@123)
+INSERT OR IGNORE INTO users (id, username, password, full_name, role) VALUES
+(2, 'admin', '$2b$10$Zaj6ytcIskfF1x.ZS5MkGuqBV2/OhWQOVJ5mbtFhvJKsaWCJXrDQW', 'Quản trị viên', 'admin');
+
 -- 2. Danh sách lớp
 INSERT OR IGNORE INTO classes (id, name, code, order_index) VALUES
 (1, 'Nhà trẻ', 'nha_tre', 1),

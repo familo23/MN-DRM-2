@@ -1,93 +1,109 @@
 <%- include('layouts/header', { title: 'Lịch Học - Mầm Non Đồ Rê Mí' }) %>
 
-<main class="container py-5 my-4">
-    
-    <section id="lich" class="mb-5">
-        <div class="text-center mb-5">
-            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fs-6">Kế hoạch mỗi ngày</span>
-            <h2 class="display-5 fw-bold text-primary mb-3">
-                <i class="bi bi-calendar-heart text-danger me-2"></i>Thời Khóa Biểu
-            </h2>
-            <p class="text-muted fs-5">Lịch hoạt động một ngày vui vẻ của các bé</p>
-        </div>
+    <main class="container py-5 my-4">
 
-        <!-- BỘ LỌC CHỌN LỚP -->
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-5">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body p-4 text-center bg-primary-subtle rounded-4">
-                        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-funnel-fill me-2"></i>Lọc theo Lớp Học</h5>
-                        <form action="/tkb" method="GET">
-                            <select class="form-select form-select-lg rounded-pill shadow-sm text-center fw-bold text-primary border-primary" name="class_id" onchange="this.form.submit()">
-                                <% if (classes && classes.length > 0) { %>
-                                    <% classes.forEach(function(cls) { %>
-                                        <option value="<%= cls.id %>" <%= selectedClassId === cls.id ? 'selected' : '' %>>
-                                            Lớp: <%= cls.name %>
-                                        </option>
-                                    <% }); %>
-                                <% } else { %>
-                                    <option value="">Chưa có lớp học nào</option>
-                                <% } %>
-                            </select>
-                        </form>
+        <section id="lich" class="mb-5">
+            <div class="text-center mb-5">
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fs-6">Kế hoạch mỗi ngày</span>
+                <h2 class="display-5 fw-bold text-primary mb-3">
+                    <i class="bi bi-calendar-heart text-danger me-2"></i>Thời Khóa Biểu
+                </h2>
+                <p class="text-muted fs-5">Lịch hoạt động một ngày vui vẻ của các bé</p>
+            </div>
+
+            <!-- BỘ LỌC CHỌN LỚP -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-5">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4 text-center bg-primary-subtle rounded-4">
+                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-funnel-fill me-2"></i>Lọc theo Lớp Học
+                            </h5>
+                            <form action="/tkb" method="GET">
+                                <select
+                                    class="form-select form-select-lg rounded-pill shadow-sm text-center fw-bold text-primary border-primary"
+                                    name="class_id" onchange="this.form.submit()">
+                                    <% if (classes && classes.length> 0) { %>
+                                        <% classes.forEach(function(cls) { %>
+                                            <option value="<%= cls.id %>" <%=selectedClassId===cls.id ? 'selected' : ''
+                                                %>>
+                                                Lớp: <%= cls.name %>
+                                            </option>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <option value="">Chưa có lớp học nào</option>
+                                                    <% } %>
+                                </select>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <% if (schedule) { %>
-            <!-- THÔNG TIN LỊCH HỌC -->
-            <div class="text-center mb-4">
-                <h4 class="fw-bold text-success"><%= schedule.month_title %></h4>
-                <p class="fs-5 mb-1"><span class="fw-bold">Chủ đề:</span> <%= schedule.theme_title %></p>
-                <span class="badge bg-info text-dark px-3 py-2 rounded-pill"><%= schedule.week_label %> (<%= schedule.date_range %>)</span>
-            </div>
+            <% if (schedule) { %>
+                <!-- THÔNG TIN LỊCH HỌC -->
+                <div class="text-center mb-4">
+                    <h4 class="fw-bold text-success">
+                        <%= schedule.month_title %>
+                    </h4>
+                    <p class="fs-5 mb-1"><span class="fw-bold">Chủ đề:</span>
+                        <%= schedule.theme_title %>
+                    </p>
+                    <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                        <%= schedule.week_label %> (<%= schedule.date_range %>)
+                    </span>
+                </div>
 
-            <!-- BẢNG LỊCH HỌC ĐỘNG -->
-            <div class="table-responsive shadow rounded-4 overflow-hidden border border-primary-subtle bg-white">
-                <table class="table table-bordered text-center align-middle mb-0 schedule-table">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="py-3" style="width: 15%">Thời gian</th>
-                            <th class="py-3" style="width: 14%">Thứ 2</th>
-                            <th class="py-3" style="width: 14%">Thứ 3</th>
-                            <th class="py-3" style="width: 14%">Thứ 4</th>
-                            <th class="py-3" style="width: 14%">Thứ 5</th>
-                            <th class="py-3" style="width: 14%">Thứ 6</th>
-                            <th class="py-3" style="width: 14%">Thứ 7</th>
-                        </tr>
-                    </thead>
-                    <tbody class="fw-semibold text-secondary">
-                        <% for(let s = 0; s < 7; s++) { %>
+                <!-- BẢNG LỊCH HỌC ĐỘNG -->
+                <div class="table-responsive shadow rounded-4 overflow-hidden border border-primary-subtle bg-white">
+                    <table class="table table-bordered text-center align-middle mb-0 schedule-table">
+                        <thead class="bg-primary text-white">
                             <tr>
-                                <td class="text-primary fw-bold"><%= timeSlots[s] %></td>
-                                <% for(let d = 0; d < 6; d++) { %>
-                                    <% const cell = matrix[s][d]; %>
-                                    
-                                    <% if (cell && cell.is_merged == 0) { %>
-                                        <td rowspan="<%= cell.row_span %>" colspan="<%= cell.col_span %>" style="background-color: <%= cell.bg_color %>; color: <%= cell.bg_color === '#ffffff' ? 'inherit' : '#000' %>">
-                                            <%= cell.content %>
-                                        </td>
-                                    <% } else if (!cell) { %>
-                                        <!-- Dự phòng nếu chưa có data trong CSDL -->
-                                        <td>-</td>
-                                    <% } %>
-                                    
-                                <% } %>
+                                <th class="py-3" style="width: 15%">Thời gian</th>
+                                <th class="py-3" style="width: 14%">Thứ 2</th>
+                                <th class="py-3" style="width: 14%">Thứ 3</th>
+                                <th class="py-3" style="width: 14%">Thứ 4</th>
+                                <th class="py-3" style="width: 14%">Thứ 5</th>
+                                <th class="py-3" style="width: 14%">Thứ 6</th>
+                                <th class="py-3" style="width: 14%">Thứ 7</th>
                             </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        <% } else { %>
-            <div class="alert alert-warning text-center rounded-4 shadow-sm py-5 mt-5">
-                <i class="bi bi-exclamation-triangle-fill display-4 text-warning mb-3 d-block"></i>
-                <h4 class="fw-bold">Chưa có dữ liệu Thời khóa biểu</h4>
-                <p class="mb-0">Hiện tại lớp học này chưa được cấu hình thời khóa biểu. Vui lòng chọn lớp khác hoặc quay lại sau!</p>
-            </div>
-        <% } %>
+                        </thead>
+                        <tbody class="fw-semibold text-secondary">
+                            <% for(let s=0; s < 7; s++) { %>
+                                <tr>
+                                    <td class="text-primary fw-bold">
+                                        <%= timeSlots[s] %>
+                                    </td>
+                                    <% for(let d=0; d < 6; d++) { %>
+                                        <% const cell=matrix[s][d]; %>
 
-    </section>
-</main>
+                                            <% if (cell && cell.is_merged==0) { %>
+                                                <% const inlineStyle=`background-color: ${cell.bg_color}; color:
+                                                    ${cell.bg_color==='#ffffff' ? 'inherit' : '#000' }`; %>
+                                                    <td rowspan="<%= cell.row_span %>" colspan="<%= cell.col_span %>"
+                                                        style="<%= inlineStyle %>">
+                                                        <%= cell.content %>
+                                                    </td>
+                                                    <% } else if (!cell) { %>
+                                                        <!-- Dự phòng nếu chưa có data trong CSDL -->
+                                                        <td>-</td>
+                                                        <% } %>
 
-<%- include('layouts/footer') %>
+                                                            <% } %>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } else { %>
+                    <div class="alert alert-warning text-center rounded-4 shadow-sm py-5 mt-5">
+                        <i class="bi bi-exclamation-triangle-fill display-4 text-warning mb-3 d-block"></i>
+                        <h4 class="fw-bold">Chưa có dữ liệu Thời khóa biểu</h4>
+                        <p class="mb-0">Hiện tại lớp học này chưa được cấu hình thời khóa biểu. Vui lòng chọn lớp khác
+                            hoặc quay lại sau!</p>
+                    </div>
+                    <% } %>
+
+        </section>
+    </main>
+
+    <%- include('layouts/footer') %>

@@ -34,9 +34,15 @@
                     <li class="nav-item">
                         <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/tkb' ? 'active-nav' : '' %>" href="/tkb"><i class="bi bi-calendar3 me-1"></i>Lịch học</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/login' ? 'active-nav' : '' %>" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a>
-                    </li>
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin' ? 'active-nav' : '' %>" href="/admin"><i class="bi bi-person-circle me-1"></i><%= user.username %></a>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/login' ? 'active-nav' : '' %>" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
         </div>

@@ -9,6 +9,16 @@
                     <p class="mb-0 mt-2 opacity-75 small">Hệ thống quản trị Đồ Rê Mí</p>
                 </div>
                 <div class="card-body p-5">
+                    <% if (typeof error !== 'undefined' && error == '1') { %>
+                        <div class="alert alert-danger rounded-3 text-center small fw-bold">
+                            Tài khoản hoặc mật khẩu không chính xác!
+                        </div>
+                    <% } %>
+                    <% if (typeof error !== 'undefined' && error == '2') { %>
+                        <div class="alert alert-warning rounded-3 text-center small fw-bold">
+                            Bạn cần đăng nhập để truy cập trang quản trị!
+                        </div>
+                    <% } %>
                     <form action="/login" method="POST">
                         <div class="mb-4">
                             <label for="username" class="form-label fw-bold text-secondary">Tên đăng nhập</label>
