@@ -4,7 +4,17 @@ const { pool } = require('../config/db');
 
 // Route hiển thị giao diện trang chủ
 router.get('/', (req, res) => {
-    res.render('index');
+    res.render('index', { currentRoute: '/' });
+});
+
+// Route hiển thị Thời khóa biểu
+router.get('/tkb', (req, res) => {
+    res.render('tkb', { currentRoute: '/tkb' });
+});
+
+// Route hiển thị trang Đăng nhập
+router.get('/login', (req, res) => {
+    res.render('login', { currentRoute: '/login' });
 });
 
 // Route API kiểm tra trạng thái Server & Database
