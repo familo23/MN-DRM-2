@@ -3,36 +3,26 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const { pool, testConnection } = require('./db');
+const { testConnection } = require('./config/db');
+const indexRoutes = require('./routes/index');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Cấu hình View Engine là EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve file tĩnh của frontend (index.html, style.css, script.js, demo.jpg...)
-app.use(express.static(path.join(__dirname)));
+// Serve các file tĩnh (CSS, JS, Images) từ thư mục public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Route kiểm tra trạng thái Server & Database
-app.get('/api/health', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT 1 as status');
-        res.json({
-            status: 'ok',
-            message: 'Server & MySQL đang hoạt động bình thường!',
-            db: 'connected'
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: 'error',
-            message: 'Không thể kết nối MySQL: ' + err.message,
-            db: 'disconnected'
-        });
-    }
-});
+// Gắn các routes
+app.use('/', indexRoutes);
 
 // Khởi động server
 app.listen(PORT, async () => {
