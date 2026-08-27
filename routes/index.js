@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../config/db');
+const { connectDB } = require('../config/db');
 
 // Route hiển thị giao diện trang chủ
 router.get('/', (req, res) => {
@@ -20,10 +20,11 @@ router.get('/login', (req, res) => {
 // Route API kiểm tra trạng thái Server & Database
 router.get('/api/health', async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT 1 as status');
+        const db = await connectDB();
+        const rows = await db.all('SELECT 1 as status');
         res.json({
             status: 'ok',
-            message: 'Server & MySQL đang hoạt động bình thường!',
+            message: 'Server & SQLite đang hoạt động bình thường!',
             db: 'connected'
         });
     } catch (err) {
