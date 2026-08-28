@@ -30,9 +30,9 @@ async function checkClassPermission(req, res, next) {
 
     try {
         const db = await connectDB();
-        let classId = req.body.class_id || req.query.class_id || req.params.class_id;
-        const scheduleId = req.body.schedule_id || req.query.schedule_id || req.params.schedule_id;
-        const cellId = req.body.cell_id;
+        let classId = req.body?.class_id || req.query?.class_id || req.params?.class_id;
+        const scheduleId = req.body?.schedule_id || req.query?.schedule_id || req.params?.schedule_id;
+        const cellId = req.body?.cell_id;
 
         // Nếu có cell_id -> suy ra schedule_id -> suy ra class_id
         if (!classId && cellId) {
@@ -51,7 +51,7 @@ async function checkClassPermission(req, res, next) {
         }
 
         if (!classId) {
-            return next(); // Nếu không gắn với class cụ thể nào (ví dụ trang tổng quan), cho qua
+            return next(); // Nếu không gắn với class cụ thể nào (ví dụ truy cập lần đầu), cho qua để route tự chọn lớp phụ trách
         }
 
         // Kiểm tra xem lớp này có thuộc về giáo viên đang đăng nhập không
@@ -62,7 +62,7 @@ async function checkClassPermission(req, res, next) {
 
         if (targetClass.teacher_id !== user.id) {
             console.warn(`[Forbidden] User ID ${user.id} (${user.username}) cố gắng truy cập lớp ID ${classId} (${targetClass.name})`);
-            if (req.xhr || req.headers.accept?.indexOf('json') > -1) {
+            if (req.xhr || req.headers?.accept?.indexOf('json') > -1) {
                 return res.status(403).json({ success: false, message: 'HTTP 403 Forbidden: Bạn không được phân công phụ trách lớp này.' });
             }
             return res.status(403).send('HTTP 403 Forbidden: Bạn không có quyền chỉnh sửa thời khóa biểu của lớp này.');
