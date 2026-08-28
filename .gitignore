@@ -2,7 +2,7 @@
 node_modules/
 
 # Environment Variables (Bảo mật mật khẩu DB của nhóm)
-.env
+# .env
 
 # Local SQLite (Không còn dùng nữa)
 *.sqlite
