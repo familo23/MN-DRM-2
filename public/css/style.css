@@ -1,55 +1,80 @@
-/* DESIGN SYSTEM & GLOBAL STYLES */
+/* CHUNG */
+
 :root {
-    --primary-color: #5b9bd5; /* Soft Sky Blue */
+    --primary-color: #5b9bd5;
     --primary-hover: #4a84b8;
-    --secondary-color: #ffb74d; /* Warm Orange/Yellow */
-    --text-color: #333333;
-    --bg-color: #f8fafc; /* Very light blue-gray background */
+    --secondary-color: #ffb74d;
+    --text-color: #333;
+    --bg-color: #f8fafc;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
 }
 
 body {
+    margin: 0;
     font-family: 'Nunito', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
 }
 
-.text-primary {
-    color: var(--primary-color) !important;
-}
-.bg-primary {
-    background-color: var(--primary-color) !important;
-}
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    border-color: var(--primary-hover);
-}
 
 /* NAVBAR */
+
 .brand-text {
     font-size: 1.6rem;
     letter-spacing: -0.5px;
 }
+
 .hover-nav {
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
+
 .hover-nav:hover {
     background-color: var(--primary-color);
     color: white !important;
     transform: translateY(-2px);
 }
+
 .active-nav {
     background-color: var(--secondary-color);
     color: white !important;
 }
+
 .navbar {
     border-bottom: 2px solid rgba(91, 155, 213, 0.1);
 }
 
-/* CAROUSEL */
+
+/* BUTTON */
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+
+/* BANNER */
+
 .carousel-inner {
     width: 100%;
 }
@@ -60,35 +85,40 @@ body {
 
 .carousel-item img {
     width: 100%;
-    height: auto;
+    height: auto !important;
     display: block;
-    object-fit: contain;
+    object-fit: contain !important;
 }
 
-.carousel-caption {
-    bottom: 0;
-}
 
-/* SCHEDULE TABLE */
-.schedule-table th, .schedule-table td {
+/* BẢNG */
+
+.schedule-table th,
+.schedule-table td {
     padding: 1.2rem 1rem;
 }
+
 .schedule-table thead th {
     font-size: 1.1rem;
     letter-spacing: 0.5px;
     border-bottom: none;
 }
+
 .schedule-table tbody tr {
-    transition: all 0.2s;
+    transition: 0.2s;
 }
+
 .schedule-table tbody tr:hover {
     background-color: rgba(91, 155, 213, 0.05);
 }
+
 .schedule-table td {
     vertical-align: middle;
 }
 
-/* CARDS */
+
+/* CARD */
+
 .icon-circle {
     width: 90px;
     height: 90px;
@@ -97,25 +127,226 @@ body {
     align-items: center;
     justify-content: center;
 }
+
 .feature-card {
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background: #ffffff;
+    background: #fff;
+    transition: 0.3s;
 }
+
 .feature-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* UTILS */
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 100px;
+
+/* GIỚI THIỆU */
+
+#about {
+    width: 100%;
+    padding: 20px 0 30px;
 }
 
-/* HIỂN THỊ ĐẦY ĐỦ BANNER */
-#heroCarousel .carousel-item img {
+.about-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.about-title h2 {
+    color: var(--primary-color);
+    font-size: 42px;
+    font-weight: 800;
+    margin: 0 0 5px;
+}
+
+.about-title p {
+    color: #777;
+    font-size: 18px;
+    margin: 0;
+}
+
+
+/* KHUNG */
+
+.about-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 25px;
+    background: #fff;
+    border-radius: 25px;
+    border: 2px solid #e8f1f8;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* CÁC ĐOẠN */
+
+.about-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.about-row:last-child {
+    border-bottom: none;
+}
+
+
+/* CHỮ */
+
+.about-content {
+    width: 50%;
+    flex: 1;
+    min-width: 0;
+}
+
+.about-content p {
+    margin: 0;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.7;
+    text-align: justify;
+}
+
+.about-content strong {
+    color: #ef7d32;
+}
+
+
+/* ẢNH */
+
+.about-image {
+    width: 50%;
+    flex: 1;
+    min-width: 0;
+    padding: 7px;
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid #e8f1f8;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.about-image img {
     width: 100%;
     height: auto !important;
+    max-width: 100%;
     display: block;
     object-fit: contain !important;
+    border-radius: 12px;
+}
+
+
+/* KHOẢNH KHẮC */
+
+.activity-gallery {
+    width: 100%;
+    margin-top: 35px;
+    text-align: center;
+}
+
+.activity-gallery h3 {
+    color: var(--primary-color);
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+}
+
+.gallery-item {
+    padding: 10px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transition: 0.3s;
+}
+
+.gallery-item:hover {
+    transform: translateY(-8px);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+
+/* KHỈ LEO CÂY */
+.monkey {
+    position: fixed;
+    top: 35%;
+    font-size: 55px;
+    z-index: 999;
+    transition: top 0.25s ease;
+    pointer-events: none;
+}
+
+.monkey-left {
+    left: 25px;
+}
+
+.monkey-right {
+    right: 25px;
+}
+
+@media (max-width: 1200px) {
+    .monkey {
+        display: none;
+    }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .about-title h2 {
+        font-size: 32px;
+    }
+
+    .about-wrapper {
+        padding: 12px;
+    }
+
+    .about-row {
+        flex-direction: column;
+        gap: 15px;
+        padding: 18px 0;
+    }
+
+    .about-content,
+    .about-image {
+        width: 100%;
+    }
+
+    .about-content p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .about-image img {
+        height: auto !important;
+        object-fit: contain !important;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .gallery-item img {
+        height: auto;
+        object-fit: contain;
+    }
 }

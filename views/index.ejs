@@ -1,68 +1,184 @@
 <%- include('layouts/header', { title: 'Trang Chủ - Mầm Non Đồ Rê Mí' }) %>
 
+<!-- KHỈ -->
+<div class="monkey monkey-left">🐒</div>
+<div class="monkey monkey-right">🐒</div>
 
 
-    <!-- HERO CAROUSEL -->
-    <section id="home" class="position-relative bg-dark">
-        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-indicators z-3">
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+<!-- BANNER -->
+<section id="home" class="position-relative bg-dark">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+        <div class="carousel-indicators z-3">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img src="/images/banner1.jpg" alt="Lớp học">
             </div>
-            <div class="carousel-inner shadow-sm">
-                <div class="carousel-item active" data-bs-interval="3000">
-                    <img src="/images/banner1.jpg" class="d-block w-100" alt="Lớp học">
-                </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="/images/banner2.jpg" class="d-block w-100" alt="Mỹ thuật">
-                </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="/images/banner3.jpg" class="d-block w-100" alt="Vui chơi ngoài trời">
-                </div>
+
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="/images/banner2.jpg" alt="Mỹ thuật">
             </div>
-            <button class="carousel-control-prev z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="/images/banner3.jpg" alt="Vui chơi ngoài trời">
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev z-3"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="carousel-control-next z-3"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+    </div>
+</section>
+
+
+<!-- NỘI DUNG -->
+<main class="container py-5">
+
+    <!-- GIỚI THIỆU -->
+    <section id="about">
+
+        <div class="about-title">
+            <h2>Về Chúng Tôi</h2>
+            <p>Trường Mầm non Đồ Rê Mí</p>
+        </div>
+
+        <div class="about-wrapper">
+
+            <!-- 1 -->
+            <div class="about-row">
+
+                <div class="about-content">
+                    <p>
+                        Trường Mầm non Đồ Rê Mí là nơi các bé được học tập,
+                        vui chơi và khám phá những điều mới mẻ mỗi ngày.
+                        Nhà trường hướng đến việc xây dựng một
+                        <strong>môi trường an toàn, thân thiện</strong>
+                        và phù hợp với sự phát triển của trẻ, giúp các bé
+                        thoải mái học hỏi và phát huy khả năng của mình.
+                    </p>
+                </div>
+
+                <div class="about-image">
+                    <img src="/images/hoatdong1.jpg" alt="Bé tham gia hoạt động">
+                </div>
+
+            </div>
+
+
+            <!-- 2 -->
+            <div class="about-row">
+
+                <div class="about-image">
+                    <img src="/images/hoatdong2.jpg" alt="Hoạt động khám phá của bé">
+                </div>
+
+                <div class="about-content">
+                    <p>
+                        Chương trình học tại lớp sẽ kết hợp giữa kiến thức
+                        cơ bản và các hoạt động phù hợp với lứa tuổi như
+                        <strong>vẽ, âm nhạc, vận động, kể chuyện,
+                        làm quen với thiên nhiên và các hoạt động sáng tạo</strong>.
+                        Bên cạnh giờ học trên lớp, nhà trường thường xuyên
+                        tổ chức các <strong>hoạt động ngoại khóa và trải nghiệm
+                        thực tế</strong> như tham quan, vui chơi ngoài trời,
+                        hoạt động tập thể, các chương trình theo chủ đề
+                        và những buổi trải nghiệm giúp bé khám phá thế giới
+                        xung quanh.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- 3 -->
+            <div class="about-row">
+
+                <div class="about-content">
+                    <p>
+                        Thông qua những hoạt động này, các bé có cơ hội
+                        <strong>rèn luyện kỹ năng giao tiếp, làm việc cùng
+                        bạn bè, tự tin thể hiện bản thân và hình thành
+                        tính tự lập</strong>.
+                        Các hoạt động cũng được tổ chức theo hướng vừa học
+                        vừa chơi, tạo cho trẻ thêm nhiều trải nghiệm thú vị
+                        bên cạnh những giờ học hằng ngày.
+                    </p>
+                </div>
+
+                <div class="about-image">
+                    <img src="/images/tet.jppg.jpg" alt="Các bé tham gia hoạt động">
+                </div>
+
+            </div>
+
+
+            <!-- 4 -->
+            <div class="about-row">
+
+                <div class="about-image">
+                    <img src="/images/hoatdong4.jpg" alt="Hoạt động của các bé">
+                </div>
+
+                <div class="about-content">
+                    <p>
+                        Nhà trường cũng chú trọng đến việc theo dõi quá trình
+                        học tập và sinh hoạt của từng bé, đồng thời tạo sự
+                        <strong>kết nối giữa giáo viên và phụ huynh</strong>
+                        để việc chăm sóc và giáo dục trẻ được thuận tiện,
+                        hiệu quả hơn.
+                    </p>
+                </div>
+
+            </div>
+
         </div>
 
     </section>
 
-    <!-- MAIN CONTENT -->
-    <main class="container py-5 my-3">
 
-        <!-- GIỚI THIỆU -->
-        <section id="about" class="mb-5 pb-5 text-center">
-            <h2 class="display-5 fw-bold text-primary mb-4">Về Chúng Tôi</h2>
-            <p class="fs-5 text-muted mx-auto" style="max-width: 800px;">
-                Trường Mầm non Đồ Rê Mí là nơi các bé được học tập, vui chơi và khám phá những điều mới mẻ mỗi ngày. Nhà
-                trường hướng đến việc xây dựng một <b>môi trường an toàn, thân thiện</b> và phù hợp với sự phát triển
-                của trẻ, giúp các bé thoải mái học hỏi và phát huy khả năng của mình.
-            </p>
-            <p class="fs-5 text-muted mx-auto" style="max-width: 800px;">
-                Chương trình học tại lớp sẽ <b> kết hợp giữa kiến thức cơ bản và các hoạt động phù hợp</b> với lứa tuổi
-                như <b>vẽ, âm nhạc, vận động, kể chuyện, làm quen với thiên nhiên và các hoạt động sáng tạo</b>. Bên
-                cạnh giờ học trên lớp, nhà trường thường xuyên tổ chức các <b>hoạt động ngoại khóa và trải nghiệm thực
-                    tế</b> như tham quan, vui chơi ngoài trời, hoạt động tập thể, các chương trình theo chủ đề và những
-                buổi trải nghiệm giúp bé khám phá thế giới xung quanh.
-            </p>
-            <p class="fs-5 text-muted mx-auto" style="max-width: 800px;">
-                Thông qua những hoạt động này, các bé có cơ hội rèn luyện kỹ năng giao tiếp, làm việc cùng bạn bè, tự
-                tin thể hiện bản thân và hình thành tính tự lập. Các hoạt động cũng được tổ chức theo hướng vừa học vừa
-                chơi, tạo cho trẻ thêm nhiều trải nghiệm thú vị bên cạnh những giờ học hằng ngày.
-            </p>
-            <p class="fs-5 text-muted mx-auto" style="max-width: 800px;">
-                Nhà trường cũng chú trọng đến việc theo dõi quá trình học tập và sinh hoạt của từng bé, đồng thời tạo sự
-                kết nối giữa giáo viên và phụ huynh để việc chăm sóc và giáo dục trẻ được thuận tiện, hiệu quả hơn.
-            </p>
-        </section>
+    <!-- KHOẢNH KHẮC -->
+    <section class="activity-gallery">
 
+        <h3>Khoảnh Khắc Của Bé</h3>
 
-    </main>
+        <div class="gallery-grid">
 
-    <%- include('layouts/footer') %>
+            <div class="gallery-item">
+                <img src="/images/hoatdong1-1.jpg" alt="Hoạt động của bé">
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/hoatdong5.jpg" alt="Hoạt động của bé">
+            </div>
+
+            <div class="gallery-item">
+                <img src="/images/hotdong3.jpg" alt="Hoạt động của bé">
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<%- include('layouts/footer') %>
