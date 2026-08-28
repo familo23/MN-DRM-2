@@ -1,109 +1,184 @@
 <%- include('layouts/header', { title: 'Lịch Học - Mầm Non Đồ Rê Mí' }) %>
 
-    <main class="container py-5 my-4">
+<style>
+    .week-nav-btn {
+        min-width: 150px;
+        transition: all 0.2s ease-in-out;
+    }
+    .week-nav-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .schedule-header-card {
+        background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    }
+</style>
 
-        <section id="lich" class="mb-5">
-            <div class="text-center mb-5">
-                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fs-6">Kế hoạch mỗi ngày</span>
-                <h2 class="display-5 fw-bold text-primary mb-3">
-                    <i class="bi bi-calendar-heart text-danger me-2"></i>Thời Khóa Biểu
-                </h2>
-                <p class="text-muted fs-5">Lịch hoạt động một ngày vui vẻ của các bé</p>
+<main class="container py-5 my-3">
+    <section id="lich" class="mb-5">
+        <div class="text-center mb-4">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fs-6 shadow-sm">
+                <i class="bi bi-stars me-1"></i>Kế hoạch học tập & sinh hoạt
+            </span>
+            <h2 class="display-5 fw-bold text-primary mb-2">
+                <i class="bi bi-calendar-heart text-danger me-2"></i>Thời Khóa Biểu
+            </h2>
+            <p class="text-muted fs-5">Lịch hoạt động từng tuần vui vẻ và bổ ích của các bé</p>
+        </div>
+
+        <!-- BỘ LỌC CHỌN LỚP & CHỌN NHANH TUẦN -->
+        <div class="row justify-content-center g-3 mb-4">
+            <div class="col-md-5 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-3 text-center bg-primary-subtle rounded-4">
+                        <label class="fw-bold text-primary mb-2 small text-uppercase">
+                            <i class="bi bi-building me-1"></i>Chọn Lớp Học
+                        </label>
+                        <form action="/tkb" method="GET" id="classFilterForm">
+                            <select class="form-select rounded-pill shadow-sm text-center fw-bold text-primary border-primary" 
+                                    name="class_id" onchange="this.form.submit()">
+                                <% if (classes && classes.length > 0) { %>
+                                    <% classes.forEach(function(cls) { %>
+                                        <option value="<%= cls.id %>" <%= selectedClassId === cls.id ? 'selected' : '' %>>
+                                            Lớp: <%= cls.name %>
+                                        </option>
+                                    <% }); %>
+                                <% } else { %>
+                                    <option value="">Chưa có lớp học nào</option>
+                                <% } %>
+                            </select>
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <!-- BỘ LỌC CHỌN LỚP -->
-            <div class="row justify-content-center mb-5">
-                <div class="col-md-5">
-                    <div class="card border-0 shadow-sm rounded-4">
-                        <div class="card-body p-4 text-center bg-primary-subtle rounded-4">
-                            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-funnel-fill me-2"></i>Lọc theo Lớp Học
-                            </h5>
+            <% if (allSchedules && allSchedules.length > 0) { %>
+                <div class="col-md-5 col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-3 text-center bg-light rounded-4">
+                            <label class="fw-bold text-secondary mb-2 small text-uppercase">
+                                <i class="bi bi-clock-history me-1"></i>Chọn nhanh các tuần
+                            </label>
                             <form action="/tkb" method="GET">
-                                <select
-                                    class="form-select form-select-lg rounded-pill shadow-sm text-center fw-bold text-primary border-primary"
-                                    name="class_id" onchange="this.form.submit()">
-                                    <% if (classes && classes.length> 0) { %>
-                                        <% classes.forEach(function(cls) { %>
-                                            <option value="<%= cls.id %>" <%=selectedClassId===cls.id ? 'selected' : ''
-                                                %>>
-                                                Lớp: <%= cls.name %>
-                                            </option>
-                                            <% }); %>
-                                                <% } else { %>
-                                                    <option value="">Chưa có lớp học nào</option>
-                                                    <% } %>
+                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                <select class="form-select rounded-pill shadow-sm text-center fw-semibold border-secondary-subtle" 
+                                        name="schedule_id" onchange="this.form.submit()">
+                                    <% allSchedules.forEach(function(s) { %>
+                                        <option value="<%= s.id %>" <%= schedule && schedule.id === s.id ? 'selected' : '' %>>
+                                            <%= s.week_label %> (<%= s.date_range %>)
+                                        </option>
+                                    <% }); %>
                                 </select>
                             </form>
                         </div>
                     </div>
                 </div>
+            <% } %>
+        </div>
+
+        <% if (schedule) { %>
+            <!-- KHU VỰC ĐIỀU HƯỚNG TUẦN TRUNG TÂM -->
+            <div class="card border-0 shadow-sm rounded-4 schedule-header-card p-4 mb-4">
+                <div class="row align-items-center g-3">
+                    <!-- Nút Tuần Trước -->
+                    <div class="col-md-3 text-center text-md-start">
+                        <% if (prevSchedule) { %>
+                            <a href="/tkb?class_id=<%= selectedClassId %>&schedule_id=<%= prevSchedule.id %>" 
+                               class="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold week-nav-btn shadow-sm">
+                                <i class="bi bi-arrow-left me-1"></i>Tuần trước
+                            </a>
+                        <% } else { %>
+                            <button class="btn btn-light border text-muted rounded-pill px-4 py-2 week-nav-btn" disabled>
+                                <i class="bi bi-arrow-left me-1"></i>Tuần trước
+                            </button>
+                        <% } %>
+                    </div>
+
+                    <!-- Tiêu đề Tuần ở Trung Tâm -->
+                    <div class="col-md-6 text-center">
+                        <span class="badge bg-primary px-3 py-2 rounded-pill fs-6 mb-2">
+                            <%= schedule.week_label || ('Tuần ' + schedule.week_number) %>
+                        </span>
+                        <h3 class="fw-bold text-dark mb-1">
+                            <%= schedule.date_range %>
+                        </h3>
+                        <% if (schedule.month_title || schedule.theme_title) { %>
+                            <div class="text-muted small">
+                                <span class="fw-bold text-success me-2"><%= schedule.month_title %></span>
+                                <% if (schedule.theme_title) { %>
+                                    <span>• Chủ đề: <b><%= schedule.theme_title %></b></span>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Nút Tuần Sau -->
+                    <div class="col-md-3 text-center text-md-end">
+                        <% if (nextSchedule) { %>
+                            <a href="/tkb?class_id=<%= selectedClassId %>&schedule_id=<%= nextSchedule.id %>" 
+                               class="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold week-nav-btn shadow-sm">
+                                Tuần sau<i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        <% } else { %>
+                            <button class="btn btn-light border text-muted rounded-pill px-4 py-2 week-nav-btn" disabled>
+                                Tuần sau<i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        <% } %>
+                    </div>
+                </div>
             </div>
 
-            <% if (schedule) { %>
-                <!-- THÔNG TIN LỊCH HỌC -->
-                <div class="text-center mb-4">
-                    <h4 class="fw-bold text-success">
-                        <%= schedule.month_title %>
-                    </h4>
-                    <p class="fs-5 mb-1"><span class="fw-bold">Chủ đề:</span>
-                        <%= schedule.theme_title %>
-                    </p>
-                    <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
-                        <%= schedule.week_label %> (<%= schedule.date_range %>)
-                    </span>
-                </div>
-
-                <!-- BẢNG LỊCH HỌC ĐỘNG -->
-                <div class="table-responsive shadow rounded-4 overflow-hidden border border-primary-subtle bg-white">
-                    <table class="table table-bordered text-center align-middle mb-0 schedule-table">
-                        <thead class="bg-primary text-white">
+            <!-- BẢNG LỊCH HỌC ĐỘNG (RESPONSIVE) -->
+            <div class="table-responsive shadow rounded-4 overflow-hidden border border-primary-subtle bg-white">
+                <table class="table table-bordered text-center align-middle mb-0 schedule-table">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th class="py-3" style="width: 16%">Thời gian</th>
+                            <th class="py-3" style="width: 14%">Thứ 2</th>
+                            <th class="py-3" style="width: 14%">Thứ 3</th>
+                            <th class="py-3" style="width: 14%">Thứ 4</th>
+                            <th class="py-3" style="width: 14%">Thứ 5</th>
+                            <th class="py-3" style="width: 14%">Thứ 6</th>
+                            <th class="py-3" style="width: 14%">Thứ 7</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-secondary">
+                        <% for(let s = 0; s < 7; s++) { %>
                             <tr>
-                                <th class="py-3" style="width: 15%">Thời gian</th>
-                                <th class="py-3" style="width: 14%">Thứ 2</th>
-                                <th class="py-3" style="width: 14%">Thứ 3</th>
-                                <th class="py-3" style="width: 14%">Thứ 4</th>
-                                <th class="py-3" style="width: 14%">Thứ 5</th>
-                                <th class="py-3" style="width: 14%">Thứ 6</th>
-                                <th class="py-3" style="width: 14%">Thứ 7</th>
-                            </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-secondary">
-                            <% for(let s=0; s < 7; s++) { %>
-                                <tr>
-                                    <td class="text-primary fw-bold">
-                                        <%= timeSlots[s] %>
-                                    </td>
-                                    <% for(let d=0; d < 6; d++) { %>
-                                        <% const cell=matrix[s][d]; %>
+                                <td class="text-primary fw-bold bg-light">
+                                    <%= timeSlots[s] %>
+                                </td>
+                                <% for(let d = 0; d < 6; d++) { %>
+                                    <% const cell = matrix[s][d]; %>
 
-                                            <% if (cell && cell.is_merged==0) { %>
-                                                <% const inlineStyle=`background-color: ${cell.bg_color}; color:
-                                                    ${cell.bg_color==='#ffffff' ? 'inherit' : '#000' }`; %>
-                                                    <td rowspan="<%= cell.row_span %>" colspan="<%= cell.col_span %>"
-                                                        style="<%= inlineStyle %>">
-                                                        <%= cell.content %>
-                                                    </td>
-                                                    <% } else if (!cell) { %>
-                                                        <!-- Dự phòng nếu chưa có data trong CSDL -->
-                                                        <td>-</td>
-                                                        <% } %>
-
-                                                            <% } %>
-                                </tr>
+                                    <% if (cell && cell.is_merged == 0) { %>
+                                        <% const inlineStyle = `background-color: ${cell.bg_color || '#ffffff'}; color: ${(!cell.bg_color || cell.bg_color === '#ffffff') ? 'inherit' : '#000'}`; %>
+                                        <td rowspan="<%= cell.row_span || 1 %>" 
+                                            colspan="<%= cell.col_span || 1 %>" 
+                                            style="<%= inlineStyle %>" 
+                                            class="py-3">
+                                            <%= cell.content %>
+                                        </td>
+                                    <% } else if (!cell) { %>
+                                        <td class="text-muted small">-</td>
+                                    <% } %>
                                 <% } %>
-                        </tbody>
-                    </table>
-                </div>
-                <% } else { %>
-                    <div class="alert alert-warning text-center rounded-4 shadow-sm py-5 mt-5">
-                        <i class="bi bi-exclamation-triangle-fill display-4 text-warning mb-3 d-block"></i>
-                        <h4 class="fw-bold">Chưa có dữ liệu Thời khóa biểu</h4>
-                        <p class="mb-0">Hiện tại lớp học này chưa được cấu hình thời khóa biểu. Vui lòng chọn lớp khác
-                            hoặc quay lại sau!</p>
-                    </div>
-                    <% } %>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
 
-        </section>
-    </main>
+        <% } else { %>
+            <!-- THÔNG BÁO THÂN THIỆN KHI CHƯA CÓ THỜI KHÓA BIỂU -->
+            <div class="alert alert-warning text-center rounded-4 shadow-sm py-5 mt-4 border-0">
+                <i class="bi bi-calendar-x display-4 text-warning mb-3 d-block"></i>
+                <h4 class="fw-bold text-dark">Chưa có thời khóa biểu cho tuần này</h4>
+                <p class="text-muted mb-0">Lớp học này hiện tại chưa có thời khóa biểu được áp dụng cho tuần đã chọn. Quý phụ huynh vui lòng chọn tuần khác hoặc quay lại sau!</p>
+            </div>
+        <% } %>
 
-    <%- include('layouts/footer') %>
+    </section>
+</main>
+
+<%- include('layouts/footer') %>

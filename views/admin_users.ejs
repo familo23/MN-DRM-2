@@ -80,7 +80,7 @@
                                                             <div class="mb-3 text-start">
                                                                 <label class="form-label fw-bold">Phân quyền</label>
                                                                 <select name="role" class="form-select">
-                                                                    <option value="giaovien" <%= u.role === 'giaovien' ? 'selected' : '' %>>Giáo viên</option>
+                                                                    <option value="teacher" <%= u.role === 'teacher' || u.role === 'giaovien' ? 'selected' : '' %>>Giáo viên</option>
                                                                     <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Quản trị viên (Admin)</option>
                                                                 </select>
                                                             </div>
@@ -133,7 +133,7 @@
                     <div class="mb-3 text-start">
                         <label class="form-label fw-bold">Phân quyền</label>
                         <select name="role" class="form-select">
-                            <option value="giaovien">Giáo viên</option>
+                            <option value="teacher">Giáo viên</option>
                             <option value="admin">Quản trị viên (Admin)</option>
                         </select>
                     </div>

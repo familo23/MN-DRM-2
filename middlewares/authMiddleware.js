@@ -1,11 +1,77 @@
-// Middleware kiểm tra xem người dùng đã đăng nhập chưa
+const { connectDB } = require('../config/db');
+
+// Middleware kiểm tra đăng nhập
 function requireLogin(req, res, next) {
     if (req.session && req.session.user) {
-        // Đã đăng nhập
         return next();
     } else {
-        // Chưa đăng nhập, chuyển hướng về trang login kèm thông báo
         return res.redirect('/login?error=2');
+    }
+}
+
+// Middleware chỉ cho phép Admin
+function requireAdmin(req, res, next) {
+    if (req.session && req.session.user && req.session.user.role === 'admin') {
+        return next();
+    }
+    return res.status(403).send('HTTP 403 Forbidden: Chỉ Quản trị viên (Admin) mới có quyền thực hiện thao tác này.');
+}
+
+// Middleware kiểm tra quyền của Giáo viên trên Lớp học
+async function checkClassPermission(req, res, next) {
+    if (!req.session || !req.session.user) {
+        return res.redirect('/login?error=2');
+    }
+
+    const user = req.session.user;
+    if (user.role === 'admin') {
+        return next(); // Admin có toàn quyền
+    }
+
+    try {
+        const db = await connectDB();
+        let classId = req.body.class_id || req.query.class_id || req.params.class_id;
+        const scheduleId = req.body.schedule_id || req.query.schedule_id || req.params.schedule_id;
+        const cellId = req.body.cell_id;
+
+        // Nếu có cell_id -> suy ra schedule_id -> suy ra class_id
+        if (!classId && cellId) {
+            const cell = await db.get(`
+                SELECT s.class_id FROM schedule_cells sc 
+                JOIN schedules s ON sc.schedule_id = s.id 
+                WHERE sc.id = ?
+            `, [cellId]);
+            if (cell) classId = cell.class_id;
+        }
+
+        // Nếu có scheduleId mà chưa có classId -> tìm class_id
+        if (!classId && scheduleId) {
+            const sched = await db.get('SELECT class_id FROM schedules WHERE id = ?', [scheduleId]);
+            if (sched) classId = sched.class_id;
+        }
+
+        if (!classId) {
+            return next(); // Nếu không gắn với class cụ thể nào (ví dụ trang tổng quan), cho qua
+        }
+
+        // Kiểm tra xem lớp này có thuộc về giáo viên đang đăng nhập không
+        const targetClass = await db.get('SELECT * FROM classes WHERE id = ?', [classId]);
+        if (!targetClass) {
+            return res.status(404).send('Lớp học không tồn tại');
+        }
+
+        if (targetClass.teacher_id !== user.id) {
+            console.warn(`[Forbidden] User ID ${user.id} (${user.username}) cố gắng truy cập lớp ID ${classId} (${targetClass.name})`);
+            if (req.xhr || req.headers.accept?.indexOf('json') > -1) {
+                return res.status(403).json({ success: false, message: 'HTTP 403 Forbidden: Bạn không được phân công phụ trách lớp này.' });
+            }
+            return res.status(403).send('HTTP 403 Forbidden: Bạn không có quyền chỉnh sửa thời khóa biểu của lớp này.');
+        }
+
+        next();
+    } catch (e) {
+        console.error('Lỗi checkClassPermission:', e);
+        res.status(500).send('Lỗi kiểm tra quyền hạn');
     }
 }
 
@@ -17,5 +83,7 @@ function setLocals(req, res, next) {
 
 module.exports = {
     requireLogin,
+    requireAdmin,
+    checkClassPermission,
     setLocals
 };

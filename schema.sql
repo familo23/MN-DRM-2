@@ -8,27 +8,34 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'teacher') DEFAULT 'teacher',
+    role ENUM('admin', 'teacher', 'giaovien') DEFAULT 'teacher',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Bảng Danh sách lớp học
+-- 2. Bảng Danh sách lớp học (Kèm phân quyền Giáo viên phụ trách)
 CREATE TABLE IF NOT EXISTS classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     code VARCHAR(100) NOT NULL UNIQUE,
-    order_index INT DEFAULT 0
+    order_index INT DEFAULT 0,
+    teacher_id INT NULL,
+    FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Bảng Quản lý Thời khóa biểu (theo tuần của từng lớp)
+-- 3. Bảng Quản lý Thời khóa biểu (theo từng tuần của từng lớp)
 CREATE TABLE IF NOT EXISTS schedules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     class_id INT NOT NULL,
+    week_start DATE NULL,
+    week_end DATE NULL,
+    week_number INT DEFAULT 1,
     month_title VARCHAR(255) DEFAULT 'THÁNG 05',
     theme_title VARCHAR(255) DEFAULT 'QUÊ HƯƠNG ĐẤT NƯỚC BÁC HỒ',
-    week_label VARCHAR(100) DEFAULT 'Tuần 2',
+    week_label VARCHAR(100) DEFAULT 'Tuần 1',
     date_range VARCHAR(255) DEFAULT 'Từ ngày 11/05 - 16/05/2026',
     is_active TINYINT(1) DEFAULT 1,
+    is_deleted TINYINT(1) DEFAULT 0,
+    deleted_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
@@ -49,28 +56,35 @@ CREATE TABLE IF NOT EXISTS schedule_cells (
     UNIQUE KEY unique_slot (schedule_id, day_of_week, slot_index)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 5. Bảng Thư viện Hoạt động (Activity Library)
+CREATE TABLE IF NOT EXISTS activity_library (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    default_color VARCHAR(50) DEFAULT '#ffffff',
+    user_id INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- =======================================================
 -- DỮ LIỆU KHỞI TẠO MẪU (SEED DATA)
 -- =======================================================
 
--- 1. Tài khoản giáo viên mặc định (Mật khẩu: 123456)
+-- 1. Tài khoản mặc định
 INSERT IGNORE INTO users (id, username, password, full_name, role) VALUES
-(1, 'giaovien', '$2a$10$7RkbQ0n0z91bYJb4f5Y4jOB6N01v8mDk.2XWbY13e8oQY9U15wXea', 'Cô Giáo Đồ Rê Mí', 'admin');
-
--- Tài khoản Admin (Mật khẩu: admin@123)
-INSERT IGNORE INTO users (id, username, password, full_name, role) VALUES
+(1, 'giaovien', '$2a$10$7RkbQ0n0z91bYJb4f5Y4jOB6N01v8mDk.2XWbY13e8oQY9U15wXea', 'Cô Giáo Đồ Rê Mí', 'teacher'),
 (2, 'admin', '$2b$10$Zaj6ytcIskfF1x.ZS5MkGuqBV2/OhWQOVJ5mbtFhvJKsaWCJXrDQW', 'Quản trị viên', 'admin');
 
--- 2. Danh sách lớp
-INSERT IGNORE INTO classes (id, name, code, order_index) VALUES
-(1, 'Nhà trẻ', 'nha_tre', 1),
-(2, 'Mầm non', 'mam_non', 2);
+-- 2. Danh sách lớp (Gán giáo viên phụ trách)
+INSERT IGNORE INTO classes (id, name, code, order_index, teacher_id) VALUES
+(1, 'Nhà trẻ', 'nha_tre', 1, 1),
+(2, 'Mầm non', 'mam_non', 2, 1);
 
 -- 3. Thời khóa biểu mẫu cho lớp Nhà trẻ
-INSERT IGNORE INTO schedules (id, class_id, month_title, theme_title, week_label, date_range, is_active) VALUES
-(1, 1, 'LỊCH HỌC : THÁNG 05', 'CHỦ ĐỀ : QUÊ HƯƠNG ĐẤT NƯỚC BÁC HỒ', 'Tuần 2', 'Từ ngày 11/05 - 16/05/2026', 1);
+INSERT IGNORE INTO schedules (id, class_id, week_start, week_end, week_number, month_title, theme_title, week_label, date_range, is_active, is_deleted) VALUES
+(1, 1, '2026-05-11', '2026-05-16', 2, 'LỊCH HỌC : THÁNG 05', 'CHỦ ĐỀ : QUÊ HƯƠNG ĐẤT NƯỚC BÁC HỒ', 'Tuần 2', 'Từ ngày 11/05 - 16/05/2026', 1, 0);
 
--- 4. Chi tiết các ô TKB theo mẫu demo.jpg
+-- 4. Chi tiết các ô TKB theo mẫu demo
 REPLACE INTO schedule_cells (id, schedule_id, day_of_week, slot_index, content, bg_color, row_span, col_span, is_merged) VALUES
 -- Thứ 2
 (1, 1, 2, 0, 'Đón trẻ, cho trẻ ăn sáng', '#ffffff', 1, 1, 0),
@@ -125,3 +139,18 @@ REPLACE INTO schedule_cells (id, schedule_id, day_of_week, slot_index, content, 
 (40, 1, 7, 4, 'HĐG', '#ffffff', 1, 1, 0),
 (41, 1, 7, 5, 'Hoạt động góc', '#ffffff', 1, 1, 0),
 (42, 1, 7, 6, '', '#ffffff', 1, 1, 1);
+
+-- 5. Seed Hoạt động mẫu cho Thư viện hoạt động
+INSERT IGNORE INTO activity_library (id, title, default_color) VALUES
+(1, 'Đón trẻ, cho trẻ ăn sáng', '#ffffff'),
+(2, 'Tập thể dục buổi sáng', '#ffffff'),
+(3, 'Uống sữa vinamilk', '#ffffff'),
+(4, 'STEAM :- Tìm hiểu thế giới xung quanh', '#92d050'),
+(5, 'Tạo hình :- Vẽ & Tô màu sáng tạo', '#92d050'),
+(6, 'Toán nhận biết :- Nhận biết hình khối, chữ số', '#ffc000'),
+(7, 'Âm Nhạc :- Hát & Vận động theo nhạc', '#ff99cc'),
+(8, 'Làm quen văn học :- Truyện & Thơ', '#ffffff'),
+(9, 'Tiếng Anh với giáo viên bản ngữ', '#00b0f0'),
+(10, 'Hoạt động góc / Vui chơi tự do', '#ffffff'),
+(11, 'Ăn trưa & Ngủ trưa', '#ffffff'),
+(12, 'Phụ Huynh đón trẻ ra về', '#ffffff');

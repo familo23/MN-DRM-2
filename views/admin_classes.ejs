@@ -10,23 +10,31 @@
         <!-- Main Content -->
         <div class="col-md-9">
             <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="fw-bold text-primary mb-0"><i class="bi bi-people me-2"></i>Danh sách Lớp Học</h2>
-                        <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#createClassModal">
-                            <i class="bi bi-plus-circle me-1"></i>Thêm Lớp
-                        </button>
+                <div class="card-body p-4 p-lg-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <div>
+                            <h2 class="fw-bold text-primary mb-1"><i class="bi bi-people me-2"></i>Danh sách Lớp Học</h2>
+                            <p class="text-muted small mb-0">Quản lý lớp và phân công Giáo viên phụ trách</p>
+                        </div>
+                        <% if (user && user.role === 'admin') { %>
+                            <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#createClassModal">
+                                <i class="bi bi-plus-circle me-1"></i>Thêm Lớp Mới
+                            </button>
+                        <% } %>
                     </div>
                     
                     <div class="table-responsive">
                         <table class="table table-hover align-middle border text-center">
                             <thead class="table-light text-secondary">
                                 <tr>
-                                    <th style="width: 10%">STT</th>
+                                    <th style="width: 8%">STT</th>
                                     <th>Tên Lớp</th>
-                                    <th>Mã Lớp (Code)</th>
-                                    <th style="width: 20%">Thứ tự ưu tiên</th>
-                                    <th style="width: 20%">Thao tác</th>
+                                    <th>Mã Lớp</th>
+                                    <th>Giáo viên phụ trách</th>
+                                    <th style="width: 15%">Thứ tự</th>
+                                    <% if (user && user.role === 'admin') { %>
+                                        <th style="width: 20%">Thao tác</th>
+                                    <% } %>
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,46 +44,74 @@
                                             <td class="fw-bold text-muted"><%= index + 1 %></td>
                                             <td class="fw-bold text-dark fs-5"><%= cls.name %></td>
                                             <td><span class="badge bg-secondary rounded-pill px-3"><%= cls.code %></span></td>
-                                            <td><%= cls.order_index %></td>
                                             <td>
-                                                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#editClassModal<%= cls.id %>">Sửa</button>
-                                                <form action="/admin/classes/delete/<%= cls.id %>" method="POST" class="d-inline" onsubmit="return confirm('CẢNH BÁO: Xóa lớp học sẽ xóa toàn bộ Thời Khóa Biểu của lớp này. Bạn có chắc chắn muốn xóa lớp <%= cls.name %> không?');">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Xóa</button>
-                                                </form>
+                                                <% if (cls.teacher_name) { %>
+                                                    <span class="badge bg-success-subtle text-success fw-bold px-3 py-2 rounded-pill">
+                                                        <i class="bi bi-person-check me-1"></i><%= cls.teacher_name %>
+                                                    </span>
+                                                <% } else { %>
+                                                    <span class="badge bg-warning-subtle text-warning fw-bold px-3 py-2 rounded-pill">
+                                                        <i class="bi bi-exclamation-circle me-1"></i>Chưa phân công
+                                                    </span>
+                                                <% } %>
                                             </td>
+                                            <td><%= cls.order_index %></td>
+                                            <% if (user && user.role === 'admin') { %>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" data-bs-toggle="modal" data-bs-target="#editClassModal<%= cls.id %>">Sửa</button>
+                                                    <form action="/admin/classes/delete/<%= cls.id %>" method="POST" class="d-inline" onsubmit="return confirm('CẢNH BÁO: Xóa lớp học sẽ xóa toàn bộ Thời Khóa Biểu của lớp này. Bạn có chắc chắn muốn xóa lớp <%= cls.name %> không?');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            <% } %>
                                         </tr>
 
                                         <!-- Edit Modal -->
-                                        <div class="modal fade" id="editClassModal<%= cls.id %>" tabindex="-1">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content rounded-4 border-0 shadow">
-                                                    <form action="/admin/classes/edit/<%= cls.id %>" method="POST">
-                                                        <div class="modal-header border-bottom-0 pb-0">
-                                                            <h5 class="modal-title fw-bold text-primary">Sửa Thông Tin Lớp Học</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body p-4">
-                                                            <div class="mb-3 text-start">
-                                                                <label class="form-label fw-bold">Tên Lớp</label>
-                                                                <input type="text" name="name" class="form-control" value="<%= cls.name %>" required>
+                                        <% if (user && user.role === 'admin') { %>
+                                            <div class="modal fade" id="editClassModal<%= cls.id %>" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content rounded-4 border-0 shadow">
+                                                        <form action="/admin/classes/edit/<%= cls.id %>" method="POST">
+                                                            <div class="modal-header border-bottom-0 pb-0">
+                                                                <h5 class="modal-title fw-bold text-primary">Sửa Thông Tin Lớp Học</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <div class="mb-3 text-start">
-                                                                <label class="form-label fw-bold">Thứ tự hiển thị (Số nhỏ xếp trên cùng)</label>
-                                                                <input type="number" name="order_index" class="form-control" value="<%= cls.order_index %>">
+                                                            <div class="modal-body p-4">
+                                                                <div class="mb-3 text-start">
+                                                                    <label class="form-label fw-bold">Tên Lớp</label>
+                                                                    <input type="text" name="name" class="form-control" value="<%= cls.name %>" required>
+                                                                </div>
+                                                                <div class="mb-3 text-start">
+                                                                    <label class="form-label fw-bold">Giáo viên phụ trách</label>
+                                                                    <select name="teacher_id" class="form-select">
+                                                                        <option value="">-- Chưa gán giáo viên --</option>
+                                                                        <% if (teachers && teachers.length > 0) { %>
+                                                                            <% teachers.forEach(function(t) { %>
+                                                                                <option value="<%= t.id %>" <%= cls.teacher_id === t.id ? 'selected' : '' %>>
+                                                                                    <%= t.full_name %> (<%= t.username %>)
+                                                                                </option>
+                                                                            <% }); %>
+                                                                        <% } %>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3 text-start">
+                                                                    <label class="form-label fw-bold">Thứ tự hiển thị (Số nhỏ xếp trên cùng)</label>
+                                                                    <input type="number" name="order_index" class="form-control" value="<%= cls.order_index %>">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="modal-footer border-top-0 pt-0">
-                                                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
-                                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu Thay Đổi</button>
-                                                        </div>
-                                                    </form>
+                                                            <div class="modal-footer border-top-0 pt-0">
+                                                                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                                                                <button type="submit" class="btn btn-primary rounded-pill px-4">Lưu Thay Đổi</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        <% } %>
                                     <% }); %>
                                 <% } else { %>
                                     <tr>
-                                        <td colspan="5" class="py-4 text-muted fs-5">Chưa có lớp học nào. Hãy thêm mới!</td>
+                                        <td colspan="<%= user && user.role === 'admin' ? 6 : 5 %>" class="py-4 text-muted fs-5">Chưa có lớp học nào được phân quyền cho bạn.</td>
                                     </tr>
                                 <% } %>
                             </tbody>
@@ -88,31 +124,46 @@
 </main>
 
 <!-- Create Modal -->
-<div class="modal fade" id="createClassModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <form action="/admin/classes/create" method="POST">
-                <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold text-primary">Thêm Lớp Học Mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="mb-3 text-start">
-                        <label class="form-label fw-bold">Tên Lớp (Vd: Lớp Chồi)</label>
-                        <input type="text" name="name" class="form-control" required placeholder="Nhập tên lớp...">
+<% if (user && user.role === 'admin') { %>
+    <div class="modal fade" id="createClassModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <form action="/admin/classes/create" method="POST">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold text-primary">Thêm Lớp Học Mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="mb-3 text-start">
-                        <label class="form-label fw-bold">Thứ tự hiển thị (Tùy chọn)</label>
-                        <input type="number" name="order_index" class="form-control" value="0">
+                    <div class="modal-body p-4">
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-bold">Tên Lớp (Vd: Lớp Chồi 1)</label>
+                            <input type="text" name="name" class="form-control" required placeholder="Nhập tên lớp...">
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-bold">Giáo viên phụ trách</label>
+                            <select name="teacher_id" class="form-select">
+                                <option value="">-- Chưa gán giáo viên --</option>
+                                <% if (teachers && teachers.length > 0) { %>
+                                    <% teachers.forEach(function(t) { %>
+                                        <option value="<%= t.id %>">
+                                            <%= t.full_name %> (<%= t.username %>)
+                                        </option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-bold">Thứ tự hiển thị (Tùy chọn)</label>
+                            <input type="number" name="order_index" class="form-control" value="0">
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer border-top-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Thêm Lớp</button>
-                </div>
-            </form>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">Thêm Lớp</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+<% } %>
 
 <%- include('layouts/footer') %>

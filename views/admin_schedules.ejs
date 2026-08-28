@@ -1,60 +1,126 @@
 <%- include('layouts/header', { title: 'Quản lý Lịch Học - Admin' }) %>
 
 <style>
-    .interactive-cell {
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        position: relative;
+    /* EXCEL-LIKE GRID & STYLING */
+    .excel-table {
+        user-select: none;
+        border-collapse: separate;
+        border-spacing: 0;
     }
-    .interactive-cell:hover {
-        outline: 3px dashed var(--bs-primary);
-        outline-offset: -3px;
+    .excel-cell {
+        min-height: 70px;
+        height: 70px;
+        position: relative;
+        cursor: cell;
+        transition: background-color 0.1s;
+        border: 1px solid #dee2e6 !important;
+        font-size: 0.95rem;
+    }
+    .excel-cell:hover {
+        outline: 2px solid #5b9bd5;
+        outline-offset: -2px;
+        z-index: 5;
+    }
+    .excel-cell.cell-selected {
+        outline: 2px solid #1976d2 !important;
+        background-color: rgba(25, 118, 210, 0.15) !important;
+        outline-offset: -2px;
         z-index: 10;
-        transform: scale(1.02);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .excel-cell.cell-focus {
+        outline: 3px solid #0d6efd !important;
+        outline-offset: -3px;
+        z-index: 15;
+    }
+    .color-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 1px solid rgba(0,0,0,0.15);
     }
     .color-btn {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
-        border: 2px solid transparent;
+        border: 2px solid #ccc;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: transform 0.15s;
     }
     .color-btn:hover {
-        transform: scale(1.1);
+        transform: scale(1.15);
+        border-color: #333;
     }
     .color-btn.active {
         border-color: #000;
-        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+    .activity-item {
+        cursor: grab;
+        transition: all 0.2s ease;
+        border: 1px solid #e0e0e0;
+    }
+    .activity-item:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        border-color: var(--bs-primary);
+    }
+    .activity-item:active {
+        cursor: grabbing;
+    }
+    .toolbar-btn {
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+    }
+    .cell-drag-over {
+        outline: 3px dashed #198754 !important;
+        background-color: rgba(25, 135, 84, 0.2) !important;
     }
 </style>
 
-<main class="container py-5 my-4">
-    <div class="row">
+<main class="container-fluid py-4 px-lg-4">
+    <div class="row g-4">
         <!-- Sidebar -->
-        <div class="col-md-3 mb-4">
+        <div class="col-lg-2 col-md-3">
             <%- include('partials/sidebar') %>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-4 p-lg-5">
-                    <h2 class="fw-bold text-primary mb-4"><i class="bi bi-calendar-check me-2"></i>Quản lý Thời Khóa Biểu</h2>
+        <!-- Main Content (Grid + Activity Library) -->
+        <div class="col-lg-10 col-md-9">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
                     
-                    <!-- LỌC THEO LỚP HỌC -->
-                    <div class="bg-light rounded-4 p-4 mb-4">
+                    <!-- HEADER & BỘ LỌC LỚP + TUẦN -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 pb-3 border-bottom">
+                        <div>
+                            <h2 class="fw-bold text-primary mb-1">
+                                <i class="bi bi-grid-3x3 me-2"></i>Quản Lý Thời Khóa Biểu
+                            </h2>
+                            <p class="text-muted small mb-0">Công cụ soạn thảo TKB tương tác chuẩn Excel cho Giáo viên</p>
+                        </div>
+                        
+                        <!-- CÁC NÚT TẠO TUẦN -->
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-outline-primary rounded-pill fw-bold toolbar-btn" data-bs-toggle="modal" data-bs-target="#createWeekModal">
+                                <i class="bi bi-plus-lg me-1"></i>+ Tạo 1 Tuần Mới
+                            </button>
+                            <button class="btn btn-primary rounded-pill fw-bold toolbar-btn shadow-sm" data-bs-toggle="modal" data-bs-target="#createBatchModal">
+                                <i class="bi bi-collection-play me-1"></i>+ Tạo Hàng Loạt Tuần
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- THANH CHỌN LỚP VÀ TUẦN LÀM VIỆC -->
+                    <div class="bg-light rounded-4 p-3 mb-4">
                         <form action="/admin/schedules" method="GET" class="row g-3 align-items-center">
-                            <div class="col-md-3">
-                                <label class="fw-bold text-muted mb-0">Chọn lớp học:</label>
-                            </div>
-                            <div class="col-md-6">
-                                <select class="form-select fw-bold border-primary" name="class_id" onchange="this.form.submit()">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted mb-1">Lớp Học:</label>
+                                <select class="form-select fw-bold border-primary shadow-sm" name="class_id" onchange="this.form.submit()">
                                     <% if (classes && classes.length > 0) { %>
                                         <% classes.forEach(function(cls) { %>
                                             <option value="<%= cls.id %>" <%= selectedClassId === cls.id ? 'selected' : '' %>>
-                                                <%= cls.name %>
+                                                Lớp: <%= cls.name %>
                                             </option>
                                         <% }); %>
                                     <% } else { %>
@@ -62,122 +128,435 @@
                                     <% } %>
                                 </select>
                             </div>
+
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold text-muted mb-1">Chọn Tuần Làm Việc:</label>
+                                <select class="form-select fw-semibold border-secondary-subtle shadow-sm" name="schedule_id" onchange="this.form.submit()" <%= !allSchedules || allSchedules.length === 0 ? 'disabled' : '' %>>
+                                    <% if (allSchedules && allSchedules.length > 0) { %>
+                                        <% allSchedules.forEach(function(s) { %>
+                                            <option value="<%= s.id %>" <%= schedule && schedule.id === s.id ? 'selected' : '' %>>
+                                                <%= s.week_label %> (<%= s.date_range %>) - <%= s.month_title %>
+                                            </option>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <option value="">Chưa có tuần nào. Hãy tạo mới!</option>
+                                    <% } %>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 d-flex align-items-end">
+                                <% if (schedule) { %>
+                                    <div class="dropdown w-100">
+                                        <button class="btn btn-outline-secondary dropdown-toggle w-100 fw-bold shadow-sm" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-gear me-1"></i>Thao tác Tuần
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                                            <li>
+                                                <button class="dropdown-item py-2 fw-semibold" type="button" data-bs-toggle="modal" data-bs-target="#copyWeekModal">
+                                                    <i class="bi bi-copy me-2 text-primary"></i>Sao chép từ tuần khác
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item py-2 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#scheduleInfoCollapse">
+                                                    <i class="bi bi-pencil-square me-2 text-success"></i>Sửa Tiêu đề & Thời gian
+                                                </button>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <form action="/admin/schedules/delete-week" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn XÓA MỀM tuần này không? Lịch học sẽ được ẩn khỏi phụ huynh và lưu trữ an toàn.');">
+                                                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                                    <button type="submit" class="dropdown-item text-danger py-2 fw-semibold">
+                                                        <i class="bi bi-trash3 me-2"></i>Xóa Tuần này (Soft Delete)
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                            </div>
                         </form>
                     </div>
 
                     <% if (schedule) { %>
-                        <!-- FORM SỬA THÔNG TIN CHUNG -->
-                        <div class="card border border-primary-subtle rounded-4 mb-4">
-                            <div class="card-header bg-primary-subtle fw-bold text-primary py-3">
-                                <i class="bi bi-pencil-square me-2"></i>Cài đặt Tiêu đề
-                            </div>
-                            <div class="card-body">
-                                <form action="/admin/schedules/update-info" method="POST" class="row g-3">
-                                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
-                                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
-                                    
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Tháng</label>
-                                        <input type="text" name="month_title" class="form-control" value="<%= schedule.month_title %>" required>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="form-label small fw-bold">Chủ đề</label>
-                                        <input type="text" name="theme_title" class="form-control" value="<%= schedule.theme_title %>">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small fw-bold">Tuần</label>
-                                        <input type="text" name="week_label" class="form-control" value="<%= schedule.week_label %>">
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-primary w-100 fw-bold">Lưu Tiêu Đề</button>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label small fw-bold">Thời gian áp dụng</label>
-                                        <input type="text" name="date_range" class="form-control" value="<%= schedule.date_range %>">
-                                    </div>
-                                </form>
+                        <!-- COLLAPSE FORM SỬA TIÊU ĐỀ TUẦN -->
+                        <div class="collapse mb-4" id="scheduleInfoCollapse">
+                            <div class="card border border-primary-subtle rounded-4 shadow-sm">
+                                <div class="card-header bg-primary-subtle fw-bold text-primary py-2">
+                                    <i class="bi bi-sliders me-2"></i>Cài đặt Tiêu đề & Thời gian áp dụng
+                                </div>
+                                <div class="card-body p-4">
+                                    <form action="/admin/schedules/update-info" method="POST" class="row g-3">
+                                        <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                        <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                        
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold">Số Thứ Tự Tuần</label>
+                                            <input type="number" name="week_number" class="form-control" value="<%= schedule.week_number || 1 %>">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold">Nhãn Tuần</label>
+                                            <input type="text" name="week_label" class="form-control" value="<%= schedule.week_label %>" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Tháng</label>
+                                            <input type="text" name="month_title" class="form-control" value="<%= schedule.month_title %>" required>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label small fw-bold">Chủ đề tuần</label>
+                                            <input type="text" name="theme_title" class="form-control" value="<%= schedule.theme_title %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Ngày bắt đầu (T2)</label>
+                                            <input type="date" name="week_start" class="form-control" value="<%= schedule.week_start ? new Date(schedule.week_start).toISOString().split('T')[0] : '' %>">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Ngày kết thúc (T7)</label>
+                                            <input type="date" name="week_end" class="form-control" value="<%= schedule.week_end ? new Date(schedule.week_end).toISOString().split('T')[0] : '' %>">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">Hiển thị khoảng ngày (Chuỗi)</label>
+                                            <input type="text" name="date_range" class="form-control" value="<%= schedule.date_range %>">
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-end">
+                                            <button type="submit" class="btn btn-primary w-100 fw-bold">Lưu Cài Đặt</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="alert alert-info border-0 shadow-sm rounded-3 d-flex align-items-center">
-                            <i class="bi bi-info-circle-fill fs-4 text-info me-3"></i>
-                            <div>
-                                <strong>Mẹo:</strong> Hãy <b>CLICK trực tiếp</b> vào các ô Thời Khóa Biểu bên dưới để thay đổi Môn Học và Màu Sắc ngay lập tức!
-                            </div>
-                        </div>
+                        <!-- EXCEL TOOLBAR & ACTIVITY LIBRARY GRID -->
+                        <div class="row g-3">
+                            <!-- CỘT BẢNG TKB (EXCEL GRID) -->
+                            <div class="col-xl-9 col-lg-8">
+                                
+                                <!-- EXCEL ACTION TOOLBAR -->
+                                <div class="card border border-secondary-subtle rounded-4 shadow-sm mb-3 bg-light">
+                                    <div class="card-body p-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                        <!-- Nhóm thao tác Ô -->
+                                        <div class="d-flex flex-wrap align-items-center gap-1">
+                                            <button type="button" class="btn btn-sm btn-outline-primary toolbar-btn rounded-3" id="btnMerge" onclick="handleMergeCells()" title="Gộp các ô được chọn">
+                                                <i class="bi bi-bounding-box-circles me-1"></i>Gộp Ô (Merge)
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary toolbar-btn rounded-3" id="btnUnmerge" onclick="handleUnmergeCells()" title="Hủy gộp ô">
+                                                <i class="bi bi-grid-1x2 me-1"></i>Hủy Gộp (Unmerge)
+                                            </button>
+                                            
+                                            <div class="vr mx-1"></div>
 
-                        <!-- BẢNG TKB TƯƠNG TÁC -->
-                        <div class="table-responsive shadow-sm rounded-4 border border-secondary-subtle">
-                            <table class="table table-bordered text-center align-middle mb-0">
-                                <thead class="bg-secondary text-white">
-                                    <tr>
-                                        <th class="py-3" style="width: 15%">Thời gian</th>
-                                        <th class="py-3" style="width: 14%">Thứ 2</th>
-                                        <th class="py-3" style="width: 14%">Thứ 3</th>
-                                        <th class="py-3" style="width: 14%">Thứ 4</th>
-                                        <th class="py-3" style="width: 14%">Thứ 5</th>
-                                        <th class="py-3" style="width: 14%">Thứ 6</th>
-                                        <th class="py-3" style="width: 14%">Thứ 7</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for(let s=0; s < 7; s++) { %>
-                                        <tr>
-                                            <td class="text-primary fw-bold bg-light"><%= timeSlots[s] %></td>
-                                            <% for(let d=0; d < 6; d++) { %>
-                                                <% const cell = matrix[s][d]; %>
-                                                <% if (cell && cell.is_merged == 0) { %>
-                                                    <% const inlineStyle=`background-color: ${cell.bg_color}; color: ${cell.bg_color==='#ffffff' ? 'inherit' : '#000' }`; %>
-                                                    
-                                                    <td class="interactive-cell fw-semibold" 
-                                                        rowspan="<%= cell.row_span %>" 
-                                                        colspan="<%= cell.col_span %>"
-                                                        style="<%= inlineStyle %>"
-                                                        onclick="openCellModal(<%= cell.id %>, this.innerText, '<%= cell.bg_color %>')">
-                                                        <%= cell.content %>
+                                            <button type="button" class="btn btn-sm btn-outline-dark toolbar-btn rounded-3" id="btnCopy" onclick="handleCopyCells()" title="Sao chép ô (Ctrl+C)">
+                                                <i class="bi bi-clipboard me-1"></i>Copy
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-dark toolbar-btn rounded-3" id="btnPaste" onclick="handlePasteCells()" title="Dán vào ô (Ctrl+V)">
+                                                <i class="bi bi-clipboard-check me-1"></i>Paste
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger toolbar-btn rounded-3" onclick="handleClearCells()" title="Xóa nội dung ô">
+                                                <i class="bi bi-eraser me-1"></i>Xóa Ô
+                                            </button>
+                                        </div>
+
+                                        <!-- Bảng màu nhanh -->
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="small fw-bold text-muted me-1">Màu ô:</span>
+                                            <button type="button" class="color-btn" style="background-color: #ffffff" onclick="applyColorToSelection('#ffffff')" title="Trắng"></button>
+                                            <button type="button" class="color-btn" style="background-color: #92d050" onclick="applyColorToSelection('#92d050')" title="Xanh lá"></button>
+                                            <button type="button" class="color-btn" style="background-color: #ffc000" onclick="applyColorToSelection('#ffc000')" title="Vàng"></button>
+                                            <button type="button" class="color-btn" style="background-color: #00b0f0" onclick="applyColorToSelection('#00b0f0')" title="Xanh dương"></button>
+                                            <button type="button" class="color-btn" style="background-color: #ff99cc" onclick="applyColorToSelection('#ff99cc')" title="Hồng"></button>
+                                            <button type="button" class="color-btn" style="background-color: #ffc7ce" onclick="applyColorToSelection('#ffc7ce')" title="Đỏ nhạt"></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- LƯỚI THỜI KHÓA BIỂU (EXCEL GRID) -->
+                                <div class="table-responsive shadow-sm rounded-4 border border-secondary-subtle bg-white">
+                                    <table class="table table-bordered text-center align-middle mb-0 excel-table" id="excelGridTable">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <th class="py-3" style="width: 15%">Thời gian</th>
+                                                <th class="py-3" style="width: 14%">Thứ 2</th>
+                                                <th class="py-3" style="width: 14%">Thứ 3</th>
+                                                <th class="py-3" style="width: 14%">Thứ 4</th>
+                                                <th class="py-3" style="width: 14%">Thứ 5</th>
+                                                <th class="py-3" style="width: 14%">Thứ 6</th>
+                                                <th class="py-3" style="width: 14%">Thứ 7</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for(let s=0; s < 7; s++) { %>
+                                                <tr>
+                                                    <td class="text-primary fw-bold bg-light" style="user-select:none;">
+                                                        <%= timeSlots[s] %>
                                                     </td>
-
-                                                <% } else if (!cell) { %>
-                                                    <td class="bg-light text-muted small">Lỗi dữ liệu</td>
-                                                <% } %>
+                                                    <% for(let d=2; d <= 7; d++) { %>
+                                                        <% const cell = matrix[s][d-2]; %>
+                                                        <% if (cell && cell.is_merged == 0) { %>
+                                                            <% const inlineStyle = `background-color: ${cell.bg_color || '#ffffff'}; color: ${(!cell.bg_color || cell.bg_color === '#ffffff') ? 'inherit' : '#000'}`; %>
+                                                            <td class="excel-cell fw-semibold" 
+                                                                id="cell_<%= s %>_<%= d %>"
+                                                                data-cell-id="<%= cell.id %>"
+                                                                data-slot="<%= s %>" 
+                                                                data-day="<%= d %>"
+                                                                data-rowspan="<%= cell.row_span || 1 %>"
+                                                                data-colspan="<%= cell.col_span || 1 %>"
+                                                                data-color="<%= cell.bg_color || '#ffffff' %>"
+                                                                rowspan="<%= cell.row_span || 1 %>" 
+                                                                colspan="<%= cell.col_span || 1 %>"
+                                                                style="<%= inlineStyle %>"
+                                                                ondblclick="openEditModal(this)">
+                                                                <%= cell.content %>
+                                                            </td>
+                                                        <% } %>
+                                                    <% } %>
+                                                </tr>
                                             <% } %>
-                                        </tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                        <div class="mt-4 text-end">
-                            <form action="/admin/schedules/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn làm mới toàn bộ bảng TKB của lớp này không?');">
-                                <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
-                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
-                                <button type="submit" class="btn btn-outline-danger fw-bold"><i class="bi bi-trash me-2"></i>Làm mới toàn bộ TKB (Xóa)</button>
-                            </form>
+                                <div class="d-flex justify-content-between align-items-center mt-3 text-muted small">
+                                    <div>
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        <span><b>Hướng dẫn:</b> Kéo chuột chọn nhiều ô để <b>Gộp Ô</b>, nhấn <b>Ctrl+C / Ctrl+V</b> để sao chép, hoặc kéo thả hoạt động từ thư viện bên phải vào ô. Nháy đúp vào ô để sửa văn bản.</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- CỘT THƯ VIỆN HOẠT ĐỘNG (ACTIVITY LIBRARY) -->
+                            <div class="col-xl-3 col-lg-4">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 bg-light">
+                                    <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center rounded-top-4">
+                                        <h6 class="fw-bold text-primary mb-0">
+                                            <i class="bi bi-bookmark-star-fill text-warning me-1"></i>Thư Viện Hoạt Động
+                                        </h6>
+                                        <button class="btn btn-sm btn-primary rounded-pill px-2 py-1 small fw-bold" data-bs-toggle="modal" data-bs-target="#createActivityModal">
+                                            <i class="bi bi-plus"></i>Thêm
+                                        </button>
+                                    </div>
+                                    <div class="card-body p-3 overflow-auto" style="max-height: 580px;">
+                                        <p class="small text-muted mb-2">Nhấp hoặc kéo thả vào ô TKB:</p>
+                                        <div class="d-flex flex-column gap-2" id="activityList">
+                                            <% if (activities && activities.length > 0) { %>
+                                                <% activities.forEach(function(act) { %>
+                                                    <div class="activity-item bg-white p-2 rounded-3 d-flex align-items-center justify-content-between"
+                                                         draggable="true"
+                                                         ondragstart="handleActivityDragStart(event, '<%= act.title %>', '<%= act.default_color %>')"
+                                                         onclick="applyActivityToSelection('<%= act.title %>', '<%= act.default_color %>')">
+                                                        <div class="d-flex align-items-center gap-2 text-start">
+                                                            <span class="color-dot flex-shrink-0" style="background-color: <%= act.default_color %>;"></span>
+                                                            <span class="small fw-semibold text-dark"><%= act.title %></span>
+                                                        </div>
+                                                        <% if (act.id > 12) { %>
+                                                            <button class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="deleteActivity(<%= act.id %>, event)" title="Xóa hoạt động">
+                                                                <i class="bi bi-x"></i>
+                                                            </button>
+                                                        <% } %>
+                                                    </div>
+                                                <% }); %>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     <% } else { %>
-                        <!-- CHƯA CÓ LỊCH -->
+                        <!-- CHƯA CÓ TUẦN NÀO -->
                         <div class="text-center py-5">
                             <i class="bi bi-calendar-x display-1 text-muted mb-4 d-block opacity-50"></i>
-                            <h3 class="fw-bold">Chưa có Thời Khóa Biểu</h3>
-                            <p class="text-muted mb-4">Lớp học này hiện tại chưa được khởi tạo thời khóa biểu. Nhấn nút bên dưới để tạo lưới lịch học mặc định.</p>
-                            
-                            <form action="/admin/schedules/init" method="POST">
-                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm px-5">
-                                    <i class="bi bi-magic me-2"></i>Tạo Lưới Thời Khóa Biểu
+                            <h3 class="fw-bold">Lớp này chưa có Thời Khóa Biểu</h3>
+                            <p class="text-muted mb-4">Hãy tạo một tuần mới hoặc tạo hàng loạt tuần để bắt đầu soạn lịch học.</p>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="button" class="btn btn-outline-primary btn-lg rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#createWeekModal">
+                                    <i class="bi bi-plus-lg me-2"></i>Tạo 1 Tuần Mới
                                 </button>
-                            </form>
+                                <button type="button" class="btn btn-primary btn-lg rounded-pill fw-bold px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#createBatchModal">
+                                    <i class="bi bi-collection-play me-2"></i>Tạo Hàng Loạt Tuần
+                                </button>
+                            </div>
                         </div>
                     <% } %>
+
                 </div>
             </div>
         </div>
     </div>
 </main>
 
-<!-- MODAL SỬA Ô TKB -->
-<div class="modal fade" id="cellModal" tabindex="-1">
+<!-- MODAL TẠO 1 TUẦN MỚI -->
+<div class="modal fade" id="createWeekModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="/admin/schedules/create-week" method="POST">
+                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="bi bi-calendar-plus me-2"></i>Tạo Tuần Học Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ngày bắt đầu tuần (Thứ 2):</label>
+                        <input type="date" name="week_start" class="form-control" required value="<%= new Date().toISOString().split('T')[0] %>">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Số Tuần:</label>
+                            <input type="number" name="week_number" class="form-control" value="<%= (allSchedules && allSchedules.length > 0) ? allSchedules.length + 1 : 1 %>">
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Tháng:</label>
+                            <input type="text" name="month_title" class="form-control" value="THÁNG <%= (new Date().getMonth() + 1).toString().padStart(2, '0') %>">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Chủ đề tuần (Tùy chọn):</label>
+                        <input type="text" name="theme_title" class="form-control" placeholder="Ví dụ: Bé yêu động vật">
+                    </div>
+                    <% if (allSchedules && allSchedules.length > 0) { %>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Sao chép nội dung từ tuần trước:</label>
+                            <select name="copy_from_id" class="form-select">
+                                <option value="">-- Tạo bảng trống --</option>
+                                <% allSchedules.forEach(function(s) { %>
+                                    <option value="<%= s.id %>">
+                                        Sao chép từ <%= s.week_label %> (<%= s.date_range %>)
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Tạo Tuần</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TẠO HÀNG LOẠT TUẦN (BATCH CREATION) -->
+<div class="modal fade" id="createBatchModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form action="/admin/schedules/create-batch" method="POST">
+                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-primary"><i class="bi bi-collection-play me-2"></i>Tạo Hàng Loạt Tuần</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="alert alert-info border-0 rounded-3 small mb-3">
+                        Hệ thống sẽ tự động tính toán <code>week_start</code>, <code>week_end</code> và nhãn Tuần cho từng tuần liên tiếp.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ngày bắt đầu tuần đầu tiên (Thứ 2):</label>
+                        <input type="date" name="start_date" class="form-control" required value="<%= new Date().toISOString().split('T')[0] %>">
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Số lượng tuần cần tạo:</label>
+                            <input type="number" name="num_weeks" class="form-control" min="1" max="52" value="4" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Bắt đầu từ Tuần số:</label>
+                            <input type="number" name="start_week_number" class="form-control" value="<%= (allSchedules && allSchedules.length > 0) ? allSchedules.length + 1 : 1 %>">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tháng mặc định:</label>
+                        <input type="text" name="month_title" class="form-control" value="THÁNG <%= (new Date().getMonth() + 1).toString().padStart(2, '0') %>">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="copy_from_previous" value="1" id="copyPrevSwitch" checked>
+                        <label class="form-check-label fw-semibold" for="copyPrevSwitch">
+                            Tự động sao chép mẫu thời khóa biểu của tuần trước
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Tạo Hàng Loạt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SAO CHÉP TỪ TUẦN KHÁC (COPY WEEK) -->
+<% if (schedule && allSchedules && allSchedules.length > 1) { %>
+    <div class="modal fade" id="copyWeekModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <form action="/admin/schedules/copy-week" method="POST" onsubmit="return confirm('CẢNH BÁO: Thao tác này sẽ ghi đè toàn bộ nội dung của tuần hiện tại bằng tuần nguồn. Bạn có chắc chắn muốn tiếp tục?');">
+                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                    <input type="hidden" name="target_schedule_id" value="<%= schedule.id %>">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold text-primary"><i class="bi bi-copy me-2"></i>Sao Chép Thời Khóa Biểu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Chọn tuần nguồn để sao chép:</label>
+                            <select name="source_schedule_id" class="form-select" required>
+                                <% allSchedules.forEach(function(s) { %>
+                                    <% if (s.id !== schedule.id) { %>
+                                        <option value="<%= s.id %>">
+                                            <%= s.week_label %> (<%= s.date_range %>)
+                                        </option>
+                                    <% } %>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <p class="small text-muted mb-0">Toàn bộ 42 ô (môn học, màu sắc, ô đã gộp) sẽ được deep copy sang tuần hiện tại một cách độc lập.</p>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Sao Chép Ngay</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<!-- MODAL THÊM HOẠT ĐỘNG VÀO THƯ VIỆN -->
+<div class="modal fade" id="createActivityModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary"><i class="bi bi-plus-circle me-2"></i>Thêm Hoạt Động Thường Dùng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tên hoạt động / Môn học:</label>
+                    <input type="text" id="newActivityTitle" class="form-control" placeholder="Ví dụ: Làm quen chữ cái">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Màu sắc nổi bật:</label>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="color-btn active" style="background-color: #ffffff" onclick="selectNewActColor('#ffffff', this)"></button>
+                        <button type="button" class="color-btn" style="background-color: #92d050" onclick="selectNewActColor('#92d050', this)"></button>
+                        <button type="button" class="color-btn" style="background-color: #ffc000" onclick="selectNewActColor('#ffc000', this)"></button>
+                        <button type="button" class="color-btn" style="background-color: #00b0f0" onclick="selectNewActColor('#00b0f0', this)"></button>
+                        <button type="button" class="color-btn" style="background-color: #ff99cc" onclick="selectNewActColor('#ff99cc', this)"></button>
+                    </div>
+                    <input type="hidden" id="newActivityColor" value="#ffffff">
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="saveNewActivity()">Lưu Hoạt Động</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SỬA Ô TKB TRỰC TIẾP -->
+<div class="modal fade" id="cellEditModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow-lg">
             <div class="modal-header bg-light border-bottom-0">
@@ -185,98 +564,546 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <input type="hidden" id="modalCellId">
+                <input type="hidden" id="modalCellSlot">
+                <input type="hidden" id="modalCellDay">
                 
-                <div class="mb-4">
+                <div class="mb-3">
                     <label class="form-label fw-bold">Nội dung (Môn học / Hoạt động)</label>
                     <textarea class="form-control" id="modalCellContent" rows="3" placeholder="Nhập tên môn học..."></textarea>
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Màu sắc nổi bật</label>
+                    <label class="form-label fw-bold">Màu sắc ô</label>
                     <div class="d-flex gap-2 flex-wrap">
-                        <button type="button" class="color-btn" style="background-color: #ffffff" onclick="selectColor('#ffffff')" title="Trắng"></button>
-                        <button type="button" class="color-btn" style="background-color: #ffc000" onclick="selectColor('#ffc000')" title="Vàng"></button>
-                        <button type="button" class="color-btn" style="background-color: #92d050" onclick="selectColor('#92d050')" title="Xanh lá"></button>
-                        <button type="button" class="color-btn" style="background-color: #00b0f0" onclick="selectColor('#00b0f0')" title="Xanh dương"></button>
-                        <button type="button" class="color-btn" style="background-color: #ff99cc" onclick="selectColor('#ff99cc')" title="Hồng"></button>
-                        <button type="button" class="color-btn" style="background-color: #ff0000" onclick="selectColor('#ff0000')" title="Đỏ"></button>
+                        <button type="button" class="color-btn" style="background-color: #ffffff" onclick="setModalColor('#ffffff')"></button>
+                        <button type="button" class="color-btn" style="background-color: #92d050" onclick="setModalColor('#92d050')"></button>
+                        <button type="button" class="color-btn" style="background-color: #ffc000" onclick="setModalColor('#ffc000')"></button>
+                        <button type="button" class="color-btn" style="background-color: #00b0f0" onclick="setModalColor('#00b0f0')"></button>
+                        <button type="button" class="color-btn" style="background-color: #ff99cc" onclick="setModalColor('#ff99cc')"></button>
+                        <button type="button" class="color-btn" style="background-color: #ffc7ce" onclick="setModalColor('#ffc7ce')"></button>
                     </div>
                     <input type="hidden" id="modalCellColor" value="#ffffff">
                 </div>
             </div>
             <div class="modal-footer border-top-0 pt-0">
                 <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveCell" onclick="saveCellData()">Lưu thay đổi</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveModal" onclick="saveModalEdit()">Lưu</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let cellModal;
+    const currentScheduleId = <%= schedule ? schedule.id : 'null' %>;
+    const currentClassId = <%= selectedClassId ? selectedClassId : 'null' %>;
+
+    // Excel Selection State
+    let isMouseDown = false;
+    let startSlot = null;
+    let startDay = null;
+    let currentSlot = null;
+    let currentDay = null;
     
+    // Bounds of current rectangular selection
+    let selectedBounds = null; // { minSlot, maxSlot, minDay, maxDay }
+    let clipboardData = null; // for Copy/Paste
+
+    let cellEditModal;
+
     document.addEventListener("DOMContentLoaded", () => {
-        cellModal = new bootstrap.Modal(document.getElementById('cellModal'));
+        const modalEl = document.getElementById('cellEditModal');
+        if (modalEl) cellEditModal = new bootstrap.Modal(modalEl);
+
+        initExcelGridInteractions();
     });
 
-    function selectColor(colorHex) {
-        document.getElementById('modalCellColor').value = colorHex;
-        // Xóa class active của các nút màu khác
-        document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
-        // Thêm class active cho nút vừa click
-        event.target.classList.add('active');
-    }
+    // ==========================================
+    // EXCEL GRID SELECTION ENGINE
+    // ==========================================
+    function initExcelGridInteractions() {
+        const table = document.getElementById('excelGridTable');
+        if (!table) return;
 
-    function openCellModal(id, content, color) {
-        document.getElementById('modalCellId').value = id;
-        document.getElementById('modalCellContent').value = content.trim();
-        document.getElementById('modalCellColor').value = color;
-        
-        // Highlight đúng nút màu
-        document.querySelectorAll('.color-btn').forEach(btn => {
-            btn.classList.remove('active');
-            // rgb to hex or standard matching isn't perfectly reliable with DOM colors sometimes, 
-            // but since we render it exactly as hex string in the inline style, it matches.
-            // A simple trick is checking if style.backgroundColor includes the hex or we can just compare hex.
+        // Mousedown trên cell
+        table.addEventListener('mousedown', (e) => {
+            const cell = e.target.closest('.excel-cell');
+            if (!cell) return;
+            
+            isMouseDown = true;
+            const slot = parseInt(cell.dataset.slot);
+            const day = parseInt(cell.dataset.day);
+
+            if (e.shiftKey && startSlot !== null && startDay !== null) {
+                // Shift+Click: mở rộng vùng chọn
+                currentSlot = slot;
+                currentDay = day;
+                updateSelection();
+            } else {
+                startSlot = slot;
+                startDay = day;
+                currentSlot = slot;
+                currentDay = day;
+                updateSelection();
+            }
         });
-        const targetBtn = Array.from(document.querySelectorAll('.color-btn')).find(
-            b => b.getAttribute('onclick').includes(color)
-        );
-        if (targetBtn) targetBtn.classList.add('active');
 
-        cellModal.show();
+        // Mouseover trong khi đang drag
+        table.addEventListener('mouseover', (e) => {
+            if (!isMouseDown) return;
+            const cell = e.target.closest('.excel-cell');
+            if (!cell) return;
+
+            const slot = parseInt(cell.dataset.slot);
+            const day = parseInt(cell.dataset.day);
+            if (slot !== currentSlot || day !== currentDay) {
+                currentSlot = slot;
+                currentDay = day;
+                updateSelection();
+            }
+        });
+
+        // Mouseup
+        document.addEventListener('mouseup', () => {
+            if (isMouseDown) {
+                isMouseDown = false;
+            }
+        });
+
+        // Drag & Drop từ thư viện hoạt động
+        table.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const cell = e.target.closest('.excel-cell');
+            if (cell) cell.classList.add('cell-drag-over');
+        });
+
+        table.addEventListener('dragleave', (e) => {
+            const cell = e.target.closest('.excel-cell');
+            if (cell) cell.classList.remove('cell-drag-over');
+        });
+
+        table.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const cell = e.target.closest('.excel-cell');
+            if (!cell) return;
+            cell.classList.remove('cell-drag-over');
+
+            const activityData = e.dataTransfer.getData('text/plain');
+            if (activityData) {
+                try {
+                    const { title, color } = JSON.parse(activityData);
+                    const slot = parseInt(cell.dataset.slot);
+                    const day = parseInt(cell.dataset.day);
+                    applyActivityToCell(slot, day, title, color);
+                } catch (err) {}
+            }
+        });
+
+        // Keyboard Shortcuts (Ctrl+C, Ctrl+V, Delete)
+        document.addEventListener('keydown', (e) => {
+            // Không can thiệp nếu đang nhập trong input/textarea
+            if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
+                e.preventDefault();
+                handleCopyCells();
+            } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
+                e.preventDefault();
+                handlePasteCells();
+            } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                e.preventDefault();
+                handleClearCells();
+            }
+        });
     }
 
-    async function saveCellData() {
-        const id = document.getElementById('modalCellId').value;
-        const content = document.getElementById('modalCellContent').value;
-        const color = document.getElementById('modalCellColor').value;
-        const btnSave = document.getElementById('btnSaveCell');
+    function updateSelection() {
+        if (startSlot === null || startDay === null || currentSlot === null || currentDay === null) return;
 
-        btnSave.disabled = true;
-        btnSave.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...';
+        const minSlot = Math.min(startSlot, currentSlot);
+        const maxSlot = Math.max(startSlot, currentSlot);
+        const minDay = Math.min(startDay, currentDay);
+        const maxDay = Math.max(startDay, currentDay);
+
+        selectedBounds = { minSlot, maxSlot, minDay, maxDay };
+
+        // Xóa class highlight cũ
+        document.querySelectorAll('.excel-cell').forEach(c => {
+            c.classList.remove('cell-selected', 'cell-focus');
+        });
+
+        // Highlight các ô nằm trong bounding box
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                const cell = document.getElementById(`cell_${s}_${d}`);
+                if (cell) {
+                    cell.classList.add('cell-selected');
+                }
+            }
+        }
+
+        const focusCell = document.getElementById(`cell_${startSlot}_${startDay}`);
+        if (focusCell) focusCell.classList.add('cell-focus');
+    }
+
+    // ==========================================
+    // MERGE & UNMERGE LOGIC
+    // ==========================================
+    async function handleMergeCells() {
+        if (!selectedBounds) {
+            alert('Vui lòng kéo chuột chọn ít nhất 2 ô để gộp!');
+            return;
+        }
+
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+        const totalCells = (maxSlot - minSlot + 1) * (maxDay - minDay + 1);
+        if (totalCells <= 1) {
+            alert('Vui lòng chọn từ 2 ô trở lên để gộp ô!');
+            return;
+        }
+
+        // Kiểm tra xem các ô được chọn có dữ liệu không
+        let contents = [];
+        let firstContent = '';
+        let firstColor = '#ffffff';
+
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                const cell = document.getElementById(`cell_${s}_${d}`);
+                if (cell) {
+                    const text = cell.innerText.trim();
+                    if (text) contents.push(text);
+                    if (s === minSlot && d === minDay) {
+                        firstContent = text;
+                        firstColor = cell.dataset.color || '#ffffff';
+                    }
+                }
+            }
+        }
+
+        // Nếu có nhiều ô có nội dung -> Hỏi xác nhận
+        if (contents.length > 1) {
+            const confirmed = confirm(
+                'Các ô được chọn đang có nội dung. Bạn có chắc muốn gộp các ô này không?\n\n' +
+                'Lưu ý: Nội dung của ô đầu tiên ("' + firstContent + '") sẽ được giữ lại.'
+            );
+            if (!confirmed) return;
+        }
 
         try {
-            const res = await fetch('/admin/schedules/update-cell', {
+            const res = await fetch('/admin/schedules/merge-cells', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cell_id: id, content: content, bg_color: color })
+                body: JSON.stringify({
+                    schedule_id: currentScheduleId,
+                    class_id: currentClassId,
+                    min_slot: minSlot,
+                    max_slot: maxSlot,
+                    min_day: minDay,
+                    max_day: maxDay,
+                    master_content: firstContent,
+                    master_color: firstColor
+                })
             });
+
             const data = await res.json();
-            
             if (data.success) {
-                // Tải lại trang để thấy cập nhật ngay lập tức
                 window.location.reload();
             } else {
-                alert("Lỗi khi lưu dữ liệu!");
+                alert('Lỗi gộp ô: ' + (data.message || 'Thất bại'));
             }
-        } catch (error) {
-            console.error(error);
-            alert("Lỗi kết nối!");
-        } finally {
-            btnSave.disabled = false;
-            btnSave.innerHTML = 'Lưu thay đổi';
+        } catch (e) {
+            console.error(e);
+            alert('Lỗi kết nối khi gộp ô');
+        }
+    }
+
+    async function handleUnmergeCells() {
+        if (!selectedBounds) {
+            alert('Vui lòng chọn ô đã gộp để hủy gộp!');
+            return;
+        }
+
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+
+        try {
+            const res = await fetch('/admin/schedules/unmerge-cells', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    schedule_id: currentScheduleId,
+                    class_id: currentClassId,
+                    min_slot: minSlot,
+                    max_slot: maxSlot,
+                    min_day: minDay,
+                    max_day: maxDay
+                })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert('Lỗi hủy gộp ô: ' + (data.message || 'Thất bại'));
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Lỗi kết nối khi hủy gộp ô');
+        }
+    }
+
+    // ==========================================
+    // COPY / PASTE / CLEAR
+    // ==========================================
+    function handleCopyCells() {
+        if (!selectedBounds) return;
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+
+        const cells = [];
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                const cell = document.getElementById(`cell_${s}_${d}`);
+                cells.push({
+                    relSlot: s - minSlot,
+                    relDay: d - minDay,
+                    content: cell ? cell.innerText.trim() : '',
+                    bg_color: cell ? cell.dataset.color || '#ffffff' : '#ffffff'
+                });
+            }
+        }
+
+        clipboardData = {
+            width: maxDay - minDay + 1,
+            height: maxSlot - minSlot + 1,
+            cells
+        };
+
+        // Flash viền báo hiệu copy
+        document.querySelectorAll('.cell-selected').forEach(c => {
+            c.style.transition = 'all 0.1s';
+            c.style.opacity = '0.5';
+            setTimeout(() => c.style.opacity = '1', 150);
+        });
+    }
+
+    async function handlePasteCells() {
+        if (!clipboardData || !selectedBounds) return;
+
+        const targetStartSlot = selectedBounds.minSlot;
+        const targetStartDay = selectedBounds.minDay;
+
+        const updateBatch = [];
+        for (const item of clipboardData.cells) {
+            const destSlot = targetStartSlot + item.relSlot;
+            const destDay = targetStartDay + item.relDay;
+
+            if (destSlot < 7 && destDay <= 7) {
+                updateBatch.push({
+                    slot_index: destSlot,
+                    day_of_week: destDay,
+                    content: item.content,
+                    bg_color: item.bg_color
+                });
+            }
+        }
+
+        if (updateBatch.length === 0) return;
+
+        await sendBatchCellUpdate(updateBatch);
+    }
+
+    async function handleClearCells() {
+        if (!selectedBounds) return;
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+
+        const updateBatch = [];
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                updateBatch.push({
+                    slot_index: s,
+                    day_of_week: d,
+                    content: '',
+                    bg_color: '#ffffff'
+                });
+            }
+        }
+
+        await sendBatchCellUpdate(updateBatch);
+    }
+
+    async function applyColorToSelection(color) {
+        if (!selectedBounds) return;
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+
+        const updateBatch = [];
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                const cell = document.getElementById(`cell_${s}_${d}`);
+                updateBatch.push({
+                    slot_index: s,
+                    day_of_week: d,
+                    content: cell ? cell.innerText.trim() : '',
+                    bg_color: color
+                });
+            }
+        }
+
+        await sendBatchCellUpdate(updateBatch);
+    }
+
+    // ==========================================
+    // THƯ VIỆN HOẠT ĐỘNG
+    // ==========================================
+    function handleActivityDragStart(e, title, color) {
+        e.dataTransfer.setData('text/plain', JSON.stringify({ title, color }));
+    }
+
+    async function applyActivityToSelection(title, color) {
+        if (!selectedBounds) {
+            alert('Vui lòng chọn 1 hoặc nhiều ô trên bảng trước khi nhấp hoạt động!');
+            return;
+        }
+
+        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+        const updateBatch = [];
+
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                updateBatch.push({
+                    slot_index: s,
+                    day_of_week: d,
+                    content: title,
+                    bg_color: color
+                });
+            }
+        }
+
+        await sendBatchCellUpdate(updateBatch);
+    }
+
+    async function applyActivityToCell(slot, day, title, color) {
+        await sendBatchCellUpdate([{
+            slot_index: slot,
+            day_of_week: day,
+            content: title,
+            bg_color: color
+        }]);
+    }
+
+    function selectNewActColor(colorHex, btn) {
+        document.getElementById('newActivityColor').value = colorHex;
+        btn.parentElement.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    async function saveNewActivity() {
+        const title = document.getElementById('newActivityTitle').value.trim();
+        const color = document.getElementById('newActivityColor').value;
+
+        if (!title) {
+            alert('Vui lòng nhập tên hoạt động!');
+            return;
+        }
+
+        try {
+            const res = await fetch('/admin/activities/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, default_color: color })
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert('Lỗi khi lưu hoạt động');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Lỗi kết nối');
+        }
+    }
+
+    async function deleteActivity(id, event) {
+        event.stopPropagation();
+        if (!confirm('Bạn có muốn xóa hoạt động này khỏi thư viện?')) return;
+
+        try {
+            const res = await fetch(`/admin/activities/delete/${id}`, { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                window.location.reload();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // ==========================================
+    // MODAL CHỈNH SỬA TRỰC TIẾP
+    // ==========================================
+    function openEditModal(cell) {
+        const slot = cell.dataset.slot;
+        const day = cell.dataset.day;
+        const content = cell.innerText.trim();
+        const color = cell.dataset.color || '#ffffff';
+
+        document.getElementById('modalCellSlot').value = slot;
+        document.getElementById('modalCellDay').value = day;
+        document.getElementById('modalCellContent').value = content;
+        document.getElementById('modalCellColor').value = color;
+
+        cellEditModal.show();
+    }
+
+    function setModalColor(color) {
+        document.getElementById('modalCellColor').value = color;
+    }
+
+    async function saveModalEdit() {
+        const slot = parseInt(document.getElementById('modalCellSlot').value);
+        const day = parseInt(document.getElementById('modalCellDay').value);
+        const content = document.getElementById('modalCellContent').value.trim();
+        const color = document.getElementById('modalCellColor').value;
+
+        await sendBatchCellUpdate([{
+            slot_index: slot,
+            day_of_week: day,
+            content,
+            bg_color: color
+        }]);
+
+        cellEditModal.hide();
+    }
+
+    // Helper gửi AJAX cập nhật mảng cells
+    async function sendBatchCellUpdate(cells) {
+        try {
+            const res = await fetch('/admin/schedules/batch-update-cells', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    schedule_id: currentScheduleId,
+                    class_id: currentClassId,
+                    cells
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Cập nhật DOM trực tiếp để mượt mà
+                for (const item of cells) {
+                    const el = document.getElementById(`cell_${item.slot_index}_${item.day_of_week}`);
+                    if (el) {
+                        el.innerText = item.content;
+                        el.dataset.color = item.bg_color;
+                        el.style.backgroundColor = item.bg_color;
+                        el.style.color = (!item.bg_color || item.bg_color === '#ffffff') ? 'inherit' : '#000';
+                    }
+                }
+            } else {
+                alert('Lỗi cập nhật ô: ' + (data.message || 'Thất bại'));
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Lỗi kết nối');
         }
     }
 </script>
