@@ -108,6 +108,10 @@ async function runAutoMigrations(p) {
             console.log('🔄 [Migration] Thêm cột deleted_at vào bảng schedules...');
             await p.query("ALTER TABLE schedules ADD COLUMN deleted_at TIMESTAMP NULL");
         }
+        if (!colNames.includes('time_slots')) {
+            console.log('🔄 [Migration] Thêm cột time_slots vào bảng schedules...');
+            await p.query("ALTER TABLE schedules ADD COLUMN time_slots TEXT NULL");
+        }
 
         // 3. Cập nhật dữ liệu mặc định cho các schedule cũ nếu bị thiếu ngày
         await p.query(`

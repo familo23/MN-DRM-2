@@ -163,19 +163,30 @@
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <form action="/admin/schedules/delete-week" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn XÓA MỀM tuần này không? Lịch học sẽ được ẩn khỏi phụ huynh và lưu trữ an toàn.');">
-                                                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
-                                                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
-                                                    <button type="submit" class="dropdown-item text-danger py-2 fw-semibold">
-                                                        <i class="bi bi-trash3 me-2"></i>Xóa Tuần này (Soft Delete)
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="dropdown-item text-danger py-2 fw-semibold" onclick="submitDeleteWeekForm()">
+                                                    <i class="bi bi-trash3 me-2"></i>Xóa Tuần này (Soft Delete)
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>
                                 <% } %>
                             </div>
                         </form>
+
+                        <% if (schedule) { %>
+                            <!-- Form độc lập xử lý Soft Delete để tránh lồng thẻ form trong HTML -->
+                            <form id="deleteWeekForm" action="/admin/schedules/delete-week" method="POST" style="display:none;">
+                                <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                            </form>
+                            <script>
+                                function submitDeleteWeekForm() {
+                                    if (confirm('Bạn có chắc chắn muốn XÓA MỀM tuần này không? Lịch học sẽ được ẩn khỏi phụ huynh và lưu trữ an toàn.')) {
+                                        document.getElementById('deleteWeekForm').submit();
+                                    }
+                                }
+                            </script>
+                        <% } %>
                     </div>
 
                     <% if (schedule) { %>
@@ -236,6 +247,12 @@
                                     <div class="card-body p-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
                                         <!-- Nhóm thao tác Ô -->
                                         <div class="d-flex flex-wrap align-items-center gap-1">
+                                            <button type="button" class="btn btn-sm btn-outline-success toolbar-btn rounded-3" data-bs-toggle="modal" data-bs-target="#addTimeSlotModal" title="Thêm khung giờ mới (Thêm hàng)">
+                                                <i class="bi bi-plus-circle me-1"></i>+ Thêm Khung Giờ (Hàng)
+                                            </button>
+                                            
+                                            <div class="vr mx-1"></div>
+
                                             <button type="button" class="btn btn-sm btn-outline-primary toolbar-btn rounded-3" id="btnMerge" onclick="handleMergeCells()" title="Gộp các ô được chọn">
                                                 <i class="bi bi-bounding-box-circles me-1"></i>Gộp Ô (Merge)
                                             </button>
@@ -274,7 +291,7 @@
                                     <table class="table table-bordered text-center align-middle mb-0 excel-table" id="excelGridTable">
                                         <thead class="bg-primary text-white">
                                             <tr>
-                                                <th class="py-3" style="width: 15%">Thời gian</th>
+                                                <th class="py-3" style="width: 16%">Thời gian</th>
                                                 <th class="py-3" style="width: 14%">Thứ 2</th>
                                                 <th class="py-3" style="width: 14%">Thứ 3</th>
                                                 <th class="py-3" style="width: 14%">Thứ 4</th>
@@ -284,13 +301,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% for(let s=0; s < 7; s++) { %>
+                                            <% for(let s=0; s < timeSlots.length; s++) { %>
                                                 <tr>
-                                                    <td class="text-primary fw-bold bg-light" style="user-select:none;">
-                                                        <%= timeSlots[s] %>
+                                                    <td class="text-primary fw-bold bg-light position-relative p-2" style="user-select:none; font-size: 0.88rem;">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <span class="text-truncate" title="<%= timeSlots[s] %>"><%= timeSlots[s] %></span>
+                                                            <div class="d-inline-flex gap-1 ms-1">
+                                                                <button type="button" class="btn btn-sm btn-link p-0 text-secondary" onclick="openEditSlotModal(<%= s %>, '<%= timeSlots[s].replace(/'/g, "\\'") %>')" title="Sửa tên khung giờ">
+                                                                    <i class="bi bi-pencil-square"></i>
+                                                                </button>
+                                                                <% if (timeSlots.length > 1) { %>
+                                                                    <form action="/admin/schedules/delete-time-slot" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa hàng khung giờ [<%= timeSlots[s] %>] không? Toàn bộ các ô trong hàng này sẽ bị xóa.');">
+                                                                        <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                                                                        <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                                                                        <input type="hidden" name="slot_index" value="<%= s %>">
+                                                                        <button type="submit" class="btn btn-sm btn-link p-0 text-danger" title="Xóa hàng này">
+                                                                            <i class="bi bi-trash"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                     <% for(let d=2; d <= 7; d++) { %>
-                                                        <% const cell = matrix[s][d-2]; %>
+                                                        <% const cell = (matrix[s] && matrix[s][d-2]) ? matrix[s][d-2] : null; %>
                                                         <% if (cell && cell.is_merged == 0) { %>
                                                             <% const inlineStyle = `background-color: ${cell.bg_color || '#ffffff'}; color: ${(!cell.bg_color || cell.bg_color === '#ffffff') ? 'inherit' : '#000'}`; %>
                                                             <td class="excel-cell fw-semibold" 
@@ -307,12 +341,21 @@
                                                                 ondblclick="openEditModal(this)">
                                                                 <%= cell.content %>
                                                             </td>
+                                                        <% } else if (!cell) { %>
+                                                            <td class="excel-cell fw-semibold" id="cell_<%= s %>_<%= d %>" data-slot="<%= s %>" data-day="<%= d %>" data-rowspan="1" data-colspan="1" data-color="#ffffff" ondblclick="openEditModal(this)"></td>
                                                         <% } %>
                                                     <% } %>
                                                 </tr>
                                             <% } %>
                                         </tbody>
                                     </table>
+                                    
+                                    <!-- Nút thêm nhanh khung giờ ở chân bảng -->
+                                    <div class="text-center p-2 bg-light border-top">
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#addTimeSlotModal">
+                                            <i class="bi bi-plus-lg me-1"></i>+ Thêm Khung Giờ Mới (Thêm Hàng)
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mt-3 text-muted small">
@@ -587,15 +630,96 @@
             </div>
             <div class="modal-footer border-top-0 pt-0">
                 <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveModal" onclick="saveModalEdit()">Lưu</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" id="btnSaveModal" onclick="saveModalEdit()">
+                    <i class="bi bi-check-lg me-1"></i>Lưu Ô
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- MODAL THÊM KHUNG GIỜ MỚI (THÊM HÀNG) -->
+<% if (schedule) { %>
+    <div class="modal fade" id="addTimeSlotModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <form action="/admin/schedules/add-time-slot" method="POST">
+                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                    <div class="modal-header bg-success-subtle border-bottom-0">
+                        <h5 class="modal-title fw-bold text-success">
+                            <i class="bi bi-clock-history me-2"></i>Thêm Khung Giờ Mới (Hàng TKB)
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nhập khoảng thời gian / Tiêu đề hàng:</label>
+                            <input type="text" name="time_label" id="addTimeSlotInput" class="form-control form-control-lg" placeholder="Ví dụ: 10:30 - 11:30 (Ăn trưa)" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label small fw-bold text-muted">Hoặc chọn gợi ý nhanh:</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('addTimeSlotInput').value='06:30 - 07:00 (Đón sớm)'">06:30 - 07:00 (Đón sớm)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('addTimeSlotInput').value='10:30 - 11:30 (Ăn trưa)'">10:30 - 11:30 (Ăn trưa)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('addTimeSlotInput').value='11:30 - 14:30 (Ngủ trưa)'">11:30 - 14:30 (Ngủ trưa)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('addTimeSlotInput').value='14:30 - 15:15 (Ăn xế chiều)'">14:30 - 15:15 (Ăn xế chiều)</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('addTimeSlotInput').value='18:00 - 19:00 (Trả muộn)'">18:00 - 19:00 (Trả muộn)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">
+                            <i class="bi bi-plus-lg me-1"></i>Thêm Hàng Ngay
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SỬA TÊN KHUNG GIỜ -->
+    <div class="modal fade" id="editTimeSlotModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <form action="/admin/schedules/update-time-slot" method="POST">
+                    <input type="hidden" name="schedule_id" value="<%= schedule.id %>">
+                    <input type="hidden" name="class_id" value="<%= selectedClassId %>">
+                    <input type="hidden" name="slot_index" id="editSlotIndex">
+                    <div class="modal-header bg-light border-bottom-0">
+                        <h5 class="modal-title fw-bold text-primary">
+                            <i class="bi bi-pencil-square me-2"></i>Đổi Tên Khung Giờ
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tên khoảng thời gian:</label>
+                            <input type="text" name="new_label" id="editSlotLabelInput" class="form-control form-control-lg" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Cập Nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<% } %>
+
 <script>
     const currentScheduleId = <%= schedule ? schedule.id : 'null' %>;
     const currentClassId = <%= selectedClassId ? selectedClassId : 'null' %>;
+
+    function openEditSlotModal(slotIndex, currentLabel) {
+        document.getElementById('editSlotIndex').value = slotIndex;
+        document.getElementById('editSlotLabelInput').value = currentLabel;
+        const modal = new bootstrap.Modal(document.getElementById('editTimeSlotModal'));
+        modal.show();
+    }
 
     // Excel Selection State
     let isMouseDown = false;
@@ -719,10 +843,33 @@
     function updateSelection() {
         if (startSlot === null || startDay === null || currentSlot === null || currentDay === null) return;
 
-        const minSlot = Math.min(startSlot, currentSlot);
-        const maxSlot = Math.max(startSlot, currentSlot);
-        const minDay = Math.min(startDay, currentDay);
-        const maxDay = Math.max(startDay, currentDay);
+        let minSlot = Math.min(startSlot, currentSlot);
+        let maxSlot = Math.max(startSlot, currentSlot);
+        let minDay = Math.min(startDay, currentDay);
+        let maxDay = Math.max(startDay, currentDay);
+
+        // Mở rộng vùng chọn nếu chứa bất kỳ ô đã gộp nào (rowspan/colspan)
+        let expanded = true;
+        while (expanded) {
+            expanded = false;
+            for (let s = minSlot; s <= maxSlot; s++) {
+                for (let d = minDay; d <= maxDay; d++) {
+                    const el = document.getElementById(`cell_${s}_${d}`);
+                    if (el) {
+                        const rSpan = parseInt(el.dataset.rowspan || el.getAttribute('rowspan') || 1);
+                        const cSpan = parseInt(el.dataset.colspan || el.getAttribute('colspan') || 1);
+                        if (rSpan > 1 && s + rSpan - 1 > maxSlot) {
+                            maxSlot = s + rSpan - 1;
+                            expanded = true;
+                        }
+                        if (cSpan > 1 && d + cSpan - 1 > maxDay) {
+                            maxDay = d + cSpan - 1;
+                            expanded = true;
+                        }
+                    }
+                }
+            }
+        }
 
         selectedBounds = { minSlot, maxSlot, minDay, maxDay };
 
@@ -823,7 +970,20 @@
             return;
         }
 
-        const { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+        let { minSlot, maxSlot, minDay, maxDay } = selectedBounds;
+
+        // Mở rộng vùng hủy gộp nếu ô có rowspan/colspan
+        for (let s = minSlot; s <= maxSlot; s++) {
+            for (let d = minDay; d <= maxDay; d++) {
+                const el = document.getElementById(`cell_${s}_${d}`);
+                if (el) {
+                    const rSpan = parseInt(el.dataset.rowspan || el.getAttribute('rowspan') || 1);
+                    const cSpan = parseInt(el.dataset.colspan || el.getAttribute('colspan') || 1);
+                    if (rSpan > 1) maxSlot = Math.max(maxSlot, s + rSpan - 1);
+                    if (cSpan > 1) maxDay = Math.max(maxDay, d + cSpan - 1);
+                }
+            }
+        }
 
         try {
             const res = await fetch('/admin/schedules/unmerge-cells', {
@@ -1074,6 +1234,32 @@
         cellEditModal.hide();
     }
 
+    // Helper thêm hoạt động mới vào UI Thư viện hoạt động mà không cần tải lại trang
+    function appendActivityToUI(act) {
+        if (!act || !act.id) return;
+        const list = document.getElementById('activityList');
+        if (!list) return;
+        if (document.getElementById(`act_item_${act.id}`)) return;
+
+        const div = document.createElement('div');
+        div.id = `act_item_${act.id}`;
+        div.className = 'activity-item bg-white p-2 rounded-3 d-flex align-items-center justify-content-between shadow-sm';
+        div.draggable = true;
+        div.setAttribute('ondragstart', `handleActivityDragStart(event, "${act.title.replace(/"/g, '&quot;')}", "${act.default_color}")`);
+        div.setAttribute('onclick', `applyActivityToSelection("${act.title.replace(/"/g, '&quot;')}", "${act.default_color}")`);
+
+        div.innerHTML = `
+            <div class="d-flex align-items-center gap-2 text-start">
+                <span class="color-dot flex-shrink-0" style="background-color: ${act.default_color};"></span>
+                <span class="small fw-semibold text-dark">${act.title}</span>
+            </div>
+            <button class="btn btn-sm btn-link text-danger p-0 ms-1" onclick="deleteActivity(${act.id}, event)" title="Xóa hoạt động">
+                <i class="bi bi-x"></i>
+            </button>
+        `;
+        list.appendChild(div);
+    }
+
     // Helper gửi AJAX cập nhật mảng cells
     async function sendBatchCellUpdate(cells) {
         try {
@@ -1097,6 +1283,13 @@
                         el.style.backgroundColor = item.bg_color;
                         el.style.color = (!item.bg_color || item.bg_color === '#ffffff') ? 'inherit' : '#000';
                     }
+                }
+
+                // Tự động thêm các hoạt động mới vừa nhập vào sidebar Thư viện hoạt động
+                if (data.newActivities && Array.isArray(data.newActivities)) {
+                    data.newActivities.forEach(act => appendActivityToUI(act));
+                } else if (data.newActivity) {
+                    appendActivityToUI(data.newActivity);
                 }
             } else {
                 alert('Lỗi cập nhật ô: ' + (data.message || 'Thất bại'));

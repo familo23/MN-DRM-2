@@ -27,6 +27,9 @@ router.get('/tkb', async (req, res) => {
         const classes = await db.all('SELECT * FROM classes ORDER BY order_index ASC, id ASC');
         
         let selectedClassId = req.query.class_id;
+        if (Array.isArray(selectedClassId)) selectedClassId = selectedClassId[0];
+        if (selectedClassId) selectedClassId = parseInt(selectedClassId, 10);
+
         if (!selectedClassId && classes.length > 0) {
             selectedClassId = classes[0].id;
         }
@@ -37,7 +40,7 @@ router.get('/tkb', async (req, res) => {
         let allSchedules = [];
         let matrix = [];
         
-        const timeSlots = [
+        let timeSlots = [
             "07:00 - 08:20",
             "08:20 - 08:45",
             "08:50 - 09:00",
@@ -50,13 +53,15 @@ router.get('/tkb', async (req, res) => {
         if (selectedClassId) {
             // Lấy toàn bộ danh sách các tuần đang hoạt động (chưa bị soft delete) của lớp
             allSchedules = await db.all(`
-                SELECT id, week_label, date_range, week_number, week_start, week_end, month_title, theme_title 
+                SELECT id, week_label, date_range, week_number, week_start, week_end, month_title, theme_title, time_slots 
                 FROM schedules 
                 WHERE class_id = ? AND is_deleted = 0 
                 ORDER BY week_start ASC, id ASC
             `, [selectedClassId]);
 
-            const targetScheduleId = req.query.schedule_id;
+            let targetScheduleId = req.query.schedule_id;
+            if (Array.isArray(targetScheduleId)) targetScheduleId = targetScheduleId[0];
+            if (targetScheduleId) targetScheduleId = parseInt(targetScheduleId, 10);
 
             if (targetScheduleId) {
                 // 2A. Phụ huynh chọn tuần cụ thể
@@ -91,6 +96,16 @@ router.get('/tkb', async (req, res) => {
             
             // 3. Nếu tìm thấy tuần, xác định tuần trước và tuần sau
             if (schedule) {
+                // Parse dynamic time slots
+                if (schedule.time_slots) {
+                    try {
+                        const parsed = typeof schedule.time_slots === 'string' ? JSON.parse(schedule.time_slots) : schedule.time_slots;
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            timeSlots = parsed;
+                        }
+                    } catch (e) {}
+                }
+
                 // Tìm tuần trước đó
                 prevSchedule = await db.get(`
                     SELECT id, week_label, date_range, week_number 
@@ -109,15 +124,15 @@ router.get('/tkb', async (req, res) => {
                     ORDER BY week_start ASC, id ASC LIMIT 1
                 `, [selectedClassId, schedule.week_start, schedule.week_start, schedule.id]);
 
-                // 4. Lấy ma trận 42 ô của tuần
+                // 4. Lấy ma trận các ô của tuần
                 const cells = await db.all(`
                     SELECT * FROM schedule_cells 
                     WHERE schedule_id = ? 
                     ORDER BY slot_index, day_of_week
                 `, [schedule.id]);
                 
-                // Khởi tạo ma trận [7 slots][6 days (T2-T7)]
-                for (let s = 0; s < 7; s++) {
+                // Khởi tạo ma trận [timeSlots.length][6 days (T2-T7)]
+                for (let s = 0; s < timeSlots.length; s++) {
                     matrix[s] = [];
                     for (let d = 2; d <= 7; d++) {
                         const cell = cells.find(c => c.slot_index === s && c.day_of_week === d);

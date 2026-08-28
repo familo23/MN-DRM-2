@@ -17,6 +17,13 @@ function requireAdmin(req, res, next) {
     return res.status(403).send('HTTP 403 Forbidden: Chỉ Quản trị viên (Admin) mới có quyền thực hiện thao tác này.');
 }
 
+function toId(val) {
+    if (!val) return null;
+    if (Array.isArray(val)) val = val[0];
+    const n = parseInt(val, 10);
+    return isNaN(n) ? null : n;
+}
+
 // Middleware kiểm tra quyền của Giáo viên trên Lớp học
 async function checkClassPermission(req, res, next) {
     if (!req.session || !req.session.user) {
@@ -30,9 +37,12 @@ async function checkClassPermission(req, res, next) {
 
     try {
         const db = await connectDB();
-        let classId = req.body?.class_id || req.query?.class_id || req.params?.class_id;
-        const scheduleId = req.body?.schedule_id || req.query?.schedule_id || req.params?.schedule_id;
-        const cellId = req.body?.cell_id;
+        let rawClassId = req.body?.class_id || req.query?.class_id || req.params?.class_id;
+        let classId = toId(rawClassId);
+        const rawScheduleId = req.body?.schedule_id || req.query?.schedule_id || req.params?.schedule_id;
+        const scheduleId = toId(rawScheduleId);
+        const rawCellId = req.body?.cell_id;
+        const cellId = toId(rawCellId);
 
         // Nếu có cell_id -> suy ra schedule_id -> suy ra class_id
         if (!classId && cellId) {
@@ -41,13 +51,13 @@ async function checkClassPermission(req, res, next) {
                 JOIN schedules s ON sc.schedule_id = s.id 
                 WHERE sc.id = ?
             `, [cellId]);
-            if (cell) classId = cell.class_id;
+            if (cell) classId = toId(cell.class_id);
         }
 
         // Nếu có scheduleId mà chưa có classId -> tìm class_id
         if (!classId && scheduleId) {
             const sched = await db.get('SELECT class_id FROM schedules WHERE id = ?', [scheduleId]);
-            if (sched) classId = sched.class_id;
+            if (sched) classId = toId(sched.class_id);
         }
 
         if (!classId) {

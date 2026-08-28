@@ -177,6 +177,20 @@ router.post('/classes/delete/:id', requireAdmin, async (req, res) => {
 // 2. QUẢN LÝ THỜI KHÓA BIỂU (EXCEL-LIKE & ĐA TUẦN)
 // ==========================================
 
+const DEFAULT_TIME_SLOTS = [
+    "07:00 - 08:20", "08:20 - 08:45", "08:50 - 09:00",
+    "09:00 - 09:50", "09:50 - 10:25", "15:15 - 15:45", "16:00 - 18:00"
+];
+
+function parseTimeSlots(schedule) {
+    if (!schedule || !schedule.time_slots) return [...DEFAULT_TIME_SLOTS];
+    try {
+        const parsed = typeof schedule.time_slots === 'string' ? JSON.parse(schedule.time_slots) : schedule.time_slots;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (e) {}
+    return [...DEFAULT_TIME_SLOTS];
+}
+
 // GET /admin/schedules - Giao diện chính Quản lý TKB
 router.get('/schedules', checkClassPermission, async (req, res) => {
     try {
@@ -192,6 +206,9 @@ router.get('/schedules', checkClassPermission, async (req, res) => {
         }
 
         let selectedClassId = req.query.class_id;
+        if (Array.isArray(selectedClassId)) selectedClassId = selectedClassId[0];
+        if (selectedClassId) selectedClassId = parseInt(selectedClassId, 10);
+
         if (!selectedClassId && classes.length > 0) {
             selectedClassId = classes[0].id;
         }
@@ -199,21 +216,21 @@ router.get('/schedules', checkClassPermission, async (req, res) => {
         let allSchedules = [];
         let schedule = null;
         let matrix = [];
-        const timeSlots = [
-            "07:00 - 08:20", "08:20 - 08:45", "08:50 - 09:00",
-            "09:00 - 09:50", "09:50 - 10:25", "15:15 - 15:45", "16:00 - 18:00"
-        ];
+        let timeSlots = [...DEFAULT_TIME_SLOTS];
 
         if (selectedClassId) {
             // Lấy tất cả các tuần active của lớp này
             allSchedules = await db.all(`
-                SELECT id, week_label, date_range, week_number, week_start, week_end, month_title, theme_title 
+                SELECT id, week_label, date_range, week_number, week_start, week_end, month_title, theme_title, time_slots 
                 FROM schedules 
                 WHERE class_id = ? AND is_deleted = 0 
                 ORDER BY week_start ASC, id ASC
             `, [selectedClassId]);
 
-            const targetScheduleId = req.query.schedule_id;
+            let targetScheduleId = req.query.schedule_id;
+            if (Array.isArray(targetScheduleId)) targetScheduleId = targetScheduleId[0];
+            if (targetScheduleId) targetScheduleId = parseInt(targetScheduleId, 10);
+
             if (targetScheduleId) {
                 schedule = await db.get(`
                     SELECT * FROM schedules 
@@ -227,14 +244,35 @@ router.get('/schedules', checkClassPermission, async (req, res) => {
             }
 
             if (schedule) {
+                timeSlots = parseTimeSlots(schedule);
                 const cells = await db.all(`
                     SELECT * FROM schedule_cells 
                     WHERE schedule_id = ? 
                     ORDER BY slot_index, day_of_week
                 `, [schedule.id]);
 
-                // Khởi tạo ma trận [7 slots][6 days (T2-T7)]
-                for (let s = 0; s < 7; s++) {
+                // Tự động sửa lỗi (Self-healing): Khôi phục các ô bị kẹt is_merged = 1 mồ côi
+                const masterCells = cells.filter(c => (c.row_span > 1 || c.col_span > 1) && c.is_merged === 0);
+                const covered = new Set();
+                for (const m of masterCells) {
+                    for (let rs = 0; rs < m.row_span; rs++) {
+                        for (let cs = 0; cs < m.col_span; cs++) {
+                            if (rs === 0 && cs === 0) continue;
+                            covered.add(`${m.slot_index + rs}_${m.day_of_week + cs}`);
+                        }
+                    }
+                }
+                for (const c of cells) {
+                    if (c.is_merged === 1 && !covered.has(`${c.slot_index}_${c.day_of_week}`)) {
+                        c.is_merged = 0;
+                        c.row_span = 1;
+                        c.col_span = 1;
+                        await db.run('UPDATE schedule_cells SET is_merged = 0, row_span = 1, col_span = 1 WHERE id = ?', [c.id]);
+                    }
+                }
+
+                // Khởi tạo ma trận [timeSlots.length][6 days (T2-T7)]
+                for (let s = 0; s < timeSlots.length; s++) {
                     matrix[s] = [];
                     for (let d = 2; d <= 7; d++) {
                         const cell = cells.find(c => c.slot_index === s && c.day_of_week === d);
@@ -263,10 +301,20 @@ router.get('/schedules', checkClassPermission, async (req, res) => {
     }
 });
 
+// Helper: Sanitize ID to single integer
+function toId(val) {
+    if (!val) return null;
+    if (Array.isArray(val)) val = val[0];
+    const n = parseInt(val, 10);
+    return isNaN(n) ? null : n;
+}
+
 // POST /admin/schedules/create-week - Tạo 1 tuần mới
 router.post('/schedules/create-week', checkClassPermission, async (req, res) => {
     try {
         const { class_id, week_start, week_number, month_title, theme_title, copy_from_id } = req.body;
+        const cleanClassId = toId(class_id);
+        const cleanCopyId = toId(copy_from_id);
         const db = await connectDB();
 
         const startDate = new Date(week_start);
@@ -277,13 +325,13 @@ router.post('/schedules/create-week', checkClassPermission, async (req, res) => 
         const result = await db.run(`
             INSERT INTO schedules (class_id, week_start, week_end, week_number, month_title, theme_title, week_label, date_range, is_active, is_deleted) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 0)
-        `, [class_id, toISODate(startDate), toISODate(endDate), week_number || 1, month_title || 'THÁNG', theme_title || '', week_label, date_range]);
+        `, [cleanClassId, toISODate(startDate), toISODate(endDate), parseInt(week_number) || 1, month_title || 'THÁNG', theme_title || '', week_label, date_range]);
 
         const newScheduleId = result.lastID;
 
         // Nếu chọn sao chép từ một tuần khác
-        if (copy_from_id && parseInt(copy_from_id) > 0) {
-            const sourceCells = await db.all('SELECT * FROM schedule_cells WHERE schedule_id = ?', [copy_from_id]);
+        if (cleanCopyId && cleanCopyId > 0) {
+            const sourceCells = await db.all('SELECT * FROM schedule_cells WHERE schedule_id = ?', [cleanCopyId]);
             for (const cell of sourceCells) {
                 await db.run(`
                     INSERT INTO schedule_cells (schedule_id, day_of_week, slot_index, content, bg_color, row_span, col_span, is_merged) 
@@ -302,7 +350,7 @@ router.post('/schedules/create-week', checkClassPermission, async (req, res) => 
             }
         }
 
-        res.redirect(`/admin/schedules?class_id=${class_id}&schedule_id=${newScheduleId}`);
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${newScheduleId}`);
     } catch (e) {
         console.error("Lỗi create-week:", e);
         res.status(500).send("Lỗi tạo tuần mới");
@@ -313,6 +361,7 @@ router.post('/schedules/create-week', checkClassPermission, async (req, res) => 
 router.post('/schedules/create-batch', checkClassPermission, async (req, res) => {
     try {
         const { class_id, start_date, num_weeks, start_week_number, month_title, theme_title, copy_from_previous } = req.body;
+        const cleanClassId = toId(class_id);
         const db = await connectDB();
 
         const count = parseInt(num_weeks) || 1;
@@ -328,7 +377,7 @@ router.post('/schedules/create-batch', checkClassPermission, async (req, res) =>
                 SELECT id FROM schedules 
                 WHERE class_id = ? AND is_deleted = 0 
                 ORDER BY week_start DESC, id DESC LIMIT 1
-            `, [class_id]);
+            `, [cleanClassId]);
             if (prev) sourceScheduleId = prev.id;
         }
 
@@ -342,12 +391,11 @@ router.post('/schedules/create-batch', checkClassPermission, async (req, res) =>
             const result = await db.run(`
                 INSERT INTO schedules (class_id, week_start, week_end, week_number, month_title, theme_title, week_label, date_range, is_active, is_deleted) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, 0)
-            `, [class_id, toISODate(currentStart), toISODate(currentEnd), weekNum, month_title || 'THÁNG', theme_title || '', week_label, date_range]);
+            `, [cleanClassId, toISODate(currentStart), toISODate(currentEnd), weekNum, month_title || 'THÁNG', theme_title || '', week_label, date_range]);
 
             const newScheduleId = result.lastID;
             if (!firstNewScheduleId) firstNewScheduleId = newScheduleId;
 
-            // Nguồn để copy: nếu có sourceScheduleId hoặc lấy tuần vừa tạo trước đó
             const copySourceId = sourceScheduleId || (i > 0 ? lastCreatedScheduleId : null);
 
             if (copySourceId) {
@@ -372,7 +420,7 @@ router.post('/schedules/create-batch', checkClassPermission, async (req, res) =>
             lastCreatedScheduleId = newScheduleId;
         }
 
-        res.redirect(`/admin/schedules?class_id=${class_id}&schedule_id=${firstNewScheduleId || ''}`);
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${firstNewScheduleId || ''}`);
     } catch (e) {
         console.error("Lỗi create-batch:", e);
         res.status(500).send("Lỗi tạo nhiều tuần");
@@ -383,24 +431,25 @@ router.post('/schedules/create-batch', checkClassPermission, async (req, res) =>
 router.post('/schedules/copy-week', checkClassPermission, async (req, res) => {
     try {
         const { source_schedule_id, target_schedule_id, class_id } = req.body;
+        const cleanClassId = toId(class_id);
+        const cleanSourceId = toId(source_schedule_id);
+        const cleanTargetId = toId(target_schedule_id);
         const db = await connectDB();
 
-        if (!source_schedule_id || !target_schedule_id) {
+        if (!cleanSourceId || !cleanTargetId) {
             return res.status(400).send("Thiếu thông tin tuần nguồn hoặc tuần đích");
         }
 
-        // Lấy tất cả các ô từ tuần nguồn
-        const sourceCells = await db.all('SELECT * FROM schedule_cells WHERE schedule_id = ?', [source_schedule_id]);
+        const sourceCells = await db.all('SELECT * FROM schedule_cells WHERE schedule_id = ?', [cleanSourceId]);
 
-        // Cập nhật đè lên tuần đích
         for (const cell of sourceCells) {
             await db.run(`
                 REPLACE INTO schedule_cells (schedule_id, day_of_week, slot_index, content, bg_color, row_span, col_span, is_merged) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            `, [target_schedule_id, cell.day_of_week, cell.slot_index, cell.content, cell.bg_color, cell.row_span, cell.col_span, cell.is_merged]);
+            `, [cleanTargetId, cell.day_of_week, cell.slot_index, cell.content, cell.bg_color, cell.row_span, cell.col_span, cell.is_merged]);
         }
 
-        res.redirect(`/admin/schedules?class_id=${class_id}&schedule_id=${target_schedule_id}`);
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${cleanTargetId}`);
     } catch (e) {
         console.error("Lỗi copy-week:", e);
         res.status(500).send("Lỗi sao chép thời khóa biểu");
@@ -411,15 +460,17 @@ router.post('/schedules/copy-week', checkClassPermission, async (req, res) => {
 router.post('/schedules/update-info', checkClassPermission, async (req, res) => {
     try {
         const { schedule_id, month_title, theme_title, week_label, week_number, date_range, week_start, week_end, class_id } = req.body;
+        const cleanScheduleId = toId(schedule_id);
+        const cleanClassId = toId(class_id);
         const db = await connectDB();
 
         await db.run(`
             UPDATE schedules 
             SET month_title = ?, theme_title = ?, week_label = ?, week_number = ?, date_range = ?, week_start = ?, week_end = ? 
             WHERE id = ?
-        `, [month_title, theme_title, week_label, week_number || 1, date_range, week_start || null, week_end || null, schedule_id]);
+        `, [month_title, theme_title, week_label, parseInt(week_number) || 1, date_range, week_start || null, week_end || null, cleanScheduleId]);
 
-        res.redirect(`/admin/schedules?class_id=${class_id}&schedule_id=${schedule_id}`);
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${cleanScheduleId}`);
     } catch (e) {
         console.error("Lỗi update info:", e);
         res.redirect('/admin/schedules');
@@ -430,18 +481,110 @@ router.post('/schedules/update-info', checkClassPermission, async (req, res) => 
 router.post('/schedules/delete-week', checkClassPermission, async (req, res) => {
     try {
         const { schedule_id, class_id } = req.body;
+        const cleanScheduleId = toId(schedule_id);
+        const cleanClassId = toId(class_id);
         const db = await connectDB();
 
         await db.run(`
             UPDATE schedules 
             SET is_deleted = 1, deleted_at = NOW() 
             WHERE id = ?
-        `, [schedule_id]);
+        `, [cleanScheduleId]);
 
-        res.redirect(`/admin/schedules?class_id=${class_id}`);
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}`);
     } catch (e) {
         console.error("Lỗi delete-week:", e);
         res.redirect('/admin/schedules');
+    }
+});
+
+// POST /admin/schedules/add-time-slot - Thêm 1 hàng (khung thời gian mới)
+router.post('/schedules/add-time-slot', checkClassPermission, async (req, res) => {
+    try {
+        const { schedule_id, class_id, time_label } = req.body;
+        const cleanScheduleId = toId(schedule_id);
+        const cleanClassId = toId(class_id);
+        const label = (time_label || '').trim() || 'Thời gian mới';
+        const db = await connectDB();
+
+        const schedule = await db.get('SELECT * FROM schedules WHERE id = ?', [cleanScheduleId]);
+        if (!schedule) return res.status(404).send('Không tìm thấy thời khóa biểu');
+
+        const slots = parseTimeSlots(schedule);
+        slots.push(label);
+        const newSlotIndex = slots.length - 1;
+
+        await db.run('UPDATE schedules SET time_slots = ? WHERE id = ?', [JSON.stringify(slots), cleanScheduleId]);
+
+        // Khởi tạo 6 ô trống mới cho slot này (Thứ 2 đến Thứ 7)
+        for (let d = 2; d <= 7; d++) {
+            await db.run(`
+                INSERT INTO schedule_cells (schedule_id, day_of_week, slot_index, content, bg_color, row_span, col_span, is_merged) 
+                VALUES (?, ?, ?, '', '#ffffff', 1, 1, 0)
+            `, [cleanScheduleId, d, newSlotIndex]);
+        }
+
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${cleanScheduleId}`);
+    } catch (e) {
+        console.error('Lỗi add-time-slot:', e);
+        res.status(500).send('Lỗi thêm khung giờ');
+    }
+});
+
+// POST /admin/schedules/update-time-slot - Đổi tên khung thời gian
+router.post('/schedules/update-time-slot', checkClassPermission, async (req, res) => {
+    try {
+        const { schedule_id, class_id, slot_index, new_label } = req.body;
+        const cleanScheduleId = toId(schedule_id);
+        const cleanClassId = toId(class_id);
+        const slotIdx = parseInt(slot_index);
+        const label = (new_label || '').trim();
+        const db = await connectDB();
+
+        const schedule = await db.get('SELECT * FROM schedules WHERE id = ?', [cleanScheduleId]);
+        if (!schedule) return res.status(404).send('Không tìm thấy thời khóa biểu');
+
+        const slots = parseTimeSlots(schedule);
+        if (slotIdx >= 0 && slotIdx < slots.length && label) {
+            slots[slotIdx] = label;
+            await db.run('UPDATE schedules SET time_slots = ? WHERE id = ?', [JSON.stringify(slots), cleanScheduleId]);
+        }
+
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${cleanScheduleId}`);
+    } catch (e) {
+        console.error('Lỗi update-time-slot:', e);
+        res.status(500).send('Lỗi sửa khung giờ');
+    }
+});
+
+// POST /admin/schedules/delete-time-slot - Xóa 1 hàng (khung thời gian)
+router.post('/schedules/delete-time-slot', checkClassPermission, async (req, res) => {
+    try {
+        const { schedule_id, class_id, slot_index } = req.body;
+        const cleanScheduleId = toId(schedule_id);
+        const cleanClassId = toId(class_id);
+        const slotIdx = parseInt(slot_index);
+        const db = await connectDB();
+
+        const schedule = await db.get('SELECT * FROM schedules WHERE id = ?', [cleanScheduleId]);
+        if (!schedule) return res.status(404).send('Không tìm thấy thời khóa biểu');
+
+        const slots = parseTimeSlots(schedule);
+        if (slots.length > 1 && slotIdx >= 0 && slotIdx < slots.length) {
+            slots.splice(slotIdx, 1);
+            await db.run('UPDATE schedules SET time_slots = ? WHERE id = ?', [JSON.stringify(slots), cleanScheduleId]);
+
+            // Xóa các ô ở slot này
+            await db.run('DELETE FROM schedule_cells WHERE schedule_id = ? AND slot_index = ?', [cleanScheduleId, slotIdx]);
+
+            // Dồn slot_index của các ô sau đó lên 1 bậc
+            await db.run('UPDATE schedule_cells SET slot_index = slot_index - 1 WHERE schedule_id = ? AND slot_index > ?', [cleanScheduleId, slotIdx]);
+        }
+
+        res.redirect(`/admin/schedules?class_id=${cleanClassId}&schedule_id=${cleanScheduleId}`);
+    } catch (e) {
+        console.error('Lỗi delete-time-slot:', e);
+        res.status(500).send('Lỗi xóa khung giờ');
     }
 });
 
@@ -449,16 +592,48 @@ router.post('/schedules/delete-week', checkClassPermission, async (req, res) => 
 // 3. CÁC API THAO TÁC Ô GIỐNG EXCEL (AJAX)
 // ==========================================
 
+// Helper tự động lưu hoạt động mới vào Thư viện hoạt động nếu chưa có
+async function autoSaveActivity(db, title, color, userId) {
+    if (!title || typeof title !== 'string') return null;
+    const cleanTitle = title.trim();
+    if (cleanTitle.length < 2) return null;
+
+    try {
+        const existing = await db.get('SELECT id FROM activity_library WHERE LOWER(TRIM(title)) = LOWER(?)', [cleanTitle]);
+        if (!existing) {
+            const res = await db.run(
+                'INSERT INTO activity_library (title, default_color, user_id) VALUES (?, ?, ?)',
+                [cleanTitle, color || '#ffffff', userId || null]
+            );
+            return {
+                id: res.lastID,
+                title: cleanTitle,
+                default_color: color || '#ffffff'
+            };
+        }
+    } catch (e) {
+        console.error('Lỗi autoSaveActivity:', e.message);
+    }
+    return null;
+}
+
 // POST /admin/schedules/update-cell - Sửa 1 ô
 router.post('/schedules/update-cell', checkClassPermission, async (req, res) => {
     try {
         const { cell_id, content, bg_color } = req.body;
+        const cleanCellId = toId(cell_id);
         const db = await connectDB();
         await db.run(
             `UPDATE schedule_cells SET content = ?, bg_color = ? WHERE id = ?`,
-            [content, bg_color, cell_id]
+            [content, bg_color, cleanCellId]
         );
-        res.json({ success: true });
+
+        let newActivity = null;
+        if (content) {
+            newActivity = await autoSaveActivity(db, content, bg_color, req.session.user?.id);
+        }
+
+        res.json({ success: true, newActivity });
     } catch (e) {
         console.error("Lỗi update cell:", e);
         res.status(500).json({ success: false, message: e.message });
@@ -466,34 +641,40 @@ router.post('/schedules/update-cell', checkClassPermission, async (req, res) => 
 });
 
 // POST /admin/schedules/merge-cells - Gộp ô 2 chiều (rowspan + colspan)
-router.post('/admin/schedules/merge-cells', checkClassPermission, async (req, res) => {
+router.post('/schedules/merge-cells', checkClassPermission, async (req, res) => {
     try {
         const { schedule_id, min_slot, max_slot, min_day, max_day, master_content, master_color } = req.body;
+        const cleanScheduleId = toId(schedule_id);
         const db = await connectDB();
 
-        const row_span = max_slot - min_slot + 1;
-        const col_span = max_day - min_day + 1;
+        const row_span = parseInt(max_slot) - parseInt(min_slot) + 1;
+        const col_span = parseInt(max_day) - parseInt(min_day) + 1;
 
         // 1. Cập nhật Master Cell (ô góc trên bên trái)
         await db.run(`
             UPDATE schedule_cells 
             SET content = ?, bg_color = ?, row_span = ?, col_span = ?, is_merged = 0 
             WHERE schedule_id = ? AND slot_index = ? AND day_of_week = ?
-        `, [master_content || '', master_color || '#ffffff', row_span, col_span, schedule_id, min_slot, min_day]);
+        `, [master_content || '', master_color || '#ffffff', row_span, col_span, cleanScheduleId, parseInt(min_slot), parseInt(min_day)]);
 
         // 2. Đánh dấu các ô còn lại trong khối chữ nhật là is_merged = 1
-        for (let s = min_slot; s <= max_slot; s++) {
-            for (let d = min_day; d <= max_day; d++) {
-                if (s === min_slot && d === min_day) continue; // Bỏ qua ô master
+        for (let s = parseInt(min_slot); s <= parseInt(max_slot); s++) {
+            for (let d = parseInt(min_day); d <= parseInt(max_day); d++) {
+                if (s === parseInt(min_slot) && d === parseInt(min_day)) continue; // Bỏ qua ô master
                 await db.run(`
                     UPDATE schedule_cells 
                     SET is_merged = 1, row_span = 1, col_span = 1 
                     WHERE schedule_id = ? AND slot_index = ? AND day_of_week = ?
-                `, [schedule_id, s, d]);
+                `, [cleanScheduleId, s, d]);
             }
         }
 
-        res.json({ success: true });
+        let newActivity = null;
+        if (master_content) {
+            newActivity = await autoSaveActivity(db, master_content, master_color, req.session.user?.id);
+        }
+
+        res.json({ success: true, newActivity });
     } catch (e) {
         console.error("Lỗi merge cells:", e);
         res.status(500).json({ success: false, message: e.message });
@@ -501,19 +682,41 @@ router.post('/admin/schedules/merge-cells', checkClassPermission, async (req, re
 });
 
 // POST /admin/schedules/unmerge-cells - Hủy gộp ô
-router.post('/admin/schedules/unmerge-cells', checkClassPermission, async (req, res) => {
+router.post('/schedules/unmerge-cells', checkClassPermission, async (req, res) => {
     try {
         const { schedule_id, min_slot, max_slot, min_day, max_day } = req.body;
+        const cleanScheduleId = toId(schedule_id);
         const db = await connectDB();
 
-        // Khôi phục toàn bộ các ô trong vùng về trạng thái độc lập
-        for (let s = min_slot; s <= max_slot; s++) {
-            for (let d = min_day; d <= max_day; d++) {
+        let startS = parseInt(min_slot);
+        let endS = parseInt(max_slot);
+        let startD = parseInt(min_day);
+        let endD = parseInt(max_day);
+
+        // Tìm tất cả các ô trong vùng hoặc master cell có row_span/col_span bao phủ
+        const cellsInArea = await db.all(`
+            SELECT slot_index, day_of_week, row_span, col_span, is_merged 
+            FROM schedule_cells 
+            WHERE schedule_id = ? AND slot_index BETWEEN ? AND ? AND day_of_week BETWEEN ? AND ?
+        `, [cleanScheduleId, startS, endS, startD, endD]);
+
+        for (const c of cellsInArea) {
+            if (c.row_span > 1) {
+                endS = Math.max(endS, c.slot_index + c.row_span - 1);
+            }
+            if (c.col_span > 1) {
+                endD = Math.max(endD, c.day_of_week + c.col_span - 1);
+            }
+        }
+
+        // Khôi phục toàn bộ các ô trong vùng bao quát về trạng thái độc lập
+        for (let s = startS; s <= endS; s++) {
+            for (let d = startD; d <= endD; d++) {
                 await db.run(`
                     UPDATE schedule_cells 
                     SET is_merged = 0, row_span = 1, col_span = 1 
                     WHERE schedule_id = ? AND slot_index = ? AND day_of_week = ?
-                `, [schedule_id, s, d]);
+                `, [cleanScheduleId, s, d]);
             }
         }
 
@@ -525,10 +728,12 @@ router.post('/admin/schedules/unmerge-cells', checkClassPermission, async (req, 
 });
 
 // POST /admin/schedules/batch-update-cells - Cập nhật nhiều ô (Copy/Paste & Thư viện hoạt động)
-router.post('/admin/schedules/batch-update-cells', checkClassPermission, async (req, res) => {
+router.post('/schedules/batch-update-cells', checkClassPermission, async (req, res) => {
     try {
         const { schedule_id, cells } = req.body;
+        const cleanScheduleId = toId(schedule_id);
         const db = await connectDB();
+        const newActivities = [];
 
         if (cells && Array.isArray(cells)) {
             for (const item of cells) {
@@ -536,11 +741,16 @@ router.post('/admin/schedules/batch-update-cells', checkClassPermission, async (
                     UPDATE schedule_cells 
                     SET content = ?, bg_color = ? 
                     WHERE schedule_id = ? AND slot_index = ? AND day_of_week = ?
-                `, [item.content, item.bg_color || '#ffffff', schedule_id, item.slot_index, item.day_of_week]);
+                `, [item.content, item.bg_color || '#ffffff', cleanScheduleId, parseInt(item.slot_index), parseInt(item.day_of_week)]);
+
+                if (item.content) {
+                    const newAct = await autoSaveActivity(db, item.content, item.bg_color, req.session.user?.id);
+                    if (newAct) newActivities.push(newAct);
+                }
             }
         }
 
-        res.json({ success: true });
+        res.json({ success: true, newActivities });
     } catch (e) {
         console.error("Lỗi batch update cells:", e);
         res.status(500).json({ success: false, message: e.message });

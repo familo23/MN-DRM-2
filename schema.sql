@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS schedules (
     theme_title VARCHAR(255) DEFAULT 'QUÊ HƯƠNG ĐẤT NƯỚC BÁC HỒ',
     week_label VARCHAR(100) DEFAULT 'Tuần 1',
     date_range VARCHAR(255) DEFAULT 'Từ ngày 11/05 - 16/05/2026',
+    time_slots TEXT NULL,
     is_active TINYINT(1) DEFAULT 1,
     is_deleted TINYINT(1) DEFAULT 0,
     deleted_at TIMESTAMP NULL,
