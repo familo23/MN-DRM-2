@@ -27,6 +27,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^6.0.1"
   },

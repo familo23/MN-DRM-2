@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment Variables (Bảo mật mật khẩu DB của nhóm)
+.env
+
+# Local SQLite (Không còn dùng nữa)
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs & OS Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
