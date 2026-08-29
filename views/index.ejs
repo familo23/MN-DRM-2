@@ -1,12 +1,36 @@
-<%- include('layouts/header', { title: 'Trang Chủ - Mầm Non Đồ Rê Mí' }) %>
+<%- include('layouts/header', { title: 'Trang Chủ - Trường Mầm Non Đồ Rê Mí 2' }) %>
 
-<!-- KHỈ -->
-<div class="monkey monkey-left">🐒</div>
-<div class="monkey monkey-right">🐒</div>
+<!-- HÀNG LỒNG ĐÈN TREO TRÊN ĐỈNH TRANG -->
+<div class="top-hanging-lanterns">
+    <span class="mini-lantern">🏮</span>
+    <span class="mini-lantern">⭐</span>
+    <span class="mini-lantern">🏮</span>
+    <span class="mini-lantern">🏮</span>
+    <span class="mini-lantern">⭐</span>
+    <span class="mini-lantern">🏮</span>
+    <span class="mini-lantern">🏮</span>
+    <span class="mini-lantern">⭐</span>
+    <span class="mini-lantern">🏮</span>
+</div>
+
+<!-- HỌA TIẾT NỔI SINH ĐỘNG 2 BÊN MÀN HÌNH - CHỦ ĐỀ TRUNG THU -->
+<div class="floating-decor floating-decor-left">
+    <div class="decor-item anim-lantern-sway" title="Lồng đèn ông sao Trung Thu">🏮</div>
+    <div class="decor-item anim-bounce-rabbit" title="Thỏ ngọc cung trăng">🐰</div>
+    <div class="decor-item anim-float-cake" title="Bánh trung thu dẻo ngọt">🥮</div>
+    <div class="decor-item anim-lantern-sway" title="Trống hội rước đèn">🥁</div>
+</div>
+
+<div class="floating-decor floating-decor-right">
+    <div class="decor-item anim-moon-glow" title="Trăng rằm tròn sáng">🌕</div>
+    <div class="decor-item anim-lantern-sway" title="Đèn lồng đỏ may mắn">🏮</div>
+    <div class="decor-item anim-float-cake" title="Múa lân sư rồng">🦁</div>
+    <div class="decor-item anim-moon-glow" title="Ngôi sao lấp lánh">⭐</div>
+</div>
 
 
-<!-- BANNER -->
-<section id="home" class="position-relative bg-dark">
+<!-- HERO BANNER VỚI LỚP PHỦ CHỦ ĐỀ ĐÊM HỘI TRĂNG RẰM -->
+<section id="home" class="hero-section">
     <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
 
         <div class="carousel-indicators z-3">
@@ -17,168 +41,910 @@
 
         <div class="carousel-inner">
 
-            <div class="carousel-item active" data-bs-interval="3000">
-                <img src="/images/banner1.jpg" alt="Lớp học">
+            <div class="carousel-item active" data-bs-interval="4000">
+                <img src="/images/banner1.jpg" alt="Lớp học Mầm Non Đồ Rê Mí 2">
             </div>
 
-            <div class="carousel-item" data-bs-interval="3000">
-                <img src="/images/banner2.jpg" alt="Mỹ thuật">
+            <div class="carousel-item" data-bs-interval="4000">
+                <img src="/images/banner2.jpg" alt="Hoạt động mỹ thuật và sáng tạo">
             </div>
 
-            <div class="carousel-item" data-bs-interval="3000">
+            <div class="carousel-item" data-bs-interval="4000">
                 <img src="/images/banner3.jpg" alt="Vui chơi ngoài trời">
             </div>
 
         </div>
 
-        <button class="carousel-control-prev z-3"
-                type="button"
-                data-bs-target="#heroCarousel"
-                data-bs-slide="prev">
+        <!-- Lớp phủ nội dung trên Banner -->
+        <div class="hero-overlay">
+            <div class="container text-center">
+                <div class="hero-badge-festive mb-3">
+                    <span>🏮</span> Vui Tết Trung Thu – Rước Đèn Trông Trăng 2026 🌕
+                </div>
+                <h1 class="hero-title">Đêm Hội Trăng Rằm Đồ Rê Mí 2</h1>
+                <p class="hero-subtitle">
+                    Chào đón mùa Tết Trung Thu rộn rã tiếng cười – Nơi các thiên thần nhỏ được cùng cô và bạn bè tự tay làm bánh, dán đèn ông sao, rước đèn phá cỗ và thắp sáng những ước mơ tuổi thơ diệu kỳ!
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    <a href="#trung-thu-events" class="btn btn-warning text-dark hero-cta-btn shadow">
+                        <i class="bi bi-stars"></i> Khám Phá Hội Trăng Rằm
+                    </a>
+                    <a href="/tkb" class="btn btn-outline-light hero-cta-btn">
+                        <i class="bi bi-calendar3"></i> Xem Thời Khóa Biểu Của Bé
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Điều khiển Carousel -->
+        <button class="carousel-control-prev z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">Trước</span>
         </button>
 
-        <button class="carousel-control-next z-3"
-                type="button"
-                data-bs-target="#heroCarousel"
-                data-bs-slide="next">
+        <button class="carousel-control-next z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon rounded-circle bg-dark bg-opacity-50 p-3"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">Sau</span>
         </button>
+
+        <!-- Sóng mềm ngăn cách (Wave Divider) -->
+        <div class="wave-divider">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,40 L1200,120 L0,120 Z"></path>
+            </svg>
+        </div>
 
     </div>
 </section>
 
 
-<!-- NỘI DUNG -->
-<main class="container py-5">
+<!-- NỘI DUNG CHÍNH -->
+<main class="container py-4">
 
-    <!-- GIỚI THIỆU -->
-    <section id="about">
-
-        <div class="about-title">
-            <h2>Về Chúng Tôi</h2>
-            <p>Trường Mầm non Đồ Rê Mí</p>
+    <!-- THANH THỐNG SỐ VÀ TIỆN ÍCH NHANH (QUICK STATS) -->
+    <div class="quick-stats-container mb-5">
+        <div class="row g-3">
+            <div class="col-6 col-lg-3">
+                <div class="stats-card">
+                    <div class="stats-icon-box bg-danger bg-opacity-10 text-danger">
+                        👶
+                    </div>
+                    <div>
+                        <div class="stats-title">Nhận trẻ</div>
+                        <div class="stats-value text-danger">6 Tháng - 6 Tuổi</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stats-card">
+                    <div class="stats-icon-box bg-warning bg-opacity-10 text-warning">
+                        👨‍👩‍👧
+                    </div>
+                    <div>
+                        <div class="stats-title">Sĩ số lớp</div>
+                        <div class="stats-value text-warning">10 - 15 Bé / Lớp</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stats-card">
+                    <div class="stats-icon-box bg-success bg-opacity-10 text-success">
+                        📹
+                    </div>
+                    <div>
+                        <div class="stats-title">Camera Online</div>
+                        <div class="stats-value text-success">Trực Tuyến 24/24</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stats-card">
+                    <div class="stats-icon-box bg-primary bg-opacity-10 text-primary">
+                        ⏰
+                    </div>
+                    <div>
+                        <div class="stats-title">Thời gian học</div>
+                        <div class="stats-value text-primary">Thứ 2 - Thứ 7</div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="about-wrapper">
 
-            <!-- 1 -->
-            <div class="about-row">
-
-                <div class="about-content">
-                    <p>
-                        Trường Mầm non Đồ Rê Mí là nơi các bé được học tập,
-                        vui chơi và khám phá những điều mới mẻ mỗi ngày.
-                        Nhà trường hướng đến việc xây dựng một
-                        <strong>môi trường an toàn, thân thiện</strong>
-                        và phù hợp với sự phát triển của trẻ, giúp các bé
-                        thoải mái học hỏi và phát huy khả năng của mình.
-                    </p>
-                </div>
-
-                <div class="about-image">
-                    <img src="/images/hoatdong1.jpg" alt="Bé tham gia hoạt động">
-                </div>
-
+    <!-- KHỐI CHUYÊN ĐỀ ĐẶC BIỆT: CHUỖI HOẠT ĐỘNG TẾT TRUNG THU 2026 -->
+    <section id="trung-thu-events" class="mb-5 pt-2">
+        <div class="festive-container-box">
+            <div class="text-center mb-4">
+                <span class="section-badge bg-danger text-white">
+                    <i class="bi bi-balloon-heart-fill me-1"></i> Không Khí Lễ Hội Rực Rỡ
+                </span>
+                <h2 class="section-title text-danger">🏮 Chuỗi Hoạt Động Tết Trung Thu 2026 🌕</h2>
+                <p class="section-subtitle text-dark fw-bold opacity-75">
+                    Mùa trăng tròn năm nay, Trường Mầm Non Đồ Rê Mí 2 mang đến cho các bé một thế giới cổ tích nhiệm màu với vô vàn trải nghiệm truyền thống ý nghĩa!
+                </p>
             </div>
 
-
-            <!-- 2 -->
-            <div class="about-row">
-
-                <div class="about-image">
-                    <img src="/images/hoatdong2.jpg" alt="Hoạt động khám phá của bé">
+            <div class="row g-4">
+                <!-- Hoạt động 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="festive-activity-card">
+                        <div class="festive-icon-circle">
+                            🏮
+                        </div>
+                        <h5>Bé Làm Lồng Đèn</h5>
+                        <p>
+                            Bé tự tay dán giấy kính, trang trí đèn ông sao năm cánh lung linh để chuẩn bị cho đêm hội rước đèn rực rỡ sắc màu.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="about-content">
-                    <p>
-                        Chương trình học tại lớp sẽ kết hợp giữa kiến thức
-                        cơ bản và các hoạt động phù hợp với lứa tuổi như
-                        <strong>vẽ, âm nhạc, vận động, kể chuyện,
-                        làm quen với thiên nhiên và các hoạt động sáng tạo</strong>.
-                        Bên cạnh giờ học trên lớp, nhà trường thường xuyên
-                        tổ chức các <strong>hoạt động ngoại khóa và trải nghiệm
-                        thực tế</strong> như tham quan, vui chơi ngoài trời,
-                        hoạt động tập thể, các chương trình theo chủ đề
-                        và những buổi trải nghiệm giúp bé khám phá thế giới
-                        xung quanh.
-                    </p>
+                <!-- Hoạt động 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="festive-activity-card">
+                        <div class="festive-icon-circle">
+                            🥮
+                        </div>
+                        <h5>Làm Bánh Dẻo Nhí</h5>
+                        <p>
+                            Trải nghiệm nhào bột, dập khuôn bánh dẻo hình hoa và các con vật ngộ nghĩnh, mang về biếu ông bà cha mẹ thân yêu.
+                        </p>
+                    </div>
                 </div>
 
+                <!-- Hoạt động 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="festive-activity-card">
+                        <div class="festive-icon-circle">
+                            🦁
+                        </div>
+                        <h5>Múa Lân Rước Đèn</h5>
+                        <p>
+                            Tiếng trống hội tưng bừng, màn múa lân sư tử dũng mãnh cùng đoàn rước đèn lung linh đón Chị Hằng và Chú Cuội giáng trần.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hoạt động 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="festive-activity-card">
+                        <div class="festive-icon-circle">
+                            🎁
+                        </div>
+                        <h5>Phá Cỗ & Nhận Quà</h5>
+                        <p>
+                            Bày mâm cỗ ngũ quả rồng phượng, cùng các bạn quây quần phá cỗ và nhận những phần quà kỷ niệm tuổi thơ ấm áp.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- 3 -->
-            <div class="about-row">
-
-                <div class="about-content">
-                    <p>
-                        Thông qua những hoạt động này, các bé có cơ hội
-                        <strong>rèn luyện kỹ năng giao tiếp, làm việc cùng
-                        bạn bè, tự tin thể hiện bản thân và hình thành
-                        tính tự lập</strong>.
-                        Các hoạt động cũng được tổ chức theo hướng vừa học
-                        vừa chơi, tạo cho trẻ thêm nhiều trải nghiệm thú vị
-                        bên cạnh những giờ học hằng ngày.
-                    </p>
-                </div>
-
-                <div class="about-image">
-                    <img src="/images/tet.jppg.jpg" alt="Các bé tham gia hoạt động">
-                </div>
-
-            </div>
-
-
-            <!-- 4 -->
-            <div class="about-row">
-
-                <div class="about-image">
-                    <img src="/images/hoatdong4.jpg" alt="Hoạt động của các bé">
-                </div>
-
-                <div class="about-content">
-                    <p>
-                        Nhà trường cũng chú trọng đến việc theo dõi quá trình
-                        học tập và sinh hoạt của từng bé, đồng thời tạo sự
-                        <strong>kết nối giữa giáo viên và phụ huynh</strong>
-                        để việc chăm sóc và giáo dục trẻ được thuận tiện,
-                        hiệu quả hơn.
-                    </p>
-                </div>
-
-            </div>
-
         </div>
-
     </section>
 
 
-    <!-- KHOẢNH KHẮC -->
-    <section class="activity-gallery">
+    <!-- 4 TRỤ CỘT GIÁ TRỊ NỔI BẬT (TẠI SAO CHỌN ĐỒ RÊ MÍ 2) -->
+    <section class="mb-5 pt-3">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-warning bg-opacity-25 text-dark">
+                <i class="bi bi-star-fill text-warning me-1"></i> Vì Sao Phụ Huynh Tin Chọn
+            </span>
+            <h2 class="section-title">Điểm Nổi Bật Của Đồ Rê Mí 2</h2>
+            <p class="section-subtitle">
+                Chúng tôi mang đến môi trường mầm non lý tưởng, nơi mỗi ngày đến trường của bé là một ngày tràn ngập niềm vui và khám phá mới.
+            </p>
+        </div>
 
-        <h3>Khoảnh Khắc Của Bé</h3>
-
-        <div class="gallery-grid">
-
-            <div class="gallery-item">
-                <img src="/images/hoatdong1-1.jpg" alt="Hoạt động của bé">
+        <div class="row g-4">
+            <!-- Cột 1: STEAM & Chương trình -->
+            <div class="col-md-6 col-lg-3">
+                <div class="pillar-card">
+                    <div class="pillar-icon bg-primary bg-opacity-10 text-primary">
+                        🚀
+                    </div>
+                    <h4>Chương Trình STEAM</h4>
+                    <p>
+                        Ứng dụng phương pháp <strong>STEAM hiện đại</strong> kết hợp khung chuẩn Bộ GD&ĐT, giúp bé rèn luyện tư duy logic, làm quen khoa học và nghệ thuật tự nhiên.
+                    </p>
+                </div>
             </div>
 
-            <div class="gallery-item">
-                <img src="/images/hoatdong5.jpg" alt="Hoạt động của bé">
+            <!-- Cột 2: Năng khiếu toàn diện -->
+            <div class="col-md-6 col-lg-3">
+                <div class="pillar-card">
+                    <div class="pillar-icon bg-warning bg-opacity-10 text-warning">
+                        🎨
+                    </div>
+                    <h4>Năng Khiếu Trọn Gói</h4>
+                    <p>
+                        Tích hợp sẵn trong học phí các môn: <strong>Tiếng Anh, Hội họa, Múa, Võ thuật</strong> giúp khai phóng tài năng của bé mà không phát sinh thêm chi phí.
+                    </p>
+                </div>
             </div>
 
-            <div class="gallery-item">
-                <img src="/images/hotdong3.jpg" alt="Hoạt động của bé">
+            <!-- Cột 3: Cơ sở vật chất & Camera -->
+            <div class="col-md-6 col-lg-3">
+                <div class="pillar-card">
+                    <div class="pillar-icon bg-success bg-opacity-10 text-success">
+                        🏫
+                    </div>
+                    <h4>Cơ Sở ~40m² & Camera</h4>
+                    <p>
+                        Phòng học thoáng mát ngập ánh sáng tự nhiên, trang bị đồ chơi học tập an toàn chuẩn mầm non cùng <strong>Camera trực tuyến 24/24</strong> cho phụ huynh.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cột 4: Dinh dưỡng & Chăm sóc -->
+            <div class="col-md-6 col-lg-3">
+                <div class="pillar-card">
+                    <div class="pillar-icon bg-danger bg-opacity-10 text-danger">
+                        🍎
+                    </div>
+                    <h4>Bếp Ăn Sạch 100%</h4>
+                    <p>
+                        Thực phẩm có kiểm định chất lượng rõ ràng, thực đơn cân đối theo mùa cùng dịch vụ tiện ích <strong>ăn sáng, đón muộn, trông Thứ 7</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- VỀ CHÚNG TÔI (GIỚI THIỆU CHI TIẾT & SỨ MỆNH) -->
+    <section id="about" class="about-section">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-danger bg-opacity-10 text-danger">
+                <i class="bi bi-heart-fill text-danger me-1"></i> Tình Yêu Thương & Trách Nhiệm
+            </span>
+            <h2 class="section-title">Về Mầm Non Độc Lập Đồ Rê Mí 2</h2>
+            <p class="section-subtitle">
+                Được thành lập với sứ mệnh đồng hành cùng phụ huynh xây dựng nền tảng đầu đời vững chắc cho các thiên thần nhỏ tại Yên Hòa, Cầu Giấy.
+            </p>
+        </div>
+
+        <!-- Khối 1 -->
+        <div class="about-box-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 order-lg-1 order-2">
+                    <div class="about-content-wrap">
+                        <div class="mb-2">
+                            <span class="highlight-tag"><i class="bi bi-shield-check text-success"></i> An Toàn Tuyệt Đối</span>
+                            <span class="highlight-tag"><i class="bi bi-flower1 text-warning"></i> Thân Thiện</span>
+                        </div>
+                        <h3>Môi Trường Yêu Thương & Khám Phá</h3>
+                        <p>
+                            Trường Mầm non Đồ Rê Mí 2 là nơi các bé được học tập, vui chơi và khám phá những điều mới mẻ mỗi ngày trong tình yêu thương ấm áp của thầy cô.
+                        </p>
+                        <p>
+                            Nhà trường xây dựng không gian rộng rãi, thoáng mát, nhiều cây xanh nhằm tạo ra một môi trường an toàn, gần gũi với thiên nhiên, giúp trẻ tự do vận động và phát huy tối đa tiềm năng cá nhân.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-1">
+                    <div class="about-img-frame">
+                        <img src="/images/hoatdong1.jpg" alt="Bé tham gia hoạt động học tập tại Đồ Rê Mí 2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khối 2 -->
+        <div class="about-box-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 order-lg-1 order-1">
+                    <div class="about-img-frame">
+                        <img src="/images/hoatdong2.jpg" alt="Hoạt động trải nghiệm sáng tạo của bé">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-2">
+                    <div class="about-content-wrap">
+                        <div class="mb-2">
+                            <span class="highlight-tag"><i class="bi bi-people-fill text-primary"></i> 2 Cô / Lớp</span>
+                            <span class="highlight-tag"><i class="bi bi-award-fill text-danger"></i> Chuẩn Sư Phạm</span>
+                        </div>
+                        <h3>Đội Ngũ Giáo Viên Tận Tụy & Giàu Kinh Nghiệm</h3>
+                        <p>
+                            Mỗi lớp học duy trì chỉ từ <strong>10 đến 15 bé</strong> và có <strong>2 giáo viên</strong> trực tiếp phụ trách. Tất cả thầy cô đều có bằng cấp chính quy về giáo dục mầm non, được đào tạo chuyên sâu về phương pháp STEAM.
+                        </p>
+                        <p>
+                            Sự tận tâm, kiên nhẫn và tình yêu trẻ của các cô giúp từng em luôn cảm thấy được lắng nghe, chăm sóc chu đáo từ bữa ăn, giấc ngủ đến từng bài học kỹ năng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khối 3 -->
+        <div class="about-box-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 order-lg-1 order-2">
+                    <div class="about-content-wrap">
+                        <div class="mb-2">
+                            <span class="highlight-tag"><i class="bi bi-tree-fill text-success"></i> Ngoại Khóa & Trải Nghiệm</span>
+                            <span class="highlight-tag"><i class="bi bi-emoji-smile-fill text-warning"></i> Vừa Học Vừa Chơi</span>
+                        </div>
+                        <h3>Hoạt Động Ngoại Khóa & Rèn Luyện Kỹ Năng Sống</h3>
+                        <p>
+                            Bên cạnh giờ học trên lớp, nhà trường thường xuyên tổ chức các chuyến tham quan dã ngoại, hoạt động tập thể theo chủ đề lễ hội (Tết Trung Thu, Tết cổ truyền, Giáng sinh...) và các dự án thủ công sáng tạo.
+                        </p>
+                        <p>
+                            Thông qua những trải nghiệm thực tế này, trẻ được rèn luyện khả năng giao tiếp, tính tự lập, kỹ năng làm việc nhóm và lòng tự tin thể hiện bản thân trước đám đông.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-1">
+                    <div class="about-img-frame">
+                        <img src="/images/tet.jppg.jpg" alt="Hoạt động lễ hội và trải nghiệm của các bé">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khối 4 -->
+        <div class="about-box-card">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6 order-lg-1 order-1">
+                    <div class="about-img-frame">
+                        <img src="/images/hoatdong4.jpg" alt="Kết nối gắn bó giữa gia đình và nhà trường">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-2 order-2">
+                    <div class="about-content-wrap">
+                        <div class="mb-2">
+                            <span class="highlight-tag"><i class="bi bi-chat-dots-fill text-info"></i> Kết Nối 24/7</span>
+                            <span class="highlight-tag"><i class="bi bi-camera-video-fill text-success"></i> Minh Bạch Hoàn Toàn</span>
+                        </div>
+                        <h3>Đồng Hành Cùng Ba Mẹ Trong Hành Trình Khôn Lớn</h3>
+                        <p>
+                            Đồ Rê Mí 2 luôn coi trọng sự kết nối chặt chẽ giữa gia đình và giáo viên. Quá trình phát triển thể chất, cảm xúc và học tập của từng bé đều được cập nhật thường xuyên.
+                        </p>
+                        <p>
+                            Với hệ thống camera giám sát trực tuyến 24/24 cùng kênh liên lạc thuận tiện, ba mẹ luôn cảm thấy hoàn toàn an tâm và gần gũi bên con mọi lúc mọi nơi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CÁC LỚP NĂNG KHIẾU TÍCH HỢP TOÀN DIỆN -->
+    <section class="mb-5 py-4">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-info bg-opacity-10 text-dark">
+                <i class="bi bi-palette-fill me-1 text-danger"></i> Phát Triển Tài Năng
+            </span>
+            <h2 class="section-title">Các Môn Năng Khiếu Tích Hợp</h2>
+            <p class="section-subtitle">
+                Được lồng ghép trong chương trình học chính khóa mỗi tuần, giúp bé thỏa sức khám phá sở thích và năng khiếu tiềm ẩn.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="talent-card">
+                    <div class="talent-icon-bubble bg-primary bg-opacity-10 text-primary">
+                        🇬🇧
+                    </div>
+                    <h5>Tiếng Anh Giao Tiếp</h5>
+                    <p>Làm quen ngoại ngữ tự nhiên qua các bài hát, trò chơi tương tác và phản xạ ngữ âm vui nhộn.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="talent-card">
+                    <div class="talent-icon-bubble bg-warning bg-opacity-10 text-warning">
+                        🎨
+                    </div>
+                    <h5>Mỹ Thuật & Sáng Tạo</h5>
+                    <p>Khám phá màu sắc, rèn luyện sự khéo léo của đôi tay và khơi dậy trí tưởng tượng phong phú.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="talent-card">
+                    <div class="talent-icon-bubble bg-danger bg-opacity-10 text-danger">
+                        💃
+                    </div>
+                    <h5>Múa & Cảm Thụ Âm Nhạc</h5>
+                    <p>Phát triển thẩm mỹ âm nhạc, sự dẻo dai hình thể và sự tự tin biểu diễn trước bạn bè.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="talent-card">
+                    <div class="talent-icon-bubble bg-success bg-opacity-10 text-success">
+                        🥋
+                    </div>
+                    <h5>Võ Thuật Nhí</h5>
+                    <p>Tăng cường thể lực, rèn luyện sự nhanh nhẹn, tinh thần kỷ luật và phản xạ vận động linh hoạt.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- TIỆN ÍCH DÀNH CHO PHỤ HUYNH BẬN RỘN -->
+    <section class="mb-5 py-3">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-success bg-opacity-15 text-success">
+                <i class="bi bi-clock-history me-1"></i> Đồng Hành Tiện Lợi
+            </span>
+            <h2 class="section-title">Dịch Vụ Hỗ Trợ Phụ Huynh</h2>
+            <p class="section-subtitle">
+                Thấu hiểu thời gian bận rộn của ba mẹ, Đồ Rê Mí 2 cung cấp các dịch vụ tiện ích linh hoạt và an tâm nhất.
+            </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+                <div class="service-pill-card">
+                    <div class="service-icon">
+                        <i class="bi bi-cup-hot-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Ăn Sáng Tại Trường</h6>
+                        <small class="text-muted">Bữa sáng đầy đủ dinh dưỡng, giúp ba mẹ thảnh thơi buổi sáng.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-pill-card">
+                    <div class="service-icon">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Hỗ Trợ Đón Muộn</h6>
+                        <small class="text-muted">Cô giáo luôn chu đáo đồng hành cùng bé khi ba mẹ bận việc tan sở trễ.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-pill-card">
+                    <div class="service-icon">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Trông Trẻ Thứ 7</h6>
+                        <small class="text-muted">Mở lớp học và vui chơi ngày Thứ 7 cho phụ huynh có lịch làm việc cuối tuần.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-pill-card">
+                    <div class="service-icon">
+                        <i class="bi bi-compass-fill"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Dã Ngoại Định Kỳ</h6>
+                        <small class="text-muted">Các chuyến trải nghiệm thực tế bên ngoài trường đầy lý thú và bổ ích.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- PHẦN ĐÁNH GIÁ TỪ PHỤ HUYNH (36 ĐÁNH GIÁ XÁC THỰC - KIDDIHUB) -->
+    <section id="reviews" class="mb-5 py-4">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-warning text-dark">
+                <i class="bi bi-stars text-danger me-1"></i> Niềm Tin Của Ba Mẹ
+            </span>
+            <h2 class="section-title">Đánh Giá Từ Phụ Huynh</h2>
+            <p class="section-subtitle">
+                Tổng hợp <strong>36 đánh giá xác thực</strong> từ các bậc phụ huynh có con đang theo học tại Trường Mầm Non Độc Lập Đồ Rê Mí 2.
+            </p>
+        </div>
+
+        <!-- Khung thống kê điểm số tổng quan -->
+        <div class="reviews-summary-card mb-5">
+            <div class="row align-items-center g-4">
+                <!-- Cột điểm số lớn -->
+                <div class="col-lg-4 col-md-5">
+                    <div class="score-big-box">
+                        <div class="score-number">5.0<span class="fs-4 text-muted fw-bold">/5</span></div>
+                        <div class="stars-gold my-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <div class="fw-bold text-dark">36 Đánh giá xác thực</div>
+                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1 mt-2">
+                            <i class="bi bi-check-circle-fill me-1"></i> 100% Phụ huynh khuyên chọn
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Cột các tiêu chí chi tiết -->
+                <div class="col-lg-5 col-md-7 border-start-md ps-lg-4">
+                    <div class="criteria-item">
+                        <span>Cơ sở vật chất (~40m² & An toàn PCCC)</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="criteria-progress">
+                                <div class="criteria-progress-bar" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-danger fw-bold">5.0</span>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <span>Chất lượng giáo dục & Phương pháp STEAM</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="criteria-progress">
+                                <div class="criteria-progress-bar" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-danger fw-bold">5.0</span>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <span>Đội ngũ giáo viên tận tâm & Yêu trẻ</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="criteria-progress">
+                                <div class="criteria-progress-bar" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-danger fw-bold">5.0</span>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <span>An ninh, Camera 24/24 & Bếp ăn sạch</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="criteria-progress">
+                                <div class="criteria-progress-bar" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-danger fw-bold">5.0</span>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <span>Chất lượng tương xứng học phí</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="criteria-progress">
+                                <div class="criteria-progress-bar" style="width: 100%;"></div>
+                            </div>
+                            <span class="text-danger fw-bold">5.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột nút kêu gọi & chia sẻ -->
+                <div class="col-lg-3 text-center text-lg-end">
+                    <button class="btn btn-danger rounded-pill px-4 py-2 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                        <i class="bi bi-pencil-square me-1"></i> Gửi Cảm Nhận Của Bạn
+                    </button>
+                    <div class="small text-muted mt-2">Dành cho phụ huynh các bé</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách các thẻ nhận xét thực tế -->
+        <div class="row g-4">
+
+            <!-- Review 1: Mẹ Tôm -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-danger bg-opacity-10 text-danger">
+                                👩
+                            </div>
+                            <div class="parent-info">
+                                <h6>Mẹ Tôm</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Trường lớp thoáng mát, nhiều ánh sáng, lớp học rộng rãi, phương tiện đưa đón thuận lợi xe ô tô. Giáo viên nhiệt tình, chăm sóc tốt, đồ dùng học tập đầy đủ và mới, hệ thống PCCC đầy đủ đảm bảo an toàn, tôi rất yên tâm cho con học tại trường Đồ Rê Mí."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Yên Hòa, Cầu Giấy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 2: Ngọc Anh -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-warning bg-opacity-10 text-warning">
+                                👩‍🦰
+                            </div>
+                            <div class="parent-info">
+                                <h6>Ngọc Anh</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Mình đã cho con gửi ở đây. Cảm nhận ngay từ đầu thấy các cô rất nhiệt tình, yêu thương trẻ. Không gian lớp học thì thoáng đãng, sạch sẽ. Lớp học bố trí các góc học tập rất đẹp, bắt mắt. Mình cho con học cảm thấy rất yên tâm và sẽ lựa chọn ngôi trường này cho bé thứ 2 cũng sắp đi học."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Đã gửi 2 bé</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 3: Mẹ Shin -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-success bg-opacity-10 text-success">
+                                👱‍♀️
+                            </div>
+                            <div class="parent-info">
+                                <h6>Mẹ Shin</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Vị trí trường học thuận tiện, cơ sở vật chất tốt, các cô rất nhiệt tình và yêu thương các con, mình rất yên tâm khi gửi gắm con tại đây. Các hoạt động ngoài trời của trường tổ chức rất vui và ý nghĩa."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Lớp Mẫu Giáo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 4: Phụ huynh ẩn danh -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-danger bg-opacity-10 text-danger">
+                                👨
+                            </div>
+                            <div class="parent-info">
+                                <h6>Phụ huynh Lớp Mầm</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Mình rất hài lòng khi cho con học tại trường Đồ Rê Mí 2, các cô ân cần chu đáo, phòng học thoáng mát rộng rãi, địa điểm gần nhà nên thuận tiện đưa đón con đi học mỗi ngày."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Trần Kim Xuyến</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 5: Phụ huynh bé Bông -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-info bg-opacity-10 text-info">
+                                👧
+                            </div>
+                            <div class="parent-info">
+                                <h6>Phụ huynh Bé Bông</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Trường thoáng mát, lớp học sạch sẽ có nhiều cây xanh, các cô giáo nhiệt tình chăm trẻ tốt. Con đi học về biết tự xúc ăn, tự chào hỏi lễ phép và rất hào hứng mỗi sáng đi học."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Lớp Nhà Trẻ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 6: Phụ huynh bé Sóc -->
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-bubble-card">
+                    <span class="quote-icon-watermark">“</span>
+                    <div>
+                        <div class="testimonial-header">
+                            <div class="avatar-parent bg-purple bg-opacity-10 text-purple" style="background-color: #f3e8ff; color: #9333ea;">
+                                🧒
+                            </div>
+                            <div class="parent-info">
+                                <h6>Phụ huynh Bé Sóc</h6>
+                                <small><i class="bi bi-patch-check-fill text-danger"></i> Phụ huynh đã xác thực</small>
+                            </div>
+                        </div>
+                        <div class="stars-gold small mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="testimonial-quote">
+                            "Chương trình STEAM rất hay, con được làm quen nhiều hoạt động sáng tạo bổ ích. Các lớp năng khiếu tiếng Anh và múa vẽ dạy bài bản, các cô hỗ trợ trông muộn rất chu đáo và nhiệt tình."
+                        </p>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small d-flex justify-content-between">
+                        <span>Đánh giá 5.0 ⭐</span>
+                        <span>Lớp Lớn STEAM</span>
+                    </div>
+                </div>
             </div>
 
         </div>
+    </section>
 
+
+    <!-- KHOẢNH KHẮC ĐÁNG YÊU CỦA BÉ (PHOTO ALBUM) -->
+    <section class="activity-gallery mb-5">
+        <div class="text-center mb-4">
+            <span class="section-badge bg-danger bg-opacity-10 text-danger">
+                <i class="bi bi-camera-fill me-1"></i> Album Ảnh Đồ Rê Mí
+            </span>
+            <h2 class="section-title">Khoảnh Khắc Đáng Yêu Của Bé</h2>
+            <p class="section-subtitle">
+                Những nụ cười rạng rỡ và giây phút vui vẻ mỗi ngày của các thiên thần nhỏ tại trường.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hoatdong1-1.jpg" alt="Bé vui chơi và học tập">
+                    </div>
+                    <p class="polaroid-caption">Giờ Học Tập & Khám Phá 🌟</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hoatdong5.jpg" alt="Hoạt động ngoại khóa của bé">
+                    </div>
+                    <p class="polaroid-caption">Rèn Luyện & Vận Động Thể Chất ⚽</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hotdong3.jpg" alt="Bé vui chơi cùng bạn bè">
+                    </div>
+                    <p class="polaroid-caption">Gắn Kết Bạn Bè & Tình Thân 💖</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hoatdong6.jpg" alt="Hoạt động sáng tạo của bé">
+                    </div>
+                    <p class="polaroid-caption">Sáng Tạo Nghệ Thuật 🎨</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hoaatdong3-2.jpg" alt="Trải nghiệm thực tế">
+                    </div>
+                    <p class="polaroid-caption">Trải Nghiệm Khám Phá 🌿</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-box">
+                        <img src="/images/hoatdong5-1.jpg" alt="Giờ học năng khiếu của bé">
+                    </div>
+                    <p class="polaroid-caption">Tự Tin Thể Hiện Tài Năng 🎶</p>
+                </div>
+            </div>
+        </div>
     </section>
 
 </main>
+
+
+<!-- MODAL GỬI CẢM NHẬN / ĐÁNH GIÁ DÀNH CHO PHỤ HUYNH -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="reviewModalLabel">
+                    <i class="bi bi-chat-heart-fill text-danger me-2"></i>Gửi Cảm Nhận Phụ Huynh
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-2">
+                <p class="text-muted small">Ý kiến của ba mẹ là động lực to lớn giúp Đồ Rê Mí 2 ngày càng hoàn thiện và mang đến môi trường tốt nhất cho các bé!</p>
+                <form id="reviewForm" onsubmit="event.preventDefault(); alert('Cảm ơn ba mẹ đã gửi lời cảm nhận chân thành tới Trường Mầm Non Đồ Rê Mí 2!'); bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Họ và tên ba/mẹ (hoặc bé):</label>
+                        <input type="text" class="form-control rounded-3" placeholder="Ví dụ: Mẹ bé Bông, Ba Minh Khang..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Lớp học của bé:</label>
+                        <input type="text" class="form-control rounded-3" placeholder="Ví dụ: Lớp Mầm, Lớp Chồi, Lớp Lá...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small mb-1">Mức độ hài lòng của ba mẹ:</label>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <div class="star-rating-select" id="starRatingSelect" title="Bấm để chọn số sao">
+                                <span class="star-item active" data-value="1">★</span>
+                                <span class="star-item active" data-value="2">★</span>
+                                <span class="star-item active" data-value="3">★</span>
+                                <span class="star-item active" data-value="4">★</span>
+                                <span class="star-item active" data-value="5">★</span>
+                            </div>
+                            <span class="rating-text-label ms-2" id="ratingTextLabel">⭐⭐⭐⭐⭐ 5.0 - Xuất sắc & Rất hài lòng!</span>
+                        </div>
+                        <input type="hidden" id="ratingScoreInput" name="rating" value="5">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Cảm nhận và chia sẻ của ba mẹ:</label>
+                        <textarea class="form-control rounded-3" rows="4" placeholder="Chia sẻ về không gian lớp học, sự tận tâm của các cô, sự phát triển của bé..." required></textarea>
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Gửi Cảm Nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- NÚT LIÊN HỆ NHANH (HOTLINE & ZALO NỔI GÓC DƯỚI) -->
+<div class="floating-contact-box">
+    <a href="tel:0988906951" class="contact-btn contact-btn-hotline" title="Gọi Hotline tư vấn">
+        <i class="bi bi-telephone-fill"></i>
+        <span class="btn-tooltip">Hotline: 0988.906.951</span>
+    </a>
+    <a href="https://zalo.me/0988906951" target="_blank" class="contact-btn contact-btn-zalo" title="Chat Zalo tư vấn">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span class="btn-tooltip">Tư vấn qua Zalo</span>
+    </a>
+</div>
 
 <%- include('layouts/footer') %>
