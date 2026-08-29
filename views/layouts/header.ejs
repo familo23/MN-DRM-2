@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= typeof title !== 'undefined' ? title : 'Đồ RÊ MÍ 2' %></title>
+    <title><%= typeof title !== 'undefined' ? title : 'Trường Mầm Non Đồ Rê Mí 2' %></title>
+    
+    <!-- Favicon (Icon Logo Trường) -->
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="shortcut icon" type="image/png" href="/images/logo.png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -17,11 +22,11 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="/images/logo.png" alt="Logo" width="50" height="50" class="me-2 rounded-circle shadow-sm">
-                <span class="fs-4 fw-bold text-primary brand-text">Đồ Rê Mí</span>
+                <img src="/images/logo.png" alt="Logo Mầm Non Đồ Rê Mí 2" width="50" height="50" class="me-2 rounded-circle shadow-sm border border-warning border-opacity-50">
+                <span class="fs-4 fw-bold brand-text">Mầm Non Đồ Rê Mí 2</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -29,18 +34,18 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav gap-2">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/' ? 'active-nav' : '' %>" href="/"><i class="bi bi-house-door me-1"></i>Trang Chủ</a>
+                        <a class="nav-link fw-bold px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/' ? 'active-nav' : '' %>" href="/"><i class="bi bi-house-door me-1"></i>Trang Chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/tkb' ? 'active-nav' : '' %>" href="/tkb"><i class="bi bi-calendar3 me-1"></i>Lịch học</a>
+                        <a class="nav-link fw-bold px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/tkb' ? 'active-nav' : '' %>" href="/tkb"><i class="bi bi-calendar3 me-1"></i>Lịch học</a>
                     </li>
                     <% if (typeof user !== 'undefined' && user) { %>
                         <li class="nav-item">
-                            <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin' ? 'active-nav' : '' %>" href="/admin"><i class="bi bi-person-circle me-1"></i><%= user.username %></a>
+                            <a class="nav-link fw-bold px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/admin' ? 'active-nav' : '' %>" href="/admin"><i class="bi bi-person-circle me-1"></i><%= user.username %></a>
                         </li>
                     <% } else { %>
                         <li class="nav-item">
-                            <a class="nav-link fw-bold text-dark px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/login' ? 'active-nav' : '' %>" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a>
+                            <a class="nav-link fw-bold px-3 rounded-pill hover-nav <%= typeof currentRoute !== 'undefined' && currentRoute === '/login' ? 'active-nav' : '' %>" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a>
                         </li>
                     <% } %>
                 </ul>
