@@ -1,0 +1,171 @@
+<!-- MÀN HÌNH CHÀO MỪNG / INTRO SCREEN -->
+<div id="introScreen" class="intro-screen" aria-hidden="false">
+    <!-- Bầu trời & Mây bồng bềnh -->
+    <div class="intro-sky">
+        <div class="intro-sun">
+            <div class="sun-face">
+                <span class="sun-eye left"></span>
+                <span class="sun-eye right"></span>
+                <span class="sun-smile"></span>
+            </div>
+            <div class="sun-rays"></div>
+        </div>
+
+        <div class="intro-cloud cloud-drift-1">
+            <svg viewBox="0 0 120 60" class="cloud-svg">
+                <path d="M15,45 Q5,45 5,35 Q5,20 20,20 Q28,10 45,15 Q60,5 80,18 Q95,12 105,25 Q118,30 115,45 Z" fill="#ffffff" />
+            </svg>
+        </div>
+        <div class="intro-cloud cloud-drift-2">
+            <svg viewBox="0 0 120 60" class="cloud-svg">
+                <path d="M15,45 Q5,45 5,35 Q5,20 20,20 Q28,10 45,15 Q60,5 80,18 Q95,12 105,25 Q118,30 115,45 Z" fill="#ffffff" />
+            </svg>
+        </div>
+        <div class="intro-cloud cloud-drift-3">
+            <svg viewBox="0 0 120 60" class="cloud-svg">
+                <path d="M15,45 Q5,45 5,35 Q5,20 20,20 Q28,10 45,15 Q60,5 80,18 Q95,12 105,25 Q118,30 115,45 Z" fill="#ffffff" />
+            </svg>
+        </div>
+
+        <!-- Bong bóng, Ngôi sao & Trái tim bay lơ lửng -->
+        <div class="intro-particle p-star p-star-1"><i class="bi bi-star-fill"></i></div>
+        <div class="intro-particle p-star p-star-2"><i class="bi bi-stars"></i></div>
+        <div class="intro-particle p-star p-star-3"><i class="bi bi-star-fill"></i></div>
+        <div class="intro-particle p-bubble p-bubble-1"></div>
+        <div class="intro-particle p-bubble p-bubble-2"></div>
+        <div class="intro-particle p-bubble p-bubble-3"></div>
+        <div class="intro-particle p-heart p-heart-1"><i class="bi bi-heart-fill"></i></div>
+        <div class="intro-particle p-heart p-heart-2"><i class="bi bi-heart-fill"></i></div>
+    </div>
+
+    <!-- Nội dung chính của Intro -->
+    <div class="intro-content">
+        <div class="intro-logo-wrap mb-2">
+            <img src="/images/logo.png" alt="Logo Đồ Rê Mí 2" class="intro-logo">
+            <div class="logo-pulse-ring"></div>
+        </div>
+
+        <div class="intro-badge">
+            <i class="bi bi-balloon-heart-fill me-1 text-danger"></i> Trường Mầm Non Độc Lập
+        </div>
+
+        <h1 class="intro-title">
+            <span class="intro-letter">MẦM</span>
+            <span class="intro-letter">NON</span>
+            <span class="intro-letter">ĐỘC</span>
+            <span class="intro-letter">LẬP</span>
+            <span class="intro-letter highlight-drm">ĐỒ</span>
+            <span class="intro-letter highlight-drm">RÊ</span>
+            <span class="intro-letter highlight-drm">MÍ</span>
+            <span class="intro-badge-cs2">2</span>
+        </h1>
+
+        <!-- Cô giáo và các bé mầm non vẫy chào -->
+        <div class="intro-teacher-kids-strip mb-3">
+            <span class="strip-item"><i class="bi bi-heart-fill text-danger me-1"></i> Cô giáo tận tâm</span>
+            <span class="strip-dot">•</span>
+            <span class="strip-item"><i class="bi bi-stars text-warning me-1"></i> Bé vui khỏe mỗi ngày</span>
+            <span class="strip-dot">•</span>
+            <span class="strip-item"><i class="bi bi-shield-check text-success me-1"></i> An toàn & Tràn ngập tiếng cười</span>
+        </div>
+
+        <p class="intro-subtitle mb-3">
+            <i class="bi bi-music-note-beamed me-1 text-warning"></i> Chào mừng bé đến với Đồ Rê Mí 2! <i class="bi bi-music-note-beamed ms-1 text-warning"></i>
+        </p>
+
+        <!-- CON ĐƯỜNG ĐẾN TRƯỜNG: XE MÁY PHỤ HUYNH CHỞ BÉ ĐI HỌC -->
+        <div class="school-road-container">
+            <!-- Điểm xuất phát (Nhà bé) -->
+            <div class="road-point start-point" title="Bé xuất phát từ nhà yêu">
+                <span class="point-icon">🏡</span>
+                <span class="point-text">Nhà bé</span>
+            </div>
+
+            <!-- Khung đường chạy -->
+            <div class="school-road-track">
+                <div class="intro-progress-bar" id="introProgressBar">
+                    <!-- ICON PHỤ HUYNH ĐÈO CON ĐI HỌC TRÊN XE MÁY CHẠY TỪ ĐẦU ĐẾN CUỐI -->
+                    <div class="intro-progress-runner" id="scooterRunner">
+                        <div class="scooter-bob-wrap">
+                            <svg viewBox="0 0 110 75" class="scooter-svg" width="68" height="46">
+                                <!-- Khói xe nhỏ ở đuôi -->
+                                <g class="scooter-exhaust">
+                                    <circle cx="8" cy="58" r="3.5" fill="#cbd5e1" class="puff puff-1"/>
+                                    <circle cx="15" cy="56" r="4.5" fill="#e2e8f0" class="puff puff-2"/>
+                                    <circle cx="2" cy="60" r="2.5" fill="#94a3b8" class="puff puff-3"/>
+                                </g>
+                                <!-- Bánh sau -->
+                                <g class="scooter-wheel wheel-back" transform="translate(26, 60)">
+                                    <circle cx="0" cy="0" r="11" fill="#334155"/>
+                                    <circle cx="0" cy="0" r="6" fill="#e2e8f0"/>
+                                    <circle cx="0" cy="0" r="2.5" fill="#64748b"/>
+                                    <line x1="-5" y1="0" x2="5" y2="0" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <line x1="0" y1="-5" x2="0" y2="5" stroke="#94a3b8" stroke-width="1.5"/>
+                                </g>
+                                <!-- Bánh trước -->
+                                <g class="scooter-wheel wheel-front" transform="translate(86, 60)">
+                                    <circle cx="0" cy="0" r="11" fill="#334155"/>
+                                    <circle cx="0" cy="0" r="6" fill="#e2e8f0"/>
+                                    <circle cx="0" cy="0" r="2.5" fill="#64748b"/>
+                                    <line x1="-5" y1="0" x2="5" y2="0" stroke="#94a3b8" stroke-width="1.5"/>
+                                    <line x1="0" y1="-5" x2="0" y2="5" stroke="#94a3b8" stroke-width="1.5"/>
+                                </g>
+                                <!-- Thân xe máy mầm non màu xanh ngọc -->
+                                <path d="M24,58 Q36,46 54,48 L76,50 Q86,45 86,58 Z" fill="#06b6d4"/>
+                                <path d="M52,48 L62,34 L68,34 L64,48 Z" fill="#0891b2"/>
+                                <!-- Tay lái xe -->
+                                <path d="M68,34 L76,28 L72,25" stroke="#475569" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <!-- Đèn pha xe sáng -->
+                                <path d="M86,40 Q94,40 92,48 L80,48 Z" fill="#fef08a"/>
+                                <path d="M92,44 L102,40 L102,48 Z" fill="#fef08a" opacity="0.45"/>
+                                <!-- Yên xe -->
+                                <path d="M30,45 Q46,40 62,46 Q46,48 30,45 Z" fill="#334155"/>
+                                <!-- BÉ NGỒI SAU (Đội mũ bảo hiểm vàng, đeo balo đỏ) -->
+                                <g class="kid-passenger">
+                                    <rect x="22" y="24" width="8" height="12" rx="4" fill="#ef4444"/>
+                                    <path d="M28,34 Q34,26 40,32 L38,44 L30,44 Z" fill="#38bdf8"/>
+                                    <path d="M34,34 Q42,34 46,38" stroke="#fbcfe8" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                                    <circle cx="34" cy="22" r="7.5" fill="#fed7aa"/>
+                                    <ellipse cx="36" cy="24" rx="1.5" ry="1" fill="#f43f5e"/>
+                                    <path d="M26,20 Q34,11 42,20 Z" fill="#facc15"/>
+                                    <circle cx="34" cy="12" r="2.5" fill="#ef4444"/>
+                                </g>
+                                <!-- PHỤ HUYNH LÁI XE (Mũ bảo hiểm xanh, áo cam) -->
+                                <g class="parent-driver">
+                                    <path d="M42,28 Q52,22 58,34 L56,46 L46,46 Z" fill="#f97316"/>
+                                    <path d="M50,28 Q64,30 72,28" stroke="#fdba74" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                                    <circle cx="50" cy="16" r="8" fill="#fed7aa"/>
+                                    <ellipse cx="52" cy="18" rx="1.8" ry="1.2" fill="#fb7185"/>
+                                    <path d="M41,15 Q50,6 59,15 Z" fill="#2563eb"/>
+                                    <path d="M43,15 L57,15" stroke="#ffffff" stroke-width="1.8"/>
+                                </g>
+                            </svg>
+                            <!-- Vệt trái tim tình cảm theo sau xe -->
+                            <span class="scooter-heart-trail">💖</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đích đến: Cổng trường & Cô giáo và các bé chào đón -->
+            <div class="road-point end-point" title="Trường Mầm Non Đồ Rê Mí 2 chào đón bé!">
+                <div class="teacher-school-icon">
+                    <span class="teacher-emoji">👩‍🏫</span>
+                    <span class="school-emoji">🏫</span>
+                </div>
+                <span class="point-text">Trường Đồ Rê Mí 2</span>
+            </div>
+        </div>
+
+        <div class="intro-progress-text">
+            <span><i class="bi bi-bicycle text-primary me-1"></i> Bố mẹ đưa bé đến trường...</span>
+            <span id="introPercent" class="fw-bold text-primary">0%</span>
+        </div>
+
+        <!-- Nút Bỏ qua / Vào ngay -->
+        <button id="skipIntroBtn" class="intro-skip-btn mt-2" type="button" aria-label="Bỏ qua màn hình chờ">
+            <span>Vào trường ngay</span>
+            <i class="bi bi-arrow-right-short fs-5"></i>
+        </button>
+    </div>
+</div>

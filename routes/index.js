@@ -171,6 +171,7 @@ router.get('/login', (req, res) => {
 
 // Xử lý Đăng nhập
 router.post('/login', async (req, res) => {
+    const isAjax = req.xhr || (req.headers.accept && req.headers.accept.includes('application/json')) || (req.headers['content-type'] && req.headers['content-type'].includes('application/json'));
     try {
         const { username, password } = req.body;
         const db = await connectDB();
@@ -186,14 +187,76 @@ router.post('/login', async (req, res) => {
                     full_name: user.full_name,
                     role: user.role
                 };
+                if (isAjax) {
+                    return res.json({ success: true, redirect: '/admin' });
+                }
                 return res.redirect('/admin');
             }
         }
         
+        if (isAjax) {
+            return res.status(401).json({ success: false, message: 'Tài khoản hoặc mật khẩu không chính xác!' });
+        }
         res.redirect('/login?error=1');
     } catch (error) {
         console.error("Lỗi đăng nhập:", error);
+        if (isAjax) {
+            return res.status(500).json({ success: false, message: 'Đã xảy ra lỗi trên server' });
+        }
         res.status(500).send("Đã xảy ra lỗi trên server");
+    }
+});
+
+// Đăng ký tài khoản mới
+router.post('/register', async (req, res) => {
+    const isAjax = req.xhr || (req.headers.accept && req.headers.accept.includes('application/json')) || (req.headers['content-type'] && req.headers['content-type'].includes('application/json'));
+    try {
+        const { full_name, username, password, confirm_password } = req.body;
+
+        if (!full_name || !username || !password) {
+            if (isAjax) return res.status(400).json({ success: false, message: 'Vui lòng điền đầy đủ các thông tin!' });
+            return res.redirect('/login?tab=register&error=missing');
+        }
+
+        if (password !== confirm_password) {
+            if (isAjax) return res.status(400).json({ success: false, message: 'Mật khẩu xác nhận không khớp!' });
+            return res.redirect('/login?tab=register&error=mismatch');
+        }
+
+        if (password.length < 6) {
+            if (isAjax) return res.status(400).json({ success: false, message: 'Mật khẩu phải có ít nhất 6 ký tự!' });
+            return res.redirect('/login?tab=register&error=short');
+        }
+
+        const db = await connectDB();
+        const existingUser = await db.get('SELECT id FROM users WHERE username = ?', [username.trim()]);
+        if (existingUser) {
+            if (isAjax) return res.status(400).json({ success: false, message: 'Tên đăng nhập này đã tồn tại, vui lòng chọn tên khác!' });
+            return res.redirect('/login?tab=register&error=exists');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const result = await db.run(
+            'INSERT INTO users (username, password, full_name, role) VALUES (?, ?, ?, ?)',
+            [username.trim(), hashedPassword, full_name.trim(), 'teacher']
+        );
+
+        // Đăng nhập tự động sau khi đăng ký
+        req.session.user = {
+            id: result.lastID || result.insertId,
+            username: username.trim(),
+            full_name: full_name.trim(),
+            role: 'teacher'
+        };
+
+        if (isAjax) {
+            return res.json({ success: true, message: 'Đăng ký thành công! Đang chuyển hướng...', redirect: '/admin' });
+        }
+        res.redirect('/admin');
+    } catch (error) {
+        console.error("Lỗi đăng ký tài khoản:", error);
+        if (isAjax) return res.status(500).json({ success: false, message: 'Đã xảy ra lỗi trên server khi đăng ký!' });
+        res.redirect('/login?tab=register&error=server');
     }
 });
 

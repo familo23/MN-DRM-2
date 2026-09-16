@@ -1,26 +1,49 @@
 /* ==========================================================================
-   CSS CHO WEBSITE MẦM NON ĐỒ RÊ MÍ 2 - CHỦ ĐỀ ĐÊM HỘI TRĂNG RẰM (MID-AUTUMN NIGHT)
+   MẦM NON ĐỒ RÊ MÍ 2 - STYLESHEET CHÍNH
+   Phong cách: Cute Preschool + Modern + Colorful + Premium
    ========================================================================== */
 
 :root {
-    --primary-color: #f59e0b; /* Vàng kim trăng rằm */
-    --primary-hover: #d97706;
-    --primary-light: rgba(245, 158, 11, 0.15);
-    --secondary-color: #e11d48; /* Đỏ hồng lồng đèn */
-    --secondary-hover: #be123c;
-    --accent-gold: #fde047;
-    --accent-lantern: #ea580c;
-    --accent-teal: #0d9488;
-    --night-bg: #133852; /* Màu xanh đêm rằm đặc trưng từ ảnh mẫu */
-    --night-darker: #0c2333;
-    --night-lighter: #1b4d6e;
-    --text-color: #1e293b;
+    /* Bảng màu chủ đạo */
+    --primary-color: #5b9bd5;
+    --primary-hover: #4a84b8;
+    --primary-light: #e8f4fd;
+    --primary-soft: rgba(91, 155, 213, 0.12);
+
+    --secondary-color: #ffb74d;
+    --secondary-hover: #ffa726;
+    --secondary-light: #fff8e1;
+
+    /* Tông màu pastel bổ trợ */
+    --accent-pink: #ff8da1;
+    --accent-green: #66bb6a;
+    --accent-yellow: #ffd54f;
+    --accent-purple: #ba68c8;
+    --accent-teal: #4dd0e1;
+
+    /* Nền & Chữ */
+    --text-color: #2c3e50;
     --text-muted: #64748b;
-    --card-bg: rgba(255, 255, 255, 0.96);
-    --card-border: rgba(253, 224, 71, 0.45);
-    --card-shadow: 0 16px 35px -5px rgba(0, 0, 0, 0.3), 0 8px 15px -6px rgba(0, 0, 0, 0.2);
-    --card-hover-shadow: 0 24px 45px -8px rgba(245, 158, 11, 0.35), 0 12px 20px -5px rgba(0, 0, 0, 0.25);
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+
+    /* Bo góc chuẩn */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-pill: 50px;
+
+    /* Đổ bóng mềm mại */
+    --shadow-sm: 0 4px 12px rgba(91, 155, 213, 0.08);
+    --shadow-md: 0 8px 24px rgba(91, 155, 213, 0.12);
+    --shadow-lg: 0 16px 36px rgba(91, 155, 213, 0.16);
+    --shadow-hover: 0 20px 40px rgba(91, 155, 213, 0.22);
 }
+
+/* ==========================================================================
+   RESET & NỀN TẢNG
+   ========================================================================== */
 
 * {
     box-sizing: border-box;
@@ -28,115 +51,401 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    scroll-padding-top: 85px;
+    overflow-x: hidden;
 }
 
-/* ==========================================================================
-   NỀN ĐÊM TRĂNG TRUNG THU (THEO ẢNH MẪU ĐÊM XANH & TRĂNG VÀNG)
-   ========================================================================== */
 body {
     margin: 0;
-    font-family: 'Nunito', sans-serif;
-    background-color: var(--night-bg);
-    background-image: 
-        /* Vầng trăng vàng góc trên bên trái */
-        radial-gradient(circle at 8% 12%, rgba(254, 240, 138, 0.4) 0%, rgba(253, 224, 71, 0.18) 22%, transparent 48%),
-        /* Ánh đèn lồng vàng góc trên bên phải */
-        radial-gradient(circle at 92% 15%, rgba(251, 191, 36, 0.3) 0%, rgba(234, 88, 12, 0.12) 25%, transparent 45%),
-        /* Ánh mây vàng góc dưới bên phải */
-        radial-gradient(circle at 88% 85%, rgba(253, 224, 71, 0.25) 0%, rgba(245, 158, 11, 0.1) 25%, transparent 45%),
-        /* Gradient nền trời đêm xanh sâu */
-        linear-gradient(180deg, #0f2b3e 0%, #133852 40%, #174563 70%, #0d2535 100%),
-        /* Chấm sao vàng li ti */
-        radial-gradient(#fde047 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 45px 45px;
-    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
-    background-attachment: fixed;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-color);
     color: var(--text-color);
     overflow-x: hidden;
     position: relative;
 }
 
 /* ==========================================================================
-   HÀNG LỒNG ĐÈN TREO TRÊN ĐỈNH TRANG
+   HEADER & NAVBAR
    ========================================================================== */
-.top-hanging-lanterns {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    z-index: 1050;
-    pointer-events: none;
-    display: flex;
-    justify-content: space-around;
-    padding: 0 25px;
+
+.site-navbar {
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 2px solid rgba(91, 155, 213, 0.12) !important;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1040;
 }
 
-.mini-lantern {
-    font-size: 22px;
-    animation: lanternSwing 3.5s ease-in-out infinite alternate;
-    transform-origin: top center;
-    filter: drop-shadow(0 4px 10px rgba(253, 224, 71, 0.5));
+.site-navbar.scrolled {
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+    box-shadow: 0 10px 30px rgba(91, 155, 213, 0.15) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
 }
 
-.mini-lantern:nth-child(even) {
-    animation-duration: 4.2s;
-    animation-delay: -1.5s;
+/* Brand Logo */
+.brand-logo-img {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 10px rgba(91, 155, 213, 0.2);
 }
 
-@keyframes lanternSwing {
-    0% { transform: rotate(-8deg); }
-    100% { transform: rotate(8deg); }
-}
-
-/* ==========================================================================
-   NAVBAR (KÍNH MỜ ĐÊM TRĂNG)
-   ========================================================================== */
-.navbar {
-    border-bottom: 2px solid rgba(253, 224, 71, 0.35) !important;
-    backdrop-filter: blur(14px);
-    background-color: rgba(15, 43, 62, 0.95) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+.navbar-brand:hover .brand-logo-img {
+    transform: scale(1.08) rotate(-4deg);
 }
 
 .brand-text {
-    font-size: 1.65rem;
-    font-weight: 900 !important;
-    background: linear-gradient(45deg, #fde047, #f59e0b, #fb7185);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 1.55rem;
+    letter-spacing: -0.5px;
+    font-weight: 900;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
 }
 
-.navbar .nav-link {
-    color: #f1f5f9 !important;
-    font-size: 0.95rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.brand-badge {
+    background: linear-gradient(135deg, var(--secondary-color), #ff9800);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 6px rgba(255, 183, 77, 0.4);
+}
+
+/* Menu Links */
+.hover-nav {
+    position: relative;
+    color: #475569 !important;
+    font-weight: 700;
+    padding: 8px 18px !important;
+    border-radius: var(--radius-pill);
+    transition: all 0.28s ease;
+    overflow: hidden;
+}
+
+.hover-nav::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 20px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: transform 0.25s ease;
 }
 
 .hover-nav:hover {
-    background-color: rgba(253, 224, 71, 0.2);
-    color: #fde047 !important;
+    color: var(--primary-color) !important;
+    background-color: var(--primary-light);
     transform: translateY(-2px);
 }
 
-.active-nav {
-    background: linear-gradient(135deg, #f59e0b, #e11d48) !important;
-    color: white !important;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+.hover-nav:hover::after {
+    transform: translateX(-50%) scaleX(1);
 }
 
-.navbar-toggler {
-    background-color: rgba(253, 224, 71, 0.2);
+.active-nav {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #ffa726 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(255, 183, 77, 0.35);
+}
+
+.active-nav::after {
+    display: none;
+}
+
+.active-nav:hover {
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 183, 77, 0.45);
+}
+
+.navbar {
+    border-bottom: 2px solid rgba(91, 155, 213, 0.12);
+}
+
+
+/* ==========================================================================
+   MÀU CHỦ ĐẠO & TIỆN ÍCH
+   ========================================================================== */
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary-accent {
+    color: var(--secondary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-primary-subtle {
+    background-color: var(--primary-light) !important;
 }
 
 /* ==========================================================================
-   HERO BANNER & CAROUSEL
+   WELCOME BANNER: 2 CON LÂN CẦM TỜ SỚ "ĐỒ RÊ MÍ 2"
    ========================================================================== */
-.hero-section {
+
+.lion-welcome-strip {
+    position: relative;
+    background: linear-gradient(180deg, #fffcf0 0%, #fff3dc 100%);
+    border-bottom: 3px dashed #fed7aa;
+    padding: 16px 0 14px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.lion-welcome-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(255, 183, 77, 0.18) 8px, transparent 9px),
+        radial-gradient(circle at 90% 80%, rgba(91, 155, 213, 0.18) 10px, transparent 11px),
+        radial-gradient(circle at 50% 50%, rgba(255, 141, 161, 0.14) 6px, transparent 7px);
+    pointer-events: none;
+}
+
+.lion-ceremony-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 2 Con Lân Chibi */
+.lion-mascot {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+}
+
+.lion-left {
+    animation: bounceInLeft 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, lionFloatLeft 3s ease-in-out 1s infinite alternate;
+}
+
+.lion-right {
+    animation: bounceInRight 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, lionFloatRight 3s ease-in-out 1.2s infinite alternate;
+}
+
+.lion-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Tờ sớ ở giữa */
+.scroll-ceremony {
+    flex: 1;
+    max-width: 520px;
+    margin: 0 14px;
+    position: relative;
+    z-index: 2;
+    transform-origin: top center;
+    animation: unfurlScroll 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+.scroll-roller {
+    height: 14px;
+    background: linear-gradient(90deg, #b45309 0%, #f59e0b 20%, #fef3c7 50%, #f59e0b 80%, #b45309 100%);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.scroll-roller::before,
+.scroll-roller::after {
+    content: '';
+    width: 12px;
+    height: 20px;
+    background: #d97706;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    margin-top: -3px;
+}
+
+.scroll-body {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    border-left: 5px solid #f59e0b;
+    border-right: 5px solid #f59e0b;
+    padding: 10px 18px 12px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 12px 24px rgba(183, 28, 28, 0.28);
+}
+
+.scroll-body::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed rgba(254, 240, 138, 0.6);
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.scroll-sub-top {
+    display: block;
+    color: #fef08a;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.scroll-brand-title {
+    margin: 2px 0;
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, #fffef0 0%, #ffd54f 60%, #ffb300 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+    animation: goldShimmer 3s infinite;
+}
+
+.scroll-sub-bottom {
+    display: block;
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    opacity: 0.95;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Dải ruy băng lụa nối */
+.ribbon-link {
+    position: absolute;
+    top: 50%;
+    width: 25px;
+    height: 8px;
+    background: linear-gradient(90deg, #ffd54f, #f59e0b);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.ribbon-left {
+    left: 80px;
+    transform: rotate(-10deg);
+}
+
+.ribbon-right {
+    right: 80px;
+    transform: rotate(10deg);
+}
+
+/* Sparkles quanh sớ */
+.sparkle-star {
+    position: absolute;
+    color: #f59e0b;
+    font-size: 1.1rem;
+    animation: starTwinkle 2s infinite ease-in-out;
+    pointer-events: none;
+}
+
+.star-1 {
+    top: -6px;
+    left: 18%;
+    animation-delay: 0.2s;
+}
+
+.star-2 {
+    bottom: -6px;
+    right: 18%;
+    animation-delay: 0.8s;
+}
+
+.star-3 {
+    top: 40%;
+    left: 4%;
+    animation-delay: 1.2s;
+}
+
+.star-4 {
+    top: 40%;
+    right: 4%;
+    animation-delay: 1.5s;
+}
+
+/* ==========================================================================
+   BUTTONS HỆ THỐNG
+   ========================================================================== */
+
+.btn-cute {
+    border-radius: var(--radius-pill) !important;
+    font-weight: 800;
+    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.2px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
-    background-color: #0c2333;
+    cursor: pointer;
+}
+
+.btn-cute:hover {
+    transform: translateY(-3px);
+}
+
+.btn-cute:active {
+    transform: scale(0.97) translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #4a84b8 100%);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(91, 155, 213, 0.35);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #4a84b8 0%, #3b6f9f 100%);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(91, 155, 213, 0.45);
+}
+
+.btn-secondary-cute {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #ffa726 100%);
+    border-color: transparent;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(255, 183, 77, 0.35);
+}
+
+.btn-secondary-cute:hover {
+    background: linear-gradient(135deg, #ffa726 0%, #f57c00 100%);
+    box-shadow: 0 10px 25px rgba(255, 183, 77, 0.45);
+}
+
+/* ==========================================================================
+   HERO CAROUSEL (BANNER)
+   ========================================================================== */
+
+.hero-section {
+    position: relative;
+    background-color: #0f172a;
+    overflow: hidden;
 }
 
 .carousel-inner {
@@ -144,892 +453,180 @@ body {
 }
 
 .carousel-item {
+    width: 100%;
     position: relative;
-    height: 500px;
+    min-height: 380px;
+    max-height: 580px;
+    background-color: #0f172a;
+    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.9s ease !important;
 }
 
+/* Đảm bảo ảnh banner không bị méo, hiển thị sắc nét */
 .carousel-item img {
     width: 100%;
-    height: 100%;
+    height: 560px;
     object-fit: cover;
-    filter: brightness(0.8);
+    object-position: center;
+    display: block;
+    transition: transform 6s ease;
 }
 
-.hero-overlay {
+.carousel-item.active img {
+    transform: scale(1.03);
+}
+
+/* Lớp phủ gradient nhẹ giúp chữ nổi bật mà không làm tối ảnh */
+.carousel-overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(19, 56, 82, 0.4) 0%, rgba(12, 35, 51, 0.85) 100%);
+    background: linear-gradient(180deg,
+            rgba(15, 23, 42, 0.25) 0%,
+            rgba(15, 23, 42, 0.15) 40%,
+            rgba(15, 23, 42, 0.68) 100%);
+    z-index: 1;
+}
+
+/* Carousel Caption */
+.carousel-caption-custom {
+    position: absolute;
+    right: 8%;
+    bottom: 50px;
+    left: 8%;
+    z-index: 2;
+    color: #fff;
+    text-align: left;
+    max-width: 680px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    margin-bottom: 12px;
+}
+
+.hero-caption-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
+}
+
+.hero-caption-desc {
+    font-size: 1.12rem;
+    line-height: 1.6;
+    margin-bottom: 22px;
+    color: #f1f5f9;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    max-width: 580px;
+}
+
+.hero-btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Animation khi slide active */
+.carousel-item.active .hero-badge {
+    animation: slideInUpFade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+}
+
+.carousel-item.active .hero-caption-title {
+    animation: slideInUpFade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
+}
+
+.carousel-item.active .hero-caption-desc {
+    animation: slideInUpFade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s both;
+}
+
+.carousel-item.active .hero-btn-group {
+    animation: slideInUpFade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s both;
+}
+
+/* Indicators */
+.carousel-indicators-custom {
+    bottom: 18px !important;
+    margin-bottom: 0 !important;
+    gap: 8px;
+}
+
+.carousel-indicators-custom button {
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 50% !important;
+    background-color: rgba(255, 255, 255, 0.6) !important;
+    border: 2px solid #ffffff !important;
+    transition: all 0.35s ease !important;
+    opacity: 0.85 !important;
+}
+
+.carousel-indicators-custom button.active {
+    width: 38px !important;
+    border-radius: 12px !important;
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    box-shadow: 0 2px 10px rgba(255, 183, 77, 0.6);
+}
+
+/* Carousel Control Buttons */
+.carousel-nav-btn {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    color: white;
-    padding: 20px;
-    z-index: 2;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid #ffffff;
 }
 
-.hero-badge-festive {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 24px;
-    background: linear-gradient(90deg, rgba(225, 29, 72, 0.9), rgba(234, 88, 12, 0.9));
-    backdrop-filter: blur(10px);
-    border: 2px solid #fde047;
-    border-radius: 50px;
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: #fef08a;
-    box-shadow: 0 0 25px rgba(250, 204, 21, 0.5);
-    animation: pulseGold 2.5s infinite;
+.carousel-control-prev,
+.carousel-control-next {
+    width: 70px;
+    opacity: 0.9;
 }
 
-.hero-title {
-    font-size: 2.9rem;
-    font-weight: 900;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(253, 224, 71, 0.5);
-    letter-spacing: -0.5px;
-    margin-top: 14px;
-    margin-bottom: 12px;
-    color: #ffffff;
+.carousel-control-prev:hover .carousel-nav-btn,
+.carousel-control-next:hover .carousel-nav-btn {
+    background: #ffffff;
+    color: var(--secondary-color);
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
-.hero-subtitle {
-    font-size: 1.15rem;
-    max-width: 680px;
-    margin: 0 auto 24px;
-    color: #f8fafc;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-    line-height: 1.65;
-}
-
-.hero-cta-btn {
-    padding: 12px 28px;
-    font-weight: 800;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1rem;
-}
-
-.hero-cta-btn:hover {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 10px 25px rgba(253, 224, 71, 0.4);
-}
-
-.wave-divider {
+/* Dải lượn sóng phân cách Hero */
+.hero-bottom-wave {
     position: absolute;
     bottom: -1px;
     left: 0;
     width: 100%;
-    overflow: hidden;
     line-height: 0;
     z-index: 3;
     pointer-events: none;
 }
 
-.wave-divider svg {
-    position: relative;
+.hero-bottom-wave svg {
     display: block;
-    width: calc(100% + 1.3px);
-    height: 50px;
-    fill: var(--night-bg);
-}
-
-/* ==========================================================================
-   FLOATING DECORATIONS (TRANG TRÍ TRĂNG RẰM & LỒNG ĐÈN 2 BÊN)
-   ========================================================================== */
-.floating-decor {
-    position: fixed;
-    z-index: 50;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    gap: 26px;
-    transition: all 0.3s ease;
-}
-
-.floating-decor-left {
-    left: 20px;
-    top: 20%;
-}
-
-.floating-decor-right {
-    right: 20px;
-    top: 18%;
-}
-
-.decor-item {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    font-size: 30px;
-    background: rgba(15, 43, 62, 0.85);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 18px rgba(253, 224, 71, 0.35);
-    border: 2px solid rgba(253, 224, 71, 0.7);
-    position: relative;
-}
-
-/* Animations */
-.anim-lantern-sway { animation: lanternSway 3.8s ease-in-out infinite alternate; }
-.anim-moon-glow { animation: moonGlow 3s ease-in-out infinite alternate; }
-.anim-bounce-rabbit { animation: rabbitBounce 2.5s ease-in-out infinite; }
-.anim-float-cake { animation: floatSlow 4.2s ease-in-out infinite alternate; }
-
-@keyframes lanternSway {
-    0% { transform: translateY(0px) rotate(-10deg); }
-    100% { transform: translateY(-18px) rotate(10deg); }
-}
-
-@keyframes moonGlow {
-    0% { transform: scale(1); box-shadow: 0 0 15px rgba(253, 224, 71, 0.4); }
-    100% { transform: scale(1.14); box-shadow: 0 0 32px rgba(253, 224, 71, 0.85); }
-}
-
-@keyframes rabbitBounce {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(6deg); }
-}
-
-@keyframes floatSlow {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-18px) rotate(-6deg); }
-}
-
-@keyframes pulseGold {
-    0%, 100% { box-shadow: 0 0 18px rgba(253, 224, 71, 0.4); }
-    50% { box-shadow: 0 0 35px rgba(253, 224, 71, 0.9), 0 0 15px rgba(225, 29, 72, 0.6); }
-}
-
-@media (max-width: 1200px) {
-    .floating-decor {
-        display: none !important;
-    }
-}
-
-/* ==========================================================================
-   QUICK STATS BAR
-   ========================================================================== */
-.quick-stats-container {
-    margin-top: -45px;
-    position: relative;
-    z-index: 10;
-}
-
-.stats-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 22px 18px;
-    box-shadow: var(--card-shadow);
-    border: 2px solid var(--card-border);
-    transition: all 0.35s ease;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.stats-card:hover {
-    transform: translateY(-7px);
-    box-shadow: var(--card-hover-shadow);
-    border-color: #f59e0b;
-}
-
-.stats-icon-box {
-    width: 58px;
-    height: 58px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-}
-
-.stats-title {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-
-.stats-value {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: var(--text-color);
-    margin: 0;
-}
-
-/* ==========================================================================
-   SECTION TITLES & PILL BADGES
-   ========================================================================== */
-.section-badge {
-    display: inline-block;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.75px;
-    margin-bottom: 12px;
-    background: rgba(15, 43, 62, 0.8) !important;
-    border: 1.5px solid #fde047 !important;
-    color: #fde047 !important;
-    box-shadow: 0 0 15px rgba(253, 224, 71, 0.25);
-}
-
-.section-title {
-    font-size: 2.35rem;
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    margin-bottom: 12px;
-    background: linear-gradient(45deg, #ffffff 30%, #fde047 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.section-subtitle {
-    color: #cbd5e1;
-    font-size: 1.05rem;
-    max-width: 650px;
-    margin: 0 auto;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-
-/* ==========================================================================
-   MID-AUTUMN SPECIAL SECTION (KHỐI SỰ KIỆN TẾT TRUNG THU)
-   ========================================================================== */
-.festive-container-box {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(254, 243, 199, 0.92) 50%, rgba(255, 241, 242, 0.94) 100%);
-    border: 3px solid #fde047;
-    border-radius: 32px;
-    padding: 42px 32px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35), 0 0 30px rgba(253, 224, 71, 0.25);
-    position: relative;
-    overflow: hidden;
-}
-
-.festive-container-box::before {
-    content: '🏮';
-    position: absolute;
-    top: -10px;
-    right: 25px;
-    font-size: 60px;
-    opacity: 0.35;
-    pointer-events: none;
-}
-
-.festive-title {
-    font-size: 2.45rem;
-    font-weight: 900;
-    margin-bottom: 14px;
-    letter-spacing: -0.5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.festive-emoji {
-    font-size: 2.5rem;
-    line-height: 1;
-    display: inline-block;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
-    animation: bounceSoft 2.5s infinite;
-}
-
-.festive-heading-text {
-    color: #991b1b;
-    background: linear-gradient(45deg, #991b1b, #dc2626, #ea580c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(185, 28, 28, 0.15));
-}
-
-.festive-subtitle {
-    color: #334155 !important;
-    font-size: 1.08rem;
-    font-weight: 700;
-    max-width: 680px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-
-
-.festive-activity-card {
-    background: #ffffff;
-    border-radius: 24px;
-    padding: 26px 20px;
-    text-align: center;
-    border: 2px solid rgba(251, 191, 36, 0.5);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    height: 100%;
-}
-
-.festive-activity-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: #ea580c;
-    box-shadow: 0 20px 35px rgba(234, 88, 12, 0.2);
-}
-
-.festive-icon-circle {
-    width: 74px;
-    height: 74px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-    margin: 0 auto 16px;
-    background: linear-gradient(135deg, #fef08a, #fed7aa);
-    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
-    transition: transform 0.3s ease;
-}
-
-.festive-activity-card:hover .festive-icon-circle {
-    transform: scale(1.15) rotate(8deg);
-}
-
-.festive-activity-card h5 {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #991b1b;
-    margin-bottom: 8px;
-}
-
-.festive-activity-card p {
-    font-size: 0.92rem;
-    color: #475569;
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* ==========================================================================
-   PILLARS & FEATURE CARDS (4 TRỤ CỘT)
-   ========================================================================== */
-.pillar-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 26px;
-    padding: 30px 24px;
-    height: 100%;
-    border: 2px solid var(--card-border);
-    box-shadow: var(--card-shadow);
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.pillar-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #f59e0b, #e11d48);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.pillar-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--card-hover-shadow);
-    border-color: #f59e0b;
-}
-
-.pillar-card:hover::before {
-    opacity: 1;
-}
-
-.pillar-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    margin-bottom: 20px;
-}
-
-.pillar-card h4 {
-    font-size: 1.25rem;
-    font-weight: 800;
-    margin-bottom: 12px;
-    color: #1e293b;
-}
-
-.pillar-card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* ==========================================================================
-   ABOUT SECTION & DETAILED ROWS
-   ========================================================================== */
-.about-section {
-    padding: 40px 0;
-}
-
-.about-box-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 28px;
-    border: 2px solid var(--card-border);
-    box-shadow: var(--card-shadow);
-    padding: 36px 32px;
-    margin-bottom: 32px;
-    transition: all 0.3s ease;
-}
-
-.about-box-card:hover {
-    border-color: #f59e0b;
-    box-shadow: var(--card-hover-shadow);
-}
-
-.about-img-frame {
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
-    border: 4px solid #ffffff;
-    height: 100%;
-    min-height: 240px;
-}
-
-.about-img-frame img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.5s ease;
-}
-
-.about-box-card:hover .about-img-frame img {
-    transform: scale(1.05);
-}
-
-.about-content-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.about-content-wrap h3 {
-    font-size: 1.55rem;
-    font-weight: 800;
-    color: #1e293b;
-    margin-bottom: 14px;
-}
-
-.about-content-wrap p {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #475569;
-    margin-bottom: 14px;
-    text-align: justify;
-}
-
-.highlight-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: #fffbeb;
-    border: 1px solid rgba(251, 191, 36, 0.5);
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #92400e;
-    margin-right: 8px;
-    margin-bottom: 8px;
-}
-
-/* ==========================================================================
-   TALENT CLASSES (CÁC LỚP NĂNG KHIẾU)
-   ========================================================================== */
-.talent-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 26px 20px;
-    text-align: center;
-    border: 2px solid var(--card-border);
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
-    height: 100%;
-}
-
-.talent-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--card-hover-shadow);
-    border-color: #f59e0b;
-}
-
-.talent-icon-bubble {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
-    margin: 0 auto 16px;
-    transition: transform 0.3s ease;
-}
-
-.talent-card:hover .talent-icon-bubble {
-    transform: scale(1.12) rotate(6deg);
-}
-
-.talent-card h5 {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 8px;
-    color: #1e293b;
-}
-
-.talent-card p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0;
-}
-
-/* ==========================================================================
-   PARENT CONVENIENCE (TIỆN ÍCH PHỤ HUYNH)
-   ========================================================================== */
-.service-pill-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 22px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border: 2px solid var(--card-border);
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
-}
-
-.service-pill-card:hover {
-    transform: translateY(-4px);
-    border-color: #f59e0b;
-    box-shadow: var(--card-hover-shadow);
-}
-
-.service-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: #fef3c7;
-    color: #d97706;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-}
-
-/* ==========================================================================
-   PARENT REVIEWS & TESTIMONIALS (36 ĐÁNH GIÁ TỪ PHỤ HUYNH)
-   ========================================================================== */
-.reviews-summary-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(254, 243, 199, 0.9) 100%);
-    border-radius: 28px;
-    border: 3px solid #fde047;
-    box-shadow: var(--card-shadow);
-    padding: 34px 28px;
-}
-
-.score-big-box {
-    text-align: center;
-    padding: 10px;
-}
-
-.score-number {
-    font-size: 3.6rem;
-    font-weight: 900;
-    color: #ea580c;
-    line-height: 1;
-}
-
-.stars-gold {
-    color: #f59e0b;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-}
-
-.criteria-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 0;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #334155;
-}
-
-.criteria-progress {
-    width: 140px;
-    height: 8px;
-    background: #e2e8f0;
-    border-radius: 50px;
-    overflow: hidden;
-}
-
-.criteria-progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #ea580c);
-    border-radius: 50px;
-}
-
-.testimonial-bubble-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    padding: 26px;
-    border: 2px solid var(--card-border);
-    box-shadow: var(--card-shadow);
-    transition: all 0.35s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-}
-
-.testimonial-bubble-card:hover {
-    transform: translateY(-7px);
-    box-shadow: var(--card-hover-shadow);
-    border-color: #f59e0b;
-}
-
-.testimonial-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 16px;
-}
-
-.avatar-parent {
-    width: 48px;
     height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: 800;
-    flex-shrink: 0;
 }
 
-.parent-info h6 {
-    font-weight: 800;
-    margin: 0;
-    font-size: 1.05rem;
-    color: #1e293b;
-}
 
-.parent-info small {
-    font-size: 0.8rem;
-    color: #ea580c;
-    font-weight: 700;
-}
-
-.testimonial-quote {
-    font-size: 0.95rem;
-    line-height: 1.65;
-    color: #475569;
-    font-style: italic;
-    margin: 0;
-}
-
-.quote-icon-watermark {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    font-size: 2.5rem;
-    color: #fed7aa;
-    font-family: serif;
-    pointer-events: none;
-    opacity: 0.6;
-}
-
-/* STAR RATING PICKER */
-.star-rating-select {
-    display: inline-flex;
-    gap: 8px;
-    font-size: 34px;
-    cursor: pointer;
-    line-height: 1;
-    user-select: none;
-}
-
-.star-rating-select .star-item {
-    color: #cbd5e1;
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
-    display: inline-block;
-}
-
-.star-rating-select .star-item.active {
-    color: #f59e0b;
-    text-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
-}
-
-.star-rating-select .star-item:hover {
-    transform: scale(1.25);
-}
-
-.rating-text-label {
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: #f59e0b;
-    transition: all 0.2s ease;
-}
-
-/* ==========================================================================
-   POLAROID GALLERY (KHOẢNH KHẮC CỦA BÉ)
-   ========================================================================== */
-.polaroid-card {
-    background: #ffffff;
-    padding: 12px 12px 18px;
-    border-radius: 22px;
-    box-shadow: var(--card-shadow);
-    border: 2px solid var(--card-border);
-    transition: all 0.35s ease;
-    text-align: center;
-}
-
-.polaroid-card:hover {
-    transform: translateY(-8px) rotate(1deg);
-    box-shadow: 0 20px 30px rgba(234, 88, 12, 0.2);
-    border-color: #f59e0b;
-}
-
-.polaroid-img-box {
-    border-radius: 14px;
-    overflow: hidden;
-    height: 220px;
-    margin-bottom: 12px;
-}
-
-.polaroid-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-
-.polaroid-card:hover .polaroid-img-box img {
-    transform: scale(1.06);
-}
-
-.polaroid-caption {
-    font-weight: 800;
-    font-size: 1rem;
-    color: #334155;
-    margin: 0;
-}
-
-/* ==========================================================================
-   FLOATING ACTION BUTTONS (HOTLINE / ZALO NỔI GÓC DƯỚI)
-   ========================================================================== */
-.floating-contact-box {
-    position: fixed;
-    bottom: 30px;
-    right: 25px;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white !important;
-    font-size: 22px;
-    text-decoration: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.contact-btn-hotline {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    animation: pulseRed 2s infinite;
-}
-
-.contact-btn-zalo {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-}
-
-.contact-btn:hover {
-    transform: scale(1.12) translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
-}
-
-.contact-btn .btn-tooltip {
-    position: absolute;
-    right: 62px;
-    background: #0f2b3e;
-    border: 1px solid #fde047;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(10px);
-    transition: all 0.25s ease;
-}
-
-.contact-btn:hover .btn-tooltip {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-@keyframes pulseRed {
-    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-    70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-
-/* ==========================================================================
-   SCHEDULE TABLE STYLES (TKB)
-   ========================================================================== */
-footer {
-    background: linear-gradient(180deg, #0f2b3e 0%, #081824 100%) !important;
-    border-top: 2px solid rgba(253, 224, 71, 0.35);
-}
-
-.schedule-table {
-    background: #ffffff;
-    border-radius: 20px;
-    overflow: hidden;
-}
+/* BẢNG */
 
 .schedule-table th,
 .schedule-table td {
@@ -1037,7 +634,7 @@ footer {
 }
 
 .schedule-table thead th {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     letter-spacing: 0.5px;
     border-bottom: none;
 }
@@ -1047,63 +644,1687 @@ footer {
 }
 
 .schedule-table tbody tr:hover {
-    background-color: rgba(245, 158, 11, 0.08);
+    background-color: rgba(91, 155, 213, 0.05);
 }
 
 .schedule-table td {
     vertical-align: middle;
 }
 
+
+/* CARD */
+
+.icon-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-card {
+    background: #ffffff;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+
 /* ==========================================================================
-   RESPONSIVE QUERIES
+   SECTION "VỀ CHÚNG TÔI" (KHUNG LỚN CAO CẤP)
    ========================================================================== */
+
+#about {
+    width: 100%;
+    padding: 35px 0 50px;
+    position: relative;
+}
+
+.about-title {
+    text-align: center;
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    font-size: 0.88rem;
+    font-weight: 800;
+    padding: 6px 18px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 8px;
+    border: 1px solid rgba(91, 155, 213, 0.2);
+}
+
+.about-title h2 {
+    color: var(--primary-color);
+    font-size: 40px;
+    font-weight: 900;
+    margin: 0 0 6px;
+    letter-spacing: -0.5px;
+}
+
+.about-title p {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* KHUNG LỚN DUY NHẤT */
+.about-wrapper {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ffffff 0%, #f4faff 100%);
+    padding: 35px 40px;
+    border-radius: var(--radius-xl);
+    border: 2px solid #d9eefb;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-wrapper:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+/* Họa tiết trang trí góc khung lớn */
+.corner-cloud {
+    position: absolute;
+    width: 140px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.corner-cloud-top-right {
+    top: -20px;
+    right: -20px;
+}
+
+.corner-cloud-bottom-left {
+    bottom: -20px;
+    left: -20px;
+}
+
+/* TỪNG HÀNG NỘI DUNG */
+.about-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    padding: 26px 20px;
+    border-bottom: 1px dashed #cfe6f7;
+    position: relative;
+    z-index: 1;
+    border-radius: var(--radius-lg);
+    transition: all 0.35s ease;
+}
+
+.about-row:last-child {
+    border-bottom: none;
+}
+
+.about-row:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 26px rgba(91, 155, 213, 0.1);
+    transform: translateY(-4px);
+}
+
+/* Thẻ Tag chủ đề của từng đoạn */
+.about-tag {
+    display: inline-flex;
+    align-items: center;
+    background: #fff8e1;
+    color: #e65100;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 10px;
+    border: 1px solid #ffe082;
+}
+
+/* NỘI DUNG VĂN BẢN */
+.about-content {
+    width: 50%;
+    flex: 1;
+    min-width: 0;
+}
+
+.about-content p {
+    margin: 0;
+    color: #334155;
+    font-size: 1.08rem;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.about-content strong {
+    color: #e65100;
+    font-weight: 800;
+}
+
+/* HÌNH ẢNH */
+.about-image {
+    width: 50%;
+    flex: 1;
+    min-width: 0;
+    padding: 8px;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 2px solid #d9eefb;
+    box-shadow: 0 8px 22px rgba(91, 155, 213, 0.12);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+}
+
+.about-row:hover .about-image {
+    transform: scale(1.02);
+    box-shadow: 0 12px 28px rgba(91, 155, 213, 0.2);
+    border-color: var(--secondary-color);
+}
+
+.about-image img {
+    width: 100%;
+    height: 270px !important;
+    max-width: 100%;
+    display: block;
+    object-fit: cover !important;
+    border-radius: 16px;
+    transition: transform 0.5s ease;
+}
+
+.about-row:hover .about-image img {
+    transform: scale(1.04);
+}
+
+/* ==========================================================================
+   SECTION "KHOẢNH KHẮC CỦA BÉ" (3 HÌNH ẢNH NẰM NGANG)
+   ========================================================================== */
+
+.activity-gallery {
+    width: 100%;
+    margin-top: 45px;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.activity-gallery h3 {
+    color: var(--primary-color);
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.gallery-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+/* LƯỚI 3 ẢNH NGANG */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    border: 2px solid #e0f2fe;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--secondary-color);
+}
+
+.gallery-image-wrapper {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.gallery-item:hover img {
+    transform: scale(1.06);
+}
+
+/* Overlay gradient & camera icon khi hover */
+.gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(91, 155, 213, 0.8) 0%, rgba(255, 183, 77, 0.4) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    border-radius: 16px;
+    color: #ffffff;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-cam-icon {
+    font-size: 2.2rem;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(15px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gallery-item:hover .gallery-cam-icon {
+    transform: translateY(0);
+}
+
+.gallery-overlay-text {
+    font-weight: 800;
+    font-size: 0.95rem;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   DECORATIVE ELEMENTS (MÂY, BONG BÓNG, SAO, HOA LÁ)
+   ========================================================================== */
+
+.decor-bg-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Bong bóng nổi nhẹ */
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(91, 155, 213, 0.2) 60%, rgba(255, 183, 77, 0.3) 100%);
+    box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(91, 155, 213, 0.1);
+    animation: floatBubble 12s infinite ease-in-out;
+    pointer-events: none;
+}
+
+.bubble-1 {
+    width: 50px;
+    height: 50px;
+    top: 15%;
+    left: 3%;
+    animation-duration: 14s;
+}
+
+.bubble-2 {
+    width: 35px;
+    height: 35px;
+    top: 45%;
+    right: 4%;
+    animation-duration: 10s;
+    animation-delay: 2s;
+}
+
+.bubble-3 {
+    width: 65px;
+    height: 65px;
+    top: 75%;
+    left: 5%;
+    animation-duration: 16s;
+    animation-delay: 4s;
+}
+
+.bubble-4 {
+    width: 40px;
+    height: 40px;
+    top: 90%;
+    right: 6%;
+    animation-duration: 12s;
+    animation-delay: 1s;
+}
+
+/* Mây trôi */
+.cloud-svg-shape {
+    position: absolute;
+    fill: #ffffff;
+    opacity: 0.7;
+    filter: drop-shadow(0 4px 10px rgba(91, 155, 213, 0.08));
+    animation: floatCloud 24s infinite ease-in-out alternate;
+    pointer-events: none;
+}
+
+.cloud-left {
+    top: 25%;
+    left: -30px;
+    width: 160px;
+}
+
+.cloud-right {
+    top: 60%;
+    right: -30px;
+    width: 180px;
+    animation-delay: -10s;
+}
+
+/* ==========================================================================
+   SCROLL ANIMATIONS (INTERSECTION OBSERVER)
+   ========================================================================== */
+
+.reveal {
+    opacity: 0;
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-up {
+    transform: translateY(35px);
+}
+
+.reveal-left {
+    transform: translateX(-35px);
+}
+
+.reveal-right {
+    transform: translateX(35px);
+}
+
+.reveal-scale {
+    transform: scale(0.95);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translate(0) scale(1);
+}
+
+/* Stagger Delays */
+.delay-1 {
+    transition-delay: 0.1s;
+}
+
+.delay-2 {
+    transition-delay: 0.22s;
+}
+
+.delay-3 {
+    transition-delay: 0.35s;
+}
+
+.delay-4 {
+    transition-delay: 0.48s;
+}
+
+/* ==========================================================================
+   KEYFRAME ANIMATIONS
+   ========================================================================== */
+
+@keyframes bounceInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-60px) scale(0.85);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(10px) scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes bounceInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(60px) scale(0.85);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(-10px) scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes lionFloatLeft {
+    0% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    100% {
+        transform: translateY(-6px) rotate(3deg);
+    }
+}
+
+@keyframes lionFloatRight {
+    0% {
+        transform: translateY(0) rotate(2deg);
+    }
+
+    100% {
+        transform: translateY(-6px) rotate(-3deg);
+    }
+}
+
+@keyframes unfurlScroll {
+    0% {
+        opacity: 0;
+        transform: scaleY(0.2);
+    }
+
+    70% {
+        transform: scaleY(1.06);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+@keyframes goldShimmer {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+    }
+
+    50% {
+        filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.65));
+    }
+}
+
+@keyframes starTwinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+@keyframes slideInUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatBubble {
+    0% {
+        transform: translateY(0) translateX(0);
+    }
+
+    50% {
+        transform: translateY(-30px) translateX(15px);
+    }
+
+    100% {
+        transform: translateY(0) translateX(0);
+    }
+}
+
+@keyframes floatCloud {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(35px);
+    }
+}
+
+/* ==========================================================================
+   FOOTER NÂNG CẤP
+   ========================================================================== */
+
+.site-footer {
+    background: linear-gradient(135deg, #4a84b8 0%, #356b9c 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-wave {
+    line-height: 0;
+    width: 100%;
+}
+
+.footer-wave svg {
+    display: block;
+    width: 100%;
+    height: 48px;
+    fill: var(--bg-color);
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    transition: transform 0.25s ease;
+}
+
+.footer-contact-item:hover {
+    transform: translateX(4px);
+}
+
+.footer-icon-pill {
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Back to top button */
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #ffa726 100%);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(255, 183, 77, 0.45);
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.back-to-top.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 10px 25px rgba(255, 183, 77, 0.6);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
 @media (max-width: 992px) {
-    .hero-title {
-        font-size: 2.2rem;
+    .lion-ceremony-wrap {
+        max-width: 720px;
     }
-    .carousel-item {
-        height: 400px;
+
+    .lion-mascot {
+        width: 70px;
+        height: 70px;
     }
-    .criteria-progress {
-        width: 100px;
+
+    .scroll-brand-title {
+        font-size: 1.7rem;
+    }
+
+    .ribbon-link {
+        display: none;
+    }
+
+    .carousel-item img {
+        height: 440px;
+    }
+
+    .hero-caption-title {
+        font-size: 2rem;
+    }
+
+    .gallery-grid {
+        gap: 18px;
+    }
+
+    .gallery-item img {
+        height: 220px;
+    }
+
+    .about-wrapper {
+        padding: 25px 25px;
     }
 }
 
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 1.75rem;
+
+    /* Lion Welcome Banner Mobile */
+    .lion-welcome-strip {
+        padding: 12px 0 10px;
     }
-    .hero-subtitle {
-        font-size: 0.95rem;
-        margin-bottom: 18px;
+
+    .lion-ceremony-wrap {
+        padding: 0 8px;
     }
+
+    .lion-mascot {
+        width: 50px;
+        height: 50px;
+    }
+
+    .scroll-ceremony {
+        margin: 0 8px;
+    }
+
+    .scroll-body {
+        padding: 6px 10px 8px;
+        border-left-width: 3px;
+        border-right-width: 3px;
+    }
+
+    .scroll-sub-top {
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+    }
+
+    .scroll-brand-title {
+        font-size: 1.35rem;
+    }
+
+    .scroll-sub-bottom {
+        font-size: 0.7rem;
+    }
+
+    /* Carousel Mobile */
     .carousel-item {
-        height: 360px;
+        min-height: 320px;
     }
-    .hero-cta-btn {
-        padding: 9px 20px;
-        font-size: 0.9rem;
+
+    .carousel-item img {
+        height: 340px;
     }
-    .section-title {
-        font-size: 1.85rem;
+
+    .carousel-caption-custom {
+        bottom: 25px;
+        left: 5%;
+        right: 5%;
     }
-    .about-box-card {
-        padding: 20px 16px;
+
+    .hero-caption-title {
+        font-size: 1.45rem;
+        margin-bottom: 8px;
     }
-    .about-img-frame {
-        min-height: 200px;
-        margin-bottom: 16px;
+
+    .hero-caption-desc {
+        font-size: 0.92rem;
+        margin-bottom: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
-    .quick-stats-container {
-        margin-top: 15px;
+
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: 4px 12px;
+        margin-bottom: 8px;
     }
-    .reviews-summary-card {
-        padding: 20px 16px;
+
+    .carousel-nav-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
     }
-    .criteria-progress {
-        width: 80px;
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 45px;
     }
-    .festive-container-box {
-        padding: 24px 16px;
+
+    /* Section Về Chúng Tôi Mobile */
+    .about-title h2 {
+        font-size: 30px;
+    }
+
+    .about-wrapper {
+        padding: 16px 14px;
+        border-radius: var(--radius-lg);
+    }
+
+    .about-row {
+        flex-direction: column !important;
+        gap: 16px;
+        padding: 18px 8px;
+    }
+
+    .about-content,
+    .about-image {
+        width: 100%;
+    }
+
+    .about-content p {
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+    .about-image img {
+        height: 220px !important;
+    }
+
+    /* Khoảnh Khắc Của Bé Mobile */
+    .activity-gallery h3 {
+        font-size: 28px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 420px;
+    }
+
+    .gallery-item img {
+        height: 230px;
+    }
+
+    /* Ẩn bong bóng lớn trên mobile tránh rối mắt */
+    .bubble-3,
+    .bubble-1 {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   HỆ THỐNG ANIMATION NÂNG CAO - MẦM NON ĐỒ RÊ MÍ 2
+   ========================================================================== */
+
+/* 1. MÀN HÌNH INTRO / LOADING CHÀO MỪNG */
+.intro-screen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, #dbeafe 0%, #e0f2fe 45%, #fef9c3 80%, #dcfce7 100%);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), transform 0.85s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.intro-screen.intro-hidden {
+    opacity: 0 !important;
+    transform: translateY(-40px) scale(1.03) !important;
+    pointer-events: none !important;
+}
+
+.intro-sky {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Mặt trời cười ấm áp */
+.intro-sun {
+    position: absolute;
+    top: 8%;
+    right: 12%;
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, #fde047 30%, #f59e0b 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 45px rgba(253, 224, 71, 0.85);
+    animation: sunPulse 4s ease-in-out infinite alternate;
+}
+
+.sun-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sun-eye {
+    position: absolute;
+    top: 36%;
+    width: 7px;
+    height: 9px;
+    background: #78350f;
+    border-radius: 50%;
+    animation: lionEyeBlink 4s infinite;
+}
+
+.sun-eye.left {
+    left: 28%;
+}
+
+.sun-eye.right {
+    right: 28%;
+}
+
+.sun-smile {
+    position: absolute;
+    bottom: 28%;
+    width: 22px;
+    height: 11px;
+    border-bottom: 3.5px solid #78350f;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Mây trôi nhẹ nhàng trong intro */
+.intro-cloud {
+    position: absolute;
+    opacity: 0.92;
+    filter: drop-shadow(0 6px 14px rgba(91, 155, 213, 0.15));
+}
+
+.cloud-drift-1 {
+    top: 15%;
+    left: -150px;
+    width: 170px;
+    animation: cloudDriftAcross 26s linear infinite;
+}
+
+.cloud-drift-2 {
+    top: 55%;
+    left: -200px;
+    width: 210px;
+    animation: cloudDriftAcross 34s linear 5s infinite;
+}
+
+.cloud-drift-3 {
+    top: 30%;
+    left: -180px;
+    width: 150px;
+    animation: cloudDriftAcross 22s linear 12s infinite;
+}
+
+/* Hạt lơ lửng: Sao, Bong bóng, Trái tim */
+.intro-particle {
+    position: absolute;
+    pointer-events: none;
+}
+
+.p-star {
+    color: #f59e0b;
+    font-size: 1.4rem;
+    animation: starTwinkle 2.5s infinite ease-in-out;
+}
+
+.p-star-1 {
+    top: 22%;
+    left: 16%;
+    animation-delay: 0.3s;
+}
+
+.p-star-2 {
+    top: 68%;
+    right: 15%;
+    animation-delay: 1.2s;
+    font-size: 1.8rem;
+    color: #eab308;
+}
+
+.p-star-3 {
+    top: 38%;
+    right: 25%;
+    animation-delay: 0.7s;
+}
+
+.p-bubble {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9), rgba(91, 155, 213, 0.3) 60%, rgba(255, 183, 77, 0.4) 100%);
+    box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.05), 0 6px 15px rgba(91, 155, 213, 0.18);
+    animation: floatBubble 10s infinite ease-in-out;
+}
+
+.p-bubble-1 {
+    width: 55px;
+    height: 55px;
+    top: 25%;
+    right: 8%;
+    animation-delay: 0.5s;
+}
+
+.p-bubble-2 {
+    width: 42px;
+    height: 42px;
+    bottom: 18%;
+    left: 12%;
+    animation-delay: 2s;
+}
+
+.p-bubble-3 {
+    width: 30px;
+    height: 30px;
+    top: 60%;
+    left: 6%;
+    animation-delay: 3.5s;
+}
+
+.p-heart {
+    color: #f43f5e;
+    font-size: 1.3rem;
+    animation: floatBubble 12s infinite ease-in-out 1s;
+}
+
+.p-heart-1 {
+    top: 45%;
+    left: 20%;
+}
+
+.p-heart-2 {
+    bottom: 25%;
+    right: 22%;
+}
+
+/* Khối nội dung trung tâm của Intro */
+.intro-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 650px;
+    padding: 30px 24px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 50px rgba(91, 155, 213, 0.22);
+    animation: introBoxPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.intro-logo-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.intro-logo {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    box-shadow: 0 8px 25px rgba(91, 155, 213, 0.35);
+    border: 4px solid #ffffff;
+    animation: logoWiggle 3s ease-in-out infinite;
+}
+
+.logo-pulse-ring {
+    position: absolute;
+    inset: -6px;
+    border: 2px dashed var(--primary-color);
+    border-radius: 50%;
+    animation: spinRing 12s linear infinite;
+}
+
+.intro-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #e0f2fe;
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.intro-title {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    letter-spacing: 0.5px;
+}
+
+.intro-letter {
+    display: inline-block;
+    animation: letterBounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.intro-letter:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.intro-letter:nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.intro-letter:nth-child(3) {
+    animation-delay: 0.22s;
+}
+
+.intro-letter:nth-child(4) {
+    animation-delay: 0.28s;
+}
+
+.intro-letter:nth-child(5) {
+    animation-delay: 0.34s;
+}
+
+.intro-letter:nth-child(6) {
+    animation-delay: 0.40s;
+}
+
+.intro-letter:nth-child(7) {
+    animation-delay: 0.46s;
+}
+
+.highlight-drm {
+    color: #e11d48;
+    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.intro-badge-cs2 {
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 900;
+    padding: 2px 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 2px;
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+    animation: letterBounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.52s both;
+}
+
+.intro-subtitle {
+    color: #475569;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    animation: fadeIn 0.8s ease 0.6s both;
+}
+
+/* Thanh tải tiến trình đáng yêu */
+.intro-progress-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto 20px;
+}
+
+.intro-progress-bar {
+    position: relative;
+    width: 100%;
+    height: 14px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: visible;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.intro-progress-bar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6, #fbbf24);
+    background-size: 200% 100%;
+    border-radius: 20px;
+    animation: rainbowShift 2s linear infinite;
+    transition: width 0.15s ease-out;
+}
+
+.intro-progress-runner {
+    position: absolute;
+    top: -12px;
+    left: 0%;
+    transform: translateX(-50%);
+    font-size: 1.35rem;
+    transition: left 0.15s ease-out;
+    pointer-events: none;
+}
+
+.intro-progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+/* Nút Bỏ qua / Vào ngay */
+.intro-skip-btn {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(91, 155, 213, 0.35);
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 7px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(91, 155, 213, 0.12);
+}
+
+.intro-skip-btn:hover {
+    background: var(--primary-color);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(91, 155, 213, 0.3);
+}
+
+/* 2. CHỚP MẮT & NHÚN CỦA LINH VẬT SƯ TỬ / CON LÂN */
+.lion-mascot {
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lion-mascot:hover {
+    transform: scale(1.12);
+    filter: drop-shadow(0 12px 22px rgba(234, 88, 12, 0.35));
+}
+
+.lion-mascot:active,
+.lion-mascot.lion-celebrate {
+    animation: lionCelebrationJump 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Animation chớp mắt tự nhiên */
+.lion-eye {
+    transform-origin: center;
+    animation: lionEyeBlink 3.6s infinite;
+}
+
+@keyframes lionEyeBlink {
+
+    0%,
+    92%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    96% {
+        transform: scaleY(0.08);
+    }
+}
+
+@keyframes lionCelebrationJump {
+    0% {
+        transform: scale(1) translateY(0);
+    }
+
+    35% {
+        transform: scale(1.18, 0.85) translateY(4px);
+    }
+
+    60% {
+        transform: scale(0.95, 1.15) translateY(-18px) rotate(-8deg);
+    }
+
+    85% {
+        transform: scale(1.05, 0.95) translateY(-4px) rotate(4deg);
+    }
+
+    100% {
+        transform: scale(1) translateY(0) rotate(0);
+    }
+}
+
+.scroll-ceremony {
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.scroll-ceremony:hover {
+    transform: scale(1.02);
+}
+
+.scroll-ceremony.scroll-unfurl-active {
+    animation: scrollUnfurlBounce 0.6s ease;
+}
+
+@keyframes scrollUnfurlBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04) translateY(-3px);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 3. TRANG ĐĂNG NHẬP MẦM NON */
+.login-decor-section {
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    background: radial-gradient(circle at 10% 20%, #f0f9ff 0%, #f8fafc 60%, #fffbeb 100%);
+    overflow: hidden;
+}
+
+.login-bg-decor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.login-cloud {
+    position: absolute;
+    opacity: 0.85;
+    animation: floatCloud 22s infinite ease-in-out alternate;
+}
+
+.login-cloud.cloud-1 {
+    top: 12%;
+    left: 6%;
+}
+
+.login-cloud.cloud-2 {
+    bottom: 15%;
+    right: 8%;
+    animation-delay: -8s;
+}
+
+.login-star {
+    position: absolute;
+    font-size: 1.4rem;
+    animation: starTwinkle 2.8s infinite;
+}
+
+.login-star.star-1 {
+    top: 20%;
+    right: 18%;
+    animation-delay: 0.5s;
+}
+
+.login-star.star-2 {
+    bottom: 25%;
+    left: 16%;
+    animation-delay: 1.5s;
+}
+
+.login-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(91, 155, 213, 0.2) 60%, rgba(255, 183, 77, 0.25) 100%);
+    animation: floatBubble 14s infinite ease-in-out;
+}
+
+.login-bubble.bubble-a {
+    width: 45px;
+    height: 45px;
+    top: 35%;
+    right: 5%;
+}
+
+.login-bubble.bubble-b {
+    width: 35px;
+    height: 35px;
+    bottom: 10%;
+    left: 8%;
+    animation-delay: 3s;
+}
+
+.login-heart {
+    position: absolute;
+    top: 60%;
+    right: 22%;
+    font-size: 1.6rem;
+    animation: floatBubble 16s infinite ease-in-out 2s;
+}
+
+.login-card {
+    border-radius: 28px !important;
+    border: 2px solid rgba(91, 155, 213, 0.15) !important;
+    box-shadow: 0 16px 45px rgba(91, 155, 213, 0.18) !important;
+    background: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #4a84b8 60%, #356b9c 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: radial-gradient(circle at 50% 0, transparent 10px, #ffffff 11px);
+    background-size: 24px 12px;
+}
+
+.login-logo-badge img {
+    border: 3px solid #ffffff;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.login-card:hover .login-logo-badge img {
+    transform: rotate(8deg) scale(1.08);
+}
+
+/* Shake Animation khi đăng nhập sai */
+@keyframes cardShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    15% {
+        transform: translateX(-12px) rotate(-1deg);
+    }
+
+    30% {
+        transform: translateX(10px) rotate(1deg);
+    }
+
+    45% {
+        transform: translateX(-8px) rotate(-0.5deg);
+    }
+
+    60% {
+        transform: translateX(6px) rotate(0.5deg);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+}
+
+.shake-card {
+    animation: cardShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 16px 45px rgba(239, 68, 68, 0.22) !important;
+}
+
+/* Input Focus Glow mầm non */
+.input-group-cute input:focus {
+    box-shadow: 0 0 0 4px rgba(91, 155, 213, 0.2) !important;
+    border-color: var(--primary-color) !important;
+    background-color: #ffffff !important;
+}
+
+.input-group-cute .input-group-text {
+    border-color: #dee2e6;
+    transition: color 0.25s ease;
+}
+
+.input-group-cute:focus-within .input-group-text i {
+    color: var(--primary-color) !important;
+    transform: scale(1.15);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Success Overlay */
+.login-success-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    border-radius: 0 0 28px 28px;
+    animation: fadeIn 0.35s ease both;
+}
+
+.success-icon-wrap {
+    font-size: 4rem;
+    line-height: 1;
+    animation: successPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.alert-bounce {
+    animation: fadeIn 0.4s ease both;
+}
+
+/* 4. NAVBAR HEADER STAGGER ANIMATION */
+.nav-item-stagger {
+    opacity: 0;
+    animation: navSlideIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+@keyframes navSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 5. CÁC KEYFRAMES BỔ TRỢ */
+@keyframes sunPulse {
+    0% {
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 0 35px rgba(253, 224, 71, 0.7);
+    }
+
+    100% {
+        transform: scale(1.08) rotate(15deg);
+        box-shadow: 0 0 55px rgba(253, 224, 71, 0.95);
+    }
+}
+
+@keyframes cloudDriftAcross {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(100vw + 350px));
+    }
+}
+
+@keyframes rainbowShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+@keyframes letterBounceIn {
+    0% {
+        opacity: 0;
+        transform: translateY(22px) scale(0.7);
+    }
+
+    65% {
+        opacity: 1;
+        transform: translateY(-5px) scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes introBoxPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes logoWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-6deg);
+    }
+
+    75% {
+        transform: rotate(6deg);
+    }
+}
+
+@keyframes spinRing {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Mobile Tối ưu Intro */
+@media (max-width: 576px) {
+    .intro-content {
+        padding: 24px 18px;
+        margin: 15px;
+    }
+
+    .intro-title {
+        font-size: 1.45rem;
+    }
+
+    .intro-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .intro-logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .intro-sun {
+        width: 65px;
+        height: 65px;
+        top: 5%;
+        right: 5%;
     }
 }
