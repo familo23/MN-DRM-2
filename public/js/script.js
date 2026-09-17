@@ -315,6 +315,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // =========================================================================
+    // 7. XỬ LÝ MODAL PHÓNG TO BANNER & BẢNG HỌC PHÍ ĐẦY ĐỦ
+    // =========================================================================
+    const bannerModal = document.getElementById('bannerModal');
+    if (bannerModal) {
+        bannerModal.addEventListener('show.bs.modal', (event) => {
+            const button = event.relatedTarget;
+            if (button) {
+                const imgSrc = button.getAttribute('data-img-src');
+                const imgTitle = button.getAttribute('data-img-title');
+                const modalImg = document.getElementById('bannerModalImg');
+                const modalTitle = document.getElementById('bannerModalTitle');
+                if (modalImg && imgSrc) modalImg.src = imgSrc;
+                if (modalTitle && imgTitle) {
+                    modalTitle.innerHTML = `<i class="bi bi-image me-2 text-warning"></i>${imgTitle}`;
+                }
+            }
+        });
+    }
+
     console.log('🌈 Mầm Non Độc Lập Đồ Rê Mí 2 - Toàn bộ animation đã sẵn sàng & mượt mà!');
 });
 

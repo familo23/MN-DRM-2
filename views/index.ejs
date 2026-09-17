@@ -1,206 +1,309 @@
 <%- include('layouts/header', { title: 'Trang Chủ - Mầm Non Đồ Rê Mí' }) %>
-<%- include('partials/intro') %>
+    <%- include('partials/intro') %>
 
-    <!-- BANNER CAROUSEL HIỆN ĐẠI & SỐNG ĐỘNG -->
-    <section id="home" class="position-relative bg-dark hero-section">
+        <!-- BANNER CAROUSEL HIỆN ĐẠI & SỐNG ĐỘNG - HIỂN THỊ ĐẦY ĐỦ THÔNG TIN TRƯỜNG -->
+        <section id="home" class="position-relative hero-section">
 
-        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4500">
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4500">
 
-            <div class="carousel-indicators carousel-indicators-custom z-3">
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <div class="carousel-indicators carousel-indicators-custom z-3">
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"
+                        aria-label="Slide 1 - Biển Hiệu Trường"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2 - Hoạt Động Của Bé"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"
+                        aria-label="Slide 3 - Bảng Học Phí"></button>
+                </div>
+
+                <div class="carousel-inner">
+
+                    <!-- SLIDE 1: BANNER BIỂN HIỆU CHÍNH THỨC CỦA TRƯỜNG -->
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <img src="/images/banner1.jpg"
+                            alt="Lớp Mẫu Giáo Độc Lập Đồ Rê Mí 2 - UBND Phường Yên Hòa - Lô 35H1 KĐT Yên Hòa"
+                            class="w-100 banner-clean-img" data-bs-toggle="modal" data-bs-target="#bannerModal"
+                            data-img-src="/images/banner1.jpg"
+                            data-img-title="Biển Hiệu Chính Thức - Lớp Mẫu Giáo Độc Lập Đồ Rê Mí 2">
+                    </div>
+
+                    <!-- SLIDE 2: HOẠT ĐỘNG KHÁM PHÁ & NGHỆ THUẬT -->
+                    <div class="carousel-item" data-bs-interval="4000">
+                        <img src="/images/banner2.jpg" alt="Hoạt động mỹ thuật, âm nhạc và xây dựng khối tại Đồ Rê Mí 2"
+                            class="w-100 banner-clean-img" data-bs-toggle="modal" data-bs-target="#bannerModal"
+                            data-img-src="/images/banner2.jpg"
+                            data-img-title="Hoạt Động Khám Phá & Nghệ Thuật Sáng Tạo Của Bé">
+                    </div>
+
+                    <!-- SLIDE 3: BẢNG BIỂU HỌC PHÍ CHI TIẾT CÁC ĐỘ TUỔI -->
+                    <div class="carousel-item" data-bs-interval="6000">
+                        <img src="/images/banner3.png"
+                            alt="Bảng biểu học phí chi tiết các độ tuổi - Trường Mầm Non Đồ Rê Mí 2"
+                            class="w-100 banner-clean-img" data-bs-toggle="modal" data-bs-target="#bannerModal"
+                            data-img-src="/images/banner3.png"
+                            data-img-title="Bảng Học Phí Chi Tiết Các Độ Tuổi Của Trẻ - Mầm Non Đồ Rê Mí 2">
+                    </div>
+
+                </div>
+
+                <button class="carousel-control-prev z-3" type="button" data-bs-target="#heroCarousel"
+                    data-bs-slide="prev" aria-label="Trước">
+                    <span class="carousel-nav-btn"><i class="bi bi-chevron-left"></i></span>
+                    <span class="visually-hidden">Trước</span>
+                </button>
+
+                <button class="carousel-control-next z-3" type="button" data-bs-target="#heroCarousel"
+                    data-bs-slide="next" aria-label="Sau">
+                    <span class="carousel-nav-btn"><i class="bi bi-chevron-right"></i></span>
+                    <span class="visually-hidden">Sau</span>
+                </button>
+
+                <!-- Gợi ý nhấp xem chi tiết ảnh banner -->
+                <div class="banner-hint-pill">
+                    <i class="bi bi-zoom-in me-1"></i> Nhấp vào ảnh để xem chi tiết cỡ lớn
+                </div>
+
             </div>
-
-            <div class="carousel-inner">
-
-                <!-- SLIDE 1 -->
-                <div class="carousel-item active" data-bs-interval="4000">
-                    <img src="/images/banner1.jpg" alt="Lớp học ấm áp tràn ngập yêu thương" class="w-100 banner-clean-img">
-                </div>
-
-                <!-- SLIDE 2 -->
-                <div class="carousel-item" data-bs-interval="4000">
-                    <img src="/images/banner2.jpg" alt="Hoạt động mỹ thuật và sáng tạo" class="w-100 banner-clean-img">
-                </div>
-
-                <!-- SLIDE 3 -->
-                <div class="carousel-item" data-bs-interval="4000">
-                    <img src="/images/banner3.png" alt="Vui chơi ngoài trời cùng bạn bè" class="w-100 banner-clean-img">
-                </div>
-
-            </div>
-
-            <button class="carousel-control-prev z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-nav-btn"><i class="bi bi-chevron-left"></i></span>
-                <span class="visually-hidden">Trước</span>
-            </button>
-
-            <button class="carousel-control-next z-3" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-nav-btn"><i class="bi bi-chevron-right"></i></span>
-                <span class="visually-hidden">Sau</span>
-            </button>
 
             <!-- Lượn sóng phân cách đẹp mắt -->
             <div class="hero-bottom-wave">
                 <svg viewBox="0 0 1200 48" preserveAspectRatio="none">
-                    <path d="M0,0 C300,45 600,10 900,40 C1050,48 1150,20 1200,30 L1200,48 L0,48 Z" fill="#f8fafc"></path>
+                    <path d="M0,0 C300,45 600,10 900,40 C1050,48 1150,20 1200,30 L1200,48 L0,48 Z" fill="#ffffff">
+                    </path>
                 </svg>
             </div>
 
-        </div>
-
-    </section>
-
-
-    <!-- NỘI DUNG CHÍNH -->
-    <main class="container py-5 position-relative">
-
-        <!-- Bong bóng bay trang trí nền nhẹ nhàng -->
-        <div class="decor-bg-container" aria-hidden="true">
-            <div class="bubble bubble-1"></div>
-            <div class="bubble bubble-2"></div>
-            <div class="bubble bubble-3"></div>
-            <div class="bubble bubble-4"></div>
-        </div>
-
-        <!-- GIỚI THIỆU -->
-        <section id="about" class="position-relative">
-
-            <div class="about-title reveal reveal-up">
-                <span class="section-badge"><i class="bi bi-stars me-1"></i> Giới thiệu nhà trường</span>
-                <h2>Về Chúng Tôi</h2>
-                <p>Trường Mầm Non Độc Lập Đồ Rê Mí 2</p>
-            </div>
-
-            <!-- KHUNG LỚN -->
-            <div class="about-wrapper reveal reveal-scale">
-
-                <!-- ĐOẠN 1 -->
-                <div class="about-row reveal reveal-up delay-1">
-                    <div class="about-content">
-                        <span class="about-tag"><i class="bi bi-shield-heart-fill me-1"></i>Môi trường an toàn</span>
-                        <p>
-                            Trường Mầm non Đồ Rê Mí là nơi các bé được học tập,
-                            vui chơi và khám phá những điều mới mẻ mỗi ngày.
-                            Nhà trường hướng đến việc xây dựng một
-                            <strong>môi trường an toàn, thân thiện</strong>
-                            và phù hợp với sự phát triển của trẻ, giúp các bé
-                            thoải mái học hỏi và phát huy khả năng của mình.
-                        </p>
-                    </div>
-                    <div class="about-image">
-                        <img src="/images/hoatdong1.jpg" alt="Bé tham gia hoạt động tại trường" loading="lazy">
-                    </div>
-                </div>
-
-                <!-- ĐOẠN 2 -->
-                <div class="about-row reveal reveal-up delay-2">
-                    <div class="about-image">
-                        <img src="/images/hoatdong2.jpg" alt="Hoạt động khám phá của bé" loading="lazy">
-                    </div>
-                    <div class="about-content">
-                        <span class="about-tag"><i class="bi bi-lightbulb-fill me-1"></i>Chương trình trực quan</span>
-                        <p>
-                            Chương trình học tại lớp sẽ kết hợp giữa kiến thức
-                            cơ bản và các hoạt động phù hợp với lứa tuổi như
-                            <strong>vẽ, âm nhạc, vận động, kể chuyện,
-                                làm quen với thiên nhiên và các hoạt động sáng tạo</strong>.
-                            Bên cạnh giờ học trên lớp, nhà trường thường xuyên
-                            tổ chức các <strong>hoạt động ngoại khóa và trải nghiệm
-                                thực tế</strong> như tham quan, vui chơi ngoài trời,
-                            hoạt động tập thể, các chương trình theo chủ đề
-                            và những buổi trải nghiệm giúp bé khám phá thế giới
-                            xung quanh.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- ĐOẠN 3 -->
-                <div class="about-row reveal reveal-up delay-3">
-                    <div class="about-content">
-                        <span class="about-tag"><i class="bi bi-people-fill me-1"></i>Rèn luyện kỹ năng</span>
-                        <p>
-                            Thông qua những hoạt động này, các bé có cơ hội
-                            <strong>rèn luyện kỹ năng giao tiếp, làm việc cùng
-                                bạn bè, tự tin thể hiện bản thân và hình thành
-                                tính tự lập</strong>.
-                            Các hoạt động cũng được tổ chức theo hướng vừa học
-                            vừa chơi, tạo cho trẻ thêm nhiều trải nghiệm thú vị
-                            bên cạnh những giờ học hằng ngày.
-                        </p>
-                    </div>
-                    <div class="about-image">
-                        <img src="/images/tet.jppg.jpg" alt="Các bé tham gia ngày hội" loading="lazy">
-                    </div>
-                </div>
-
-                <!-- ĐOẠN 4 -->
-                <div class="about-row reveal reveal-up delay-4">
-                    <div class="about-image">
-                        <img src="/images/hoatdong4.jpg" alt="Hoạt động trải nghiệm của các bé" loading="lazy">
-                    </div>
-                    <div class="about-content">
-                        <span class="about-tag"><i class="bi bi-chat-heart-fill me-1"></i>Đồng hành cùng phụ huynh</span>
-                        <p>
-                            Nhà trường cũng chú trọng đến việc theo dõi quá trình
-                            học tập và sinh hoạt của từng bé, đồng thời tạo sự
-                            <strong>kết nối giữa giáo viên và phụ huynh</strong>
-                            để việc chăm sóc và giáo dục trẻ được thuận tiện,
-                            hiệu quả hơn.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-
         </section>
 
+        <!-- THANH THÔNG TIN BANNER ĐẦY ĐỦ (ĐỊA CHỈ, PHÁP LÝ & HOTLINE TUYỂN SINH) -->
+        <div class="banner-official-strip py-3 bg-white border-bottom shadow-sm">
+            <div class="container">
+                <div class="row g-3 align-items-center justify-content-between">
 
-        <!-- KHOẢNH KHẮC CỦA BÉ -->
-        <section class="activity-gallery reveal reveal-up">
-
-            <span class="section-badge"><i class="bi bi-camera-fill me-1"></i> Nhật ký hoạt động</span>
-            <h3>Khoảnh Khắc Của Bé</h3>
-            <p class="gallery-subtitle">Những nụ cười rạng rỡ và giây phút đáng nhớ của các con tại Đồ Rê Mí 2</p>
-
-            <div class="gallery-grid">
-
-                <div class="gallery-item reveal reveal-up delay-1">
-                    <div class="gallery-image-wrapper">
-                        <img src="/images/hoatdong1-1.jpg" alt="Hoạt động vui chơi của bé" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
-                            <span class="gallery-overlay-text">Khoảnh khắc đáng yêu</span>
+                    <!-- 1. Cơ sở & Địa chỉ chính thức -->
+                    <div class="col-lg-4 col-md-6 d-flex align-items-center">
+                        <div
+                            class="info-badge-icon me-3 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-geo-alt-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <span class="d-block text-uppercase fw-bold text-muted small"
+                                style="font-size: 0.72rem; letter-spacing: 0.5px;">Cơ Sở Chính Thức</span>
+                            <strong class="text-dark d-block">Lô 35H1 KĐT Mới Yên Hòa, P. Yên Hòa, Cầu Giấy, Hà
+                                Nội</strong>
                         </div>
                     </div>
-                </div>
 
-                <div class="gallery-item reveal reveal-up delay-2">
-                    <div class="gallery-image-wrapper">
-                        <img src="/images/hoatdong5.jpg" alt="Hoạt động học tập của bé" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
-                            <span class="gallery-overlay-text">Bé vui học sáng tạo</span>
+                    <!-- 2. Quyết định thành lập pháp lý -->
+                    <div class="col-lg-4 col-md-6 d-flex align-items-center">
+                        <div
+                            class="info-badge-icon me-3 bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-patch-check-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <span class="d-block text-uppercase fw-bold text-muted small"
+                                style="font-size: 0.72rem; letter-spacing: 0.5px;">Quyết Định Thành Lập</span>
+                            <strong class="text-dark d-block">Số 333/QĐ-UBND • UBND Phường Yên Hòa Cấp</strong>
                         </div>
                     </div>
-                </div>
 
-                <div class="gallery-item reveal reveal-up delay-3">
-                    <div class="gallery-image-wrapper">
-                        <img src="/images/hotdong3.jpg" alt="Bé tham gia sự kiện" loading="lazy">
-                        <div class="gallery-overlay">
-                            <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
-                            <span class="gallery-overlay-text">Tự tin tỏa sáng</span>
-                        </div>
+                    <!-- 3. Hotline & Nút tra cứu học phí -->
+                    <div class="col-lg-4 col-md-12 d-flex align-items-center justify-content-lg-end gap-2 flex-wrap">
+                        <a href="tel:0988906951"
+                            class="btn btn-warning rounded-pill px-3 py-2 fw-bold text-dark shadow-sm d-inline-flex align-items-center gap-2 hover-scale">
+                            <i class="bi bi-telephone-fill text-danger"></i>
+                            <span>Hotline: 0988.906.951</span>
+                        </a>
+                        <button type="button"
+                            class="btn btn-outline-primary rounded-pill px-3 py-2 fw-bold small d-inline-flex align-items-center gap-1 hover-scale"
+                            data-bs-toggle="modal" data-bs-target="#bannerModal" data-img-src="/images/banner3.png"
+                            data-img-title="Bảng Học Phí Chi Tiết Các Độ Tuổi Của Trẻ">
+                            <i class="bi bi-table"></i> Xem Biểu Phí
+                        </button>
                     </div>
-                </div>
 
+                </div>
+            </div>
+        </div>
+
+
+        <!-- NỘI DUNG CHÍNH -->
+        <main class="container py-5 position-relative">
+
+            <!-- Bong bóng bay trang trí nền nhẹ nhàng -->
+            <div class="decor-bg-container" aria-hidden="true">
+                <div class="bubble bubble-1"></div>
+                <div class="bubble bubble-2"></div>
+                <div class="bubble bubble-3"></div>
+                <div class="bubble bubble-4"></div>
             </div>
 
-        </section>
+            <!-- GIỚI THIỆU -->
+            <section id="about" class="position-relative">
 
-    </main>
+                <div class="about-title reveal reveal-up">
+                    <span class="section-badge"><i class="bi bi-stars me-1"></i> Giới thiệu nhà trường</span>
+                    <h2>Về Chúng Tôi</h2>
+                    <p>Trường Mầm Non Độc Lập Đồ Rê Mí 2</p>
+                </div>
+
+                <!-- KHUNG LỚN -->
+                <div class="about-wrapper reveal reveal-scale">
+
+                    <!-- ĐOẠN 1 -->
+                    <div class="about-row reveal reveal-up delay-1">
+                        <div class="about-content">
+                            <span class="about-tag"><i class="bi bi-shield-heart-fill me-1"></i>Môi trường an
+                                toàn</span>
+                            <p>
+                                Trường Mầm non Đồ Rê Mí là nơi các bé được học tập,
+                                vui chơi và khám phá những điều mới mẻ mỗi ngày.
+                                Nhà trường hướng đến việc xây dựng một
+                                <strong>môi trường an toàn, thân thiện</strong>
+                                và phù hợp với sự phát triển của trẻ, giúp các bé
+                                thoải mái học hỏi và phát huy khả năng của mình.
+                            </p>
+                        </div>
+                        <div class="about-image">
+                            <img src="/images/hoatdong1.jpg" alt="Bé tham gia hoạt động tại trường" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- ĐOẠN 2 -->
+                    <div class="about-row reveal reveal-up delay-2">
+                        <div class="about-image">
+                            <img src="/images/hoatdong2.jpg" alt="Hoạt động khám phá của bé" loading="lazy">
+                        </div>
+                        <div class="about-content">
+                            <span class="about-tag"><i class="bi bi-lightbulb-fill me-1"></i>Chương trình trực
+                                quan</span>
+                            <p>
+                                Chương trình học tại lớp sẽ kết hợp giữa kiến thức
+                                cơ bản và các hoạt động phù hợp với lứa tuổi như
+                                <strong>vẽ, âm nhạc, vận động, kể chuyện,
+                                    làm quen với thiên nhiên và các hoạt động sáng tạo</strong>.
+                                Bên cạnh giờ học trên lớp, nhà trường thường xuyên
+                                tổ chức các <strong>hoạt động ngoại khóa và trải nghiệm
+                                    thực tế</strong> như tham quan, vui chơi ngoài trời,
+                                hoạt động tập thể, các chương trình theo chủ đề
+                                và những buổi trải nghiệm giúp bé khám phá thế giới
+                                xung quanh.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ĐOẠN 3 -->
+                    <div class="about-row reveal reveal-up delay-3">
+                        <div class="about-content">
+                            <span class="about-tag"><i class="bi bi-people-fill me-1"></i>Rèn luyện kỹ năng</span>
+                            <p>
+                                Thông qua những hoạt động này, các bé có cơ hội
+                                <strong>rèn luyện kỹ năng giao tiếp, làm việc cùng
+                                    bạn bè, tự tin thể hiện bản thân và hình thành
+                                    tính tự lập</strong>.
+                                Các hoạt động cũng được tổ chức theo hướng vừa học
+                                vừa chơi, tạo cho trẻ thêm nhiều trải nghiệm thú vị
+                                bên cạnh những giờ học hằng ngày.
+                            </p>
+                        </div>
+                        <div class="about-image">
+                            <img src="/images/tet.jppg.jpg" alt="Các bé tham gia ngày hội" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- ĐOẠN 4 -->
+                    <div class="about-row reveal reveal-up delay-4">
+                        <div class="about-image">
+                            <img src="/images/hoatdong4.jpg" alt="Hoạt động trải nghiệm của các bé" loading="lazy">
+                        </div>
+                        <div class="about-content">
+                            <span class="about-tag"><i class="bi bi-chat-heart-fill me-1"></i>Đồng hành cùng phụ
+                                huynh</span>
+                            <p>
+                                Nhà trường cũng chú trọng đến việc theo dõi quá trình
+                                học tập và sinh hoạt của từng bé, đồng thời tạo sự
+                                <strong>kết nối giữa giáo viên và phụ huynh</strong>
+                                để việc chăm sóc và giáo dục trẻ được thuận tiện,
+                                hiệu quả hơn.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
 
 
-    <%- include('layouts/footer') %>
+            <!-- KHOẢNH KHẮC CỦA BÉ -->
+            <section class="activity-gallery reveal reveal-up">
+
+                <span class="section-badge"><i class="bi bi-camera-fill me-1"></i> Nhật ký hoạt động</span>
+                <h3>Khoảnh Khắc Của Bé</h3>
+                <p class="gallery-subtitle">Những nụ cười rạng rỡ và giây phút đáng nhớ của các con tại Đồ Rê Mí 2</p>
+
+                <div class="gallery-grid">
+
+                    <div class="gallery-item reveal reveal-up delay-1">
+                        <div class="gallery-image-wrapper">
+                            <img src="/images/hoatdong1-1.jpg" alt="Hoạt động vui chơi của bé" loading="lazy">
+                            <div class="gallery-overlay">
+                                <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
+                                <span class="gallery-overlay-text">Khoảnh khắc đáng yêu</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item reveal reveal-up delay-2">
+                        <div class="gallery-image-wrapper">
+                            <img src="/images/hoatdong5.jpg" alt="Hoạt động học tập của bé" loading="lazy">
+                            <div class="gallery-overlay">
+                                <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
+                                <span class="gallery-overlay-text">Bé vui học sáng tạo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item reveal reveal-up delay-3">
+                        <div class="gallery-image-wrapper">
+                            <img src="/images/hotdong3.jpg" alt="Bé tham gia sự kiện" loading="lazy">
+                            <div class="gallery-overlay">
+                                <div class="gallery-cam-icon"><i class="bi bi-camera-fill"></i></div>
+                                <span class="gallery-overlay-text">Tự tin tỏa sáng</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- MODAL XEM CHI TIẾT BANNER & BIỂU PHÍ CỠ LỚN ĐẦY ĐỦ THÔNG TIN -->
+        <div class="modal fade" id="bannerModal" tabindex="-1" aria-labelledby="bannerModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                    <div class="modal-header bg-primary text-white py-3">
+                        <h5 class="modal-title fw-bold" id="bannerModalTitle">
+                            <i class="bi bi-image me-2"></i>Chi Tiết Thông Tin Banner
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"
+                            aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body p-2 text-center bg-dark d-flex align-items-center justify-content-center"
+                        style="min-height: 320px;">
+                        <img src="/images/banner1.jpg" id="bannerModalImg" class="img-fluid rounded-3 shadow"
+                            alt="Ảnh chi tiết banner" style="max-height: 80vh; object-fit: contain;">
+                    </div>
+                    <div class="modal-footer bg-light py-2 justify-content-between flex-wrap gap-2">
+                        <span class="small text-muted">
+                            <i class="bi bi-info-circle text-primary me-1"></i>Trường Mầm Non Độc Lập Đồ Rê Mí 2 •
+                            Hotline tư vấn: <strong class="text-danger">0988.906.951</strong>
+                        </span>
+                        <button type="button" class="btn btn-secondary rounded-pill px-4 btn-sm fw-bold"
+                            data-bs-dismiss="modal">Đóng lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('layouts/footer') %>

@@ -1,4 +1,4 @@
-<%- include('layouts/header', { title: 'Đăng nhập & Đăng ký - Mầm Non Đồ Rê Mí 2' }) %>
+<%- include('layouts/header', { title: 'Đăng nhập - Mầm Non Đồ Rê Mí 2' }) %>
 
 <main class="login-decor-section position-relative py-5 my-2">
     <!-- Họa tiết mầm non bay bổng nền trang đăng nhập -->
@@ -59,16 +59,6 @@
                     </div>
 
                     <div class="card-body p-4 p-sm-5 bg-white position-relative">
-                        <!-- Nút Chuyển Đổi Tab Đăng Nhập / Đăng Ký Siêu Mượt -->
-                        <div class="auth-switch-container mb-4">
-                            <button type="button" class="auth-switch-btn active" id="btnSwitchLogin">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Đăng Nhập
-                            </button>
-                            <button type="button" class="auth-switch-btn" id="btnSwitchRegister">
-                                <i class="bi bi-person-plus-fill me-1"></i> Đăng Ký
-                            </button>
-                            <div class="auth-switch-pill" id="switchPill"></div>
-                        </div>
 
                         <!-- Thông báo lỗi từ server EJS -->
                         <% if (typeof error !== 'undefined' && error == '1') { %>
@@ -96,126 +86,54 @@
                             <p class="text-muted small" id="successSubtitle">Đang chuyển hướng vào hệ thống...</p>
                         </div>
 
-                        <!-- KHUNG CHỨA 2 FORM (SLIDE ANIMATION) -->
-                        <div class="auth-forms-slider" id="authFormsSlider">
-                            
-                            <!-- 1. FORM ĐĂNG NHẬP -->
-                            <div class="auth-pane auth-pane-login active" id="paneLogin">
-                                <form action="/login" method="POST" id="loginForm">
-                                    <div class="mb-4 input-group-cute">
-                                        <label for="username" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-person-heart me-1 text-primary"></i>Tên đăng nhập
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-person text-muted"></i>
-                                            </span>
-                                            <input type="text" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="username" name="username" placeholder="Nhập tên đăng nhập" required autocomplete="username">
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 input-group-cute">
-                                        <label for="password" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-shield-lock me-1 text-primary"></i>Mật khẩu
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-lock text-muted"></i>
-                                            </span>
-                                            <input type="password" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label text-muted small" for="rememberMe">Ghi nhớ phiên</label>
-                                        </div>
-                                        <a href="tel:0988906951" class="text-decoration-none small text-primary fw-bold hover-underline" title="Liên hệ quản trị viên">
-                                            <i class="bi bi-question-circle me-1"></i>Trợ giúp?
-                                        </a>
-                                    </div>
-
-                                    <div class="d-grid mt-2">
-                                        <button type="submit" class="btn btn-cute btn-primary py-2 fw-bold shadow-sm" id="btnLogin">
-                                            <span class="btn-text">
-                                                <i class="bi bi-box-arrow-in-right me-1"></i> Đăng Nhập
-                                            </span>
-                                            <span class="btn-spinner d-none">
-                                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                                Đang kiểm tra...
-                                            </span>
-                                        </button>
-                                    </div>
-                                </form>
+                        <!-- FORM ĐĂNG NHẬP -->
+                        <form action="/login" method="POST" id="loginForm">
+                            <div class="mb-4 input-group-cute">
+                                <label for="username" class="form-label fw-bold text-secondary small text-uppercase">
+                                    <i class="bi bi-person-heart me-1 text-primary"></i>Tên đăng nhập
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
+                                        <i class="bi bi-person text-muted"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="username" name="username" placeholder="Nhập tên đăng nhập" required autocomplete="username">
+                                </div>
                             </div>
 
-                            <!-- 2. FORM ĐĂNG KÝ -->
-                            <div class="auth-pane auth-pane-register" id="paneRegister">
-                                <form action="/register" method="POST" id="registerForm">
-                                    <div class="mb-3 input-group-cute">
-                                        <label for="regFullName" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-person-vcard me-1 text-primary"></i>Họ và tên giáo viên
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-person-badge text-muted"></i>
-                                            </span>
-                                            <input type="text" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="regFullName" name="full_name" placeholder="Ví dụ: Cô Nguyễn Thị Mai" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3 input-group-cute">
-                                        <label for="regUsername" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-person-check me-1 text-primary"></i>Tên đăng nhập
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-person text-muted"></i>
-                                            </span>
-                                            <input type="text" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="regUsername" name="username" placeholder="Tên đăng nhập viết liền" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3 input-group-cute">
-                                        <label for="regPassword" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-key me-1 text-primary"></i>Mật khẩu (ít nhất 6 ký tự)
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-lock text-muted"></i>
-                                            </span>
-                                            <input type="password" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="regPassword" name="password" placeholder="Nhập mật khẩu" required minlength="6">
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4 input-group-cute">
-                                        <label for="regConfirmPassword" class="form-label fw-bold text-secondary small text-uppercase">
-                                            <i class="bi bi-shield-check me-1 text-primary"></i>Xác nhận lại mật khẩu
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
-                                                <i class="bi bi-check2-circle text-muted"></i>
-                                            </span>
-                                            <input type="password" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="regConfirmPassword" name="confirm_password" placeholder="Nhập lại mật khẩu" required minlength="6">
-                                        </div>
-                                    </div>
-
-                                    <div class="d-grid mt-2">
-                                        <button type="submit" class="btn btn-cute btn-secondary-cute py-2 fw-bold shadow-sm" id="btnRegister">
-                                            <span class="btn-text">
-                                                <i class="bi bi-person-plus-fill me-1"></i> Hoàn Tất Đăng Ký
-                                            </span>
-                                            <span class="btn-spinner d-none">
-                                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                                Đang tạo tài khoản...
-                                            </span>
-                                        </button>
-                                    </div>
-                                </form>
+                            <div class="mb-4 input-group-cute">
+                                <label for="password" class="form-label fw-bold text-secondary small text-uppercase">
+                                    <i class="bi bi-shield-lock me-1 text-primary"></i>Mật khẩu
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
+                                        <i class="bi bi-lock text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0 ps-1 bg-light rounded-end-pill py-2" id="password" name="password" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+                                </div>
                             </div>
 
-                        </div>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label text-muted small" for="rememberMe">Ghi nhớ phiên</label>
+                                </div>
+                                <a href="tel:0988906951" class="text-decoration-none small text-primary fw-bold hover-underline" title="Liên hệ quản trị viên">
+                                    <i class="bi bi-question-circle me-1"></i>Trợ giúp?
+                                </a>
+                            </div>
+
+                            <div class="d-grid mt-2">
+                                <button type="submit" class="btn btn-cute btn-primary py-2 fw-bold shadow-sm" id="btnLogin">
+                                    <span class="btn-text">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i> Đăng Nhập
+                                    </span>
+                                    <span class="btn-spinner d-none">
+                                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                        Đang kiểm tra...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="card-footer bg-light text-center py-3 border-0 d-flex justify-content-between align-items-center px-4">

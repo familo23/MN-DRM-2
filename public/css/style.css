@@ -250,7 +250,7 @@ body {
 /* Tờ sớ ở giữa */
 .scroll-ceremony {
     flex: 1;
-    max-width: 520px;
+    max-width: 580px;
     margin: 0 14px;
     position: relative;
     z-index: 2;
@@ -305,7 +305,7 @@ body {
     color: #fef08a;
     font-size: 0.78rem;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
@@ -444,7 +444,7 @@ body {
 
 .hero-section {
     position: relative;
-    background-color: #0f172a;
+    background: linear-gradient(180deg, #0b1329 0%, #172554 50%, #0f172a 100%);
     overflow: hidden;
 }
 
@@ -455,24 +455,30 @@ body {
 .carousel-item {
     width: 100%;
     position: relative;
-    min-height: 380px;
-    max-height: 580px;
-    background-color: #0f172a;
-    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.9s ease !important;
+    min-height: auto;
+    max-height: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease !important;
 }
 
-/* Đảm bảo ảnh banner không bị méo, hiển thị sắc nét */
-.carousel-item img {
+/* Đảm bảo ảnh banner hiển thị ĐẦY ĐỦ 100% THÔNG TIN, không bị méo hay cắt xén */
+.carousel-item img,
+.carousel-item img.banner-clean-img {
     width: 100%;
-    height: 560px;
-    object-fit: cover;
-    object-position: center;
+    height: auto;
+    max-height: 75vh;
+    object-fit: contain !important;
     display: block;
-    transition: transform 6s ease;
+    margin: 0 auto;
+    cursor: zoom-in;
+    transition: none;
 }
 
 .carousel-item.active img {
-    transform: scale(1.03);
+    transform: none !important;
 }
 
 /* Lớp phủ gradient nhẹ giúp chữ nổi bật mà không làm tối ảnh */
@@ -554,14 +560,24 @@ body {
 
 /* Indicators */
 .carousel-indicators-custom {
-    bottom: 18px !important;
-    margin-bottom: 0 !important;
+    position: absolute;
+    bottom: 12px !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+    margin: 0 !important;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(8px);
+    padding: 6px 14px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 4;
     gap: 8px;
+    width: auto;
 }
 
 .carousel-indicators-custom button {
-    width: 14px !important;
-    height: 14px !important;
+    width: 12px !important;
+    height: 12px !important;
     border-radius: 50% !important;
     background-color: rgba(255, 255, 255, 0.6) !important;
     border: 2px solid #ffffff !important;
@@ -570,17 +586,42 @@ body {
 }
 
 .carousel-indicators-custom button.active {
-    width: 38px !important;
+    width: 34px !important;
     border-radius: 12px !important;
     background-color: var(--secondary-color) !important;
     border-color: var(--secondary-color) !important;
     box-shadow: 0 2px 10px rgba(255, 183, 77, 0.6);
 }
 
+/* Gợi ý nhấp xem chi tiết ảnh banner */
+.banner-hint-pill {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    color: #fef08a;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(254, 240, 138, 0.3);
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 1s ease both;
+}
+
+@media (max-width: 576px) {
+    .banner-hint-pill {
+        display: none;
+    }
+}
+
 /* Carousel Control Buttons */
 .carousel-nav-btn {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(6px);
     border-radius: 50%;
@@ -588,7 +629,7 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     border: 2px solid #ffffff;
@@ -596,7 +637,7 @@ body {
 
 .carousel-control-prev,
 .carousel-control-next {
-    width: 70px;
+    width: 60px;
     opacity: 0.9;
 }
 
@@ -610,19 +651,42 @@ body {
 
 /* Dải lượn sóng phân cách Hero */
 .hero-bottom-wave {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
+    position: relative;
     width: 100%;
     line-height: 0;
     z-index: 3;
     pointer-events: none;
+    margin-top: -1px;
 }
 
 .hero-bottom-wave svg {
     display: block;
     width: 100%;
-    height: 48px;
+    height: 38px;
+}
+
+/* Dải thông tin trường học đầy đủ dưới banner */
+.banner-official-strip {
+    background: #ffffff;
+    border-bottom: 2px solid #e2e8f0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 3;
+}
+
+.info-badge-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.hover-scale {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.hover-scale:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
 }
 
 
@@ -1398,11 +1462,15 @@ body {
 
     /* Carousel Mobile */
     .carousel-item {
-        min-height: 320px;
+        min-height: auto;
     }
 
-    .carousel-item img {
-        height: 340px;
+    .carousel-item img,
+    .carousel-item img.banner-clean-img {
+        width: 100%;
+        height: auto;
+        max-height: 60vh;
+        object-fit: contain !important;
     }
 
     .carousel-caption-custom {
